@@ -1,0 +1,11 @@
+{% extends 'bookx/base.html' %}
+
+{% block content %}
+
+<h2>Add a book</h2>
+<form method="post" enctype="multipart/form-data" class="book__form">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">Save</button>
+</form>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'bookx/base.html' %}
+
+{% block content %}
+
+<h2>Available books</h2>
+
+<ul>
+	{% for book in books %}
+    <li>
+		{{ book.title }} by {{ book.author }} <br />
+		<img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
+	</li>
+	{% endfor %}
+</ul>
+
+{% endblock %}
