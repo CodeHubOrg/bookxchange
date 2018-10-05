@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Book Xchange</title>       
-        <link rel="stylesheet" href="/{% static 'bookx/css/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'bookx/css/styles.css' %}">
     </head>
     <body>
         <div class="page-header">
@@ -12,5 +12,15 @@
         {% block content %}
             {{ content }}
         {% endblock %}
+
+        <p>User:</p>
+        <ul>
+            {% if user.is_authenticated %}
+             <li>User: {{ user.get_username }}</li>
+             <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
+           {% else %}
+             <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
+           {% endif %} 
+       </ul>
     </body>
 </html>
