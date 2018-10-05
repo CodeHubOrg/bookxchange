@@ -16,25 +16,26 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf.urls import include
+from django.views.generic import RedirectView
 
 from . import views
 
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    path('admin/', admin.site.urls),   
-    path('books/', views.book_list, name='book_list'),
+    path('', views.index, name='index'),
+    path('admin/', admin.site.urls),
     path('book/new', views.book_new, name='book_new'),
-    url(r'^book/(?P<pk>\d+)/$', views.book, name='book_detail'),
-     # url(r'^(?P<username>[\w.@+-]+)/$', views.user_profile, name='user_profile'),
-    url(r'^signup/$', core_views.signup, name='signup'),
+    path('books/', views.book_list, name='book_list'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
 
 if settings.DEBUG is True:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    
+
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
+]
