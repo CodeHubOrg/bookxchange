@@ -7,8 +7,8 @@ class Book(models.Model):
     author = models.CharField(max_length=100)
     cover = models.ImageField(upload_to='covers/')
     published_date = models.DateTimeField(blank=True, null=True)
-    # last_updated = models.DateTimeField(auto_now_add=True)
-    # owner = models.ForeignKey(User, related_name='books')
+    last_updated = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(User, related_name='books')
 
     def __str__(self):
         return self.title
