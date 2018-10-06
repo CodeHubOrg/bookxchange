@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import TemplateView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
@@ -7,8 +8,8 @@ from .models import Book
 from .forms import PostBookForm
 
 
-def index(request):
-    return render(request, 'books/base.html', {})
+class HomePageView(TemplateView):
+    template_name = 'home.html'
 
 def book_list(request): 
     books = Book.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
