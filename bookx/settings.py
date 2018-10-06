@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'bookx.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'books',
+        'NAME': 'bookx',
         'USER': 'katja',
         'PASSWORD': 'MackD105',
         'HOST': 'localhost',
@@ -132,4 +132,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-AUT_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
