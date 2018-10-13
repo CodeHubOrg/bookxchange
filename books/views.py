@@ -23,16 +23,17 @@ class BookNewView(TemplateView):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
+            book = form.save(commit=False)
             book.published_date = timezone.now()
-            return HttpResponseRedirect('book_list')
+            book.save()
+            return HttpResponseRedirect('/books')
         return render(request, self.template_name, {'form': form})
     
     @method_decorator(login_required, name='dispatch')
     def dispatch(self, request, *args, **kwargs):
         return super(BookNewView, self).dispatch(request, *args, **kwargs)
-
 
 def book_list(request): 
     books = Book.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -41,4 +42,3 @@ def book_list(request):
 def book_detail(request, pk):
     book = Book.objects.get(pk=pk)
     return render(request, 'books/book_detail.html', {'book': book})
-   
