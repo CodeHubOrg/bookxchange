@@ -6,9 +6,6 @@ from books import views
 
 CustomUser = get_user_model()
 
-pytestmark = pytest.mark.django_db
-
-
 class TestHomePageView:
     def test_anonymous(self):
         req = RequestFactory().get('/')

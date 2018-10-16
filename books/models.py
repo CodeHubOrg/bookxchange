@@ -8,5 +8,13 @@ class Book(models.Model):
     # last_updated = models.DateTimeField(auto_now_add=True)
     # owner = models.ForeignKey(User, related_name='books')
 
+    @property
+    def display_author(self):
+        name = self.author.split(' ')
+        if len(name) > 1:
+            name[-1] = name[-1]+", "
+        lastfirst = name[-1:] + name[:-1]
+        return "".join(lastfirst)
+
     def __str__(self):
         return self.title
