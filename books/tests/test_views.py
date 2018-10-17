@@ -1,5 +1,7 @@
 import pytest
 from django.test import RequestFactory
+from mixer.backend.django import mixer
+from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
 from books import views
@@ -32,6 +34,7 @@ class TestBookNewView:
         resp = client.get('/book/new')
         assert 'login' in resp.url
 
+    @pytest.mark.django_db
     def test_with_auth_client(self, client):
         username = "user1"
         password = "hiya"
@@ -40,6 +43,21 @@ class TestBookNewView:
         resp = client.get('/book/new')
         assert resp.status_code == 200
 
-    def test_with_auth_client(self, admin_client):
+    def test_with_admin_client(self, admin_client):
         resp = admin_client.get('/book/new')
         assert resp.status_code == 200
+
+class TestBookListView:
+    @pytest.mark.django_db
+    def test_books_anonymous(self, client):        
+        resp = client.get(reverse('book_list'))
+        assert resp.status_code == 200
+
+class TestDetailView:
+    @pytest.mark.django_db
+    def test_book_detail_anonymous(self, client): 
+        book = mixer.blend('books.Book', author="Kate Raworth")    
+        resp = client.get(book.absolute_url)
+        assert resp.status_code == 200
+        assert "by Kate Raworth" in str(resp.content)
+

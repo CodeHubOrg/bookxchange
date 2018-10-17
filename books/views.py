@@ -13,15 +13,16 @@ from .forms import PostBookForm
 class HomePageView(TemplateView):
     template_name = 'home.html'
 
+
 class BookNewView(TemplateView):
     form_class = PostBookForm
     template_name = 'books/book_edit.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             book = form.save(commit=False)
@@ -31,13 +32,37 @@ class BookNewView(TemplateView):
         return render(request, self.template_name, {'form': form})
     
     @method_decorator(login_required, name='dispatch')
-    def dispatch(self, request, *args, **kwargs):
-        return super(BookNewView, self).dispatch(request, *args, **kwargs)
+    def dispatch(self, request):
+        return super(BookNewView, self).dispatch(request)
 
-def book_list(request): 
-    books = Book.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, 'books/book_list.html', {'books': books})
+## Two Scoops of Django
+# def _post_new_book(request):
+#     pass
 
-def book_detail(request, pk):
-    book = Book.objects.get(pk=pk)
-    return render(request, 'books/book_detail.html', {'book': book})
+# def _get_new_book(request, form_cls, template_name):
+#     return render(request, template_name, {'form': form_cls()})
+
+# def new_book(request):
+#     form_cls = PostBookForm
+#     template_name = template_name
+#     if request.method == 'POST':
+#         return _post_new_book(request, form_cls, template_name)
+#     return _get_new_book(request, form_cls, template_name)
+
+
+#https://djangoforbeginners.com/message-board/
+
+
+
+class BookListView(TemplateView):
+    template_name = 'books/book_list.html'
+    def get(self, request):
+        books = Book.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+        return render(request, self.template_name, {'books': books})
+
+
+class BookDetailView(TemplateView):
+    template_name = 'books/book_detail.html'
+    def get(self, request, pk):
+        book = Book.objects.get(pk=pk) 
+        return render(request, self.template_name, {'book': book})

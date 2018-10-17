@@ -7,7 +7,7 @@
 <ul>
 	{% for book in books %}
     <li>
-		{{ book.title }} by {{ book.author }} <br />
+		<a href="{{ book.absolute_url }}">{{ book.title }}</a> by {{ book.author }} <br />
 		<img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
 	</li>
 	{% endfor %}
