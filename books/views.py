@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView
+from django.views.generic.edit import DeleteView, UpdateView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -35,23 +36,14 @@ class BookNewView(TemplateView):
     def dispatch(self, request):
         return super(BookNewView, self).dispatch(request)
 
-## Two Scoops of Django
-# def _post_new_book(request):
-#     pass
+ 
+class BookUpdate(UpdateView):
+    model = Book
+    template_name = 'books/book_edit.html'
+    fields = ['title', 'author', 'cover']
 
-# def _get_new_book(request, form_cls, template_name):
-#     return render(request, template_name, {'form': form_cls()})
-
-# def new_book(request):
-#     form_cls = PostBookForm
-#     template_name = template_name
-#     if request.method == 'POST':
-#         return _post_new_book(request, form_cls, template_name)
-#     return _get_new_book(request, form_cls, template_name)
-
-
-#https://djangoforbeginners.com/message-board/
-
+class BookDelete(TemplateView):
+    pass
 
 
 class BookListView(TemplateView):
@@ -59,7 +51,6 @@ class BookListView(TemplateView):
     def get(self, request):
         books = Book.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
         return render(request, self.template_name, {'books': books})
-
 
 class BookDetailView(TemplateView):
     template_name = 'books/book_detail.html'

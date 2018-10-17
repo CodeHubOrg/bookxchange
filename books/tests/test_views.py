@@ -47,6 +47,13 @@ class TestBookNewView:
         resp = admin_client.get('/book/new')
         assert resp.status_code == 200
 
+class TestBookUpdate:
+    @pytest.mark.django_db
+    def test_get(self, client):
+        book = mixer.blend('books.Book', author="Kate Raworth")    
+        resp = client.get(book.update_url)
+        assert 'login' in resp.url
+
 class TestBookListView:
     @pytest.mark.django_db
     def test_books_anonymous(self, client):        
@@ -57,7 +64,7 @@ class TestDetailView:
     @pytest.mark.django_db
     def test_book_detail_anonymous(self, client): 
         book = mixer.blend('books.Book', author="Kate Raworth")    
-        resp = client.get(book.absolute_url)
+        resp = client.get(book.get_absolute_url())
         assert resp.status_code == 200
         assert "by Kate Raworth" in str(resp.content)
 
