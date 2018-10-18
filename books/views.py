@@ -28,6 +28,8 @@ class BookNewView(TemplateView):
         if form.is_valid():
             book = form.save(commit=False)
             book.published_date = timezone.now()
+            if request.user.is_authenticated:
+                book.owner = request.user
             book.save()
             return HttpResponseRedirect('/books')
         return render(request, self.template_name, {'form': form})

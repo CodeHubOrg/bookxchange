@@ -9,8 +9,9 @@ from books import views
 CustomUser = get_user_model()
 
 class TestHomePageView:
-    def test_anonymous(self, book_owner):
-        book_owner()
+    @pytest.mark.django_db
+    def test_anonymous(self, book_owner1):
+        user1 = book_owner1
         req = RequestFactory().get('/')
         resp = views.HomePageView.as_view()(req)
         assert resp.status_code == 200, 'Should be callable by anyone'
@@ -50,23 +51,25 @@ class TestBookNewView:
 
 class TestBookUpdate:
     @pytest.mark.django_db
-    def test_get(self, client, book_owner):
-        user1 = book_owner
-        book = mixer.blend('books.Book', author="Kate Raworth")    
+    def test_get(self, client):
+        username = "user3"
+        password = "letmein"
+        user3 = CustomUser.objects.create_user(username=username, password=password)
+        book = mixer.blend('books.Book', author="Kate Raworth", owner=user3)    
+        client.login(username=username, password=password)
         resp = client.get(book.update_url)
-        assert 'login' in resp.url
+        assert 'Add' in str(resp.content)
 
 class TestBookListView:
     @pytest.mark.django_db
-    def test_books_anonymous(self, client, book_owner):        
-        user1 = book_owner
+    def test_books_anonymous(self, client): 
         resp = client.get(reverse('book_list'))
         assert resp.status_code == 200
 
 class TestDetailView:
     @pytest.mark.django_db
-    def test_book_detail_anonymous(self, client, book_owner):
-        user1 = book_owner
+    def test_book_detail_anonymous(self, client, book_owner1):
+        user1 = book_owner1
         book = mixer.blend('books.Book', author="Kate Raworth")    
         resp = client.get(book.get_absolute_url())
         assert resp.status_code == 200

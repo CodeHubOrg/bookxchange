@@ -5,6 +5,8 @@
 <h2>{{ book.title }}</h2>
 <p>by {{ book.author }}</p>
 <p>&nbsp;</p>
+{% if book.cover %}
 <img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
+{% endif %}
 
 {% endblock %}
