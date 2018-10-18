@@ -9,7 +9,8 @@ from books import views
 CustomUser = get_user_model()
 
 class TestHomePageView:
-    def test_anonymous(self):
+    def test_anonymous(self, book_owner):
+        book_owner()
         req = RequestFactory().get('/')
         resp = views.HomePageView.as_view()(req)
         assert resp.status_code == 200, 'Should be callable by anyone'
@@ -24,9 +25,9 @@ class TestBookNewView:
         resp = views.BookNewView.as_view()(req)
         assert 'login' in resp.url, 'Should not allow access to anonymous'
 
-    def test_loggedin_user(self):        
+    def test_loggedin_user(self, django_user_model):        
         req = RequestFactory().get('/')
-        req.user = CustomUser()
+        req.user = django_user_model()
         resp = views.BookNewView.as_view()(req)
         assert resp.status_code == 200, 'Authenticated user can access'
 
@@ -36,7 +37,7 @@ class TestBookNewView:
 
     @pytest.mark.django_db
     def test_with_auth_client(self, client):
-        username = "user1"
+        username = "user2"
         password = "hiya"
         CustomUser.objects.create_user(username=username, password=password)
         client.login(username=username, password=password)
@@ -49,20 +50,23 @@ class TestBookNewView:
 
 class TestBookUpdate:
     @pytest.mark.django_db
-    def test_get(self, client):
+    def test_get(self, client, book_owner):
+        user1 = book_owner
         book = mixer.blend('books.Book', author="Kate Raworth")    
         resp = client.get(book.update_url)
         assert 'login' in resp.url
 
 class TestBookListView:
     @pytest.mark.django_db
-    def test_books_anonymous(self, client):        
+    def test_books_anonymous(self, client, book_owner):        
+        user1 = book_owner
         resp = client.get(reverse('book_list'))
         assert resp.status_code == 200
 
 class TestDetailView:
     @pytest.mark.django_db
-    def test_book_detail_anonymous(self, client): 
+    def test_book_detail_anonymous(self, client, book_owner):
+        user1 = book_owner
         book = mixer.blend('books.Book', author="Kate Raworth")    
         resp = client.get(book.get_absolute_url())
         assert resp.status_code == 200
