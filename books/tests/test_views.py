@@ -10,8 +10,7 @@ CustomUser = get_user_model()
 
 class TestHomePageView:
     @pytest.mark.django_db
-    def test_anonymous(self, book_owner1):
-        user1 = book_owner1
+    def test_anonymous(self):
         req = RequestFactory().get('/')
         resp = views.HomePageView.as_view()(req)
         assert resp.status_code == 200, 'Should be callable by anyone'
@@ -68,8 +67,7 @@ class TestBookListView:
 
 class TestDetailView:
     @pytest.mark.django_db
-    def test_book_detail_anonymous(self, client, book_owner1):
-        user1 = book_owner1
+    def test_book_detail_anonymous(self, client):
         book = mixer.blend('books.Book', author="Kate Raworth")    
         resp = client.get(book.get_absolute_url())
         assert resp.status_code == 200

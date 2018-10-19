@@ -2,8 +2,9 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
-CustomUser = get_user_model()
-superuser_id = CustomUser.objects.filter(is_superuser=True)[0].id
+default_owner_name = "Codehub"
+def get_default_owner():
+    return get_user_model().objects.get_or_create(username=default_owner_name)
 
 class Book(models.Model):
     title = models.CharField(max_length=100)
@@ -11,7 +12,7 @@ class Book(models.Model):
     cover = models.ImageField(upload_to='covers/', blank=True)
     published_date = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(auto_now_add=True, null=True)
-    owner = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, default=superuser_id)
+    owner = models.ForeignKey(get_user_model(), on_delete=models.SET(get_default_owner))
 
     @property
     def display_author(self):
