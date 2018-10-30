@@ -145,3 +145,6 @@ LOGIN_URL = '/users/login/'
 # but the name used for reverse lookup
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+# custom setting by kd
+UIKIT_ROOT = os.path.join(BASE_DIR, 'static/vendor/uikit-3.0.0-rc.20/')
