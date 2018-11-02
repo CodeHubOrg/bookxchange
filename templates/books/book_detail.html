@@ -4,6 +4,11 @@
 
 <h2>{{ book.title }}</h2>
 <p>by {{ book.author }}</p>
+
+{% if user.is_authenticated %}
+<p><a href="{{ book.update_url }}">Update this book</a></p>
+{% endif %}
+
 <p>&nbsp;</p>
 {% if book.cover %}
 <img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
