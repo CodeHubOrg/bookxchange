@@ -1,0 +1,4 @@
+**/__pycache__
+.gitignore
+.pytest_cache
+.sass-cache

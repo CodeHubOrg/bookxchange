@@ -1,0 +1,37 @@
+version: "3"
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: dj
+      POSTGRES_USER: dj
+      POSTGRES_PASSWORD: should_use_env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  web:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    environment:
+      POSTGRES_DB: dj
+      POSTGRES_USER: dj
+      POSTGRES_PASSWORD: should_use_env
+      POSTGRES_HOST: db
+    volumes:
+      - .:/app
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  db-data:
