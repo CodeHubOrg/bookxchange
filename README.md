@@ -30,7 +30,6 @@ $ (bookx) pip3 install -r requirements.txt
 ```
 
 Create a postgres user and database, set db environment variables.
-
 ```
 $ sudo su - postgres
 $ createuser dj
