@@ -78,14 +78,12 @@ WSGI_APPLICATION = 'bookx.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'book_x',
-        'USER': 'katja',
-        'PASSWORD': 'MackD105',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
+        'NAME': os.environ.get('POSTGRES_DB', ''),
+        'USER': os.environ.get('POSTGRES_USER', ''),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ''),
+        'HOST': os.environ.get('POSTGRES_HOST', ''),
+    },
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -145,3 +143,6 @@ LOGIN_URL = '/users/login/'
 # but the name used for reverse lookup
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+# custom setting by kd
+UIKIT_ROOT = os.path.join(BASE_DIR, 'static/vendor/uikit-3.0.0-rc.20/')

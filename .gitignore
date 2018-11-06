@@ -106,3 +106,6 @@ venv.bak/
 # katja added for django project
 media
 **/__pycache__
+
+
+.sass-cache
