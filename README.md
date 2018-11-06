@@ -48,7 +48,6 @@ To complete the setup, apply the database migrations and create a superuser.
 $ python manage.py migrate
 $ python manage.py createsuperuser
 ```
-
 When you start the server again, you should now be able to log in and enter a book at http://localhost:8000/book/new .
 
 
@@ -74,5 +73,3 @@ Run local development server:
 ```
 docker-compose exec web python manage.py runserver 0:8000
 ```
-
-You should be able to access the app at localhost:8000.
