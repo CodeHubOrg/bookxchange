@@ -1,5 +1,6 @@
-# bookxchange
+![](https://travis-ci.com/katjad/bookxchange.svg?branch=master)
 
+# bookxchange
 
 ## Set up dev environment
 
