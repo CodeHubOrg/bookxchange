@@ -4,6 +4,31 @@
 
 ## Set up dev environment
 
+
+### Using Docker
+
+You will need [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/) installed
+
+
+Build containers and run services in detached mode:     
+
+```
+docker-compose up -d
+```
+
+Run Django commands to migrate data and create superuser:
+```
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
+
+```
+
+Run local development server:
+```
+docker-compose exec web python manage.py runserver 0:8000
+```
+
+
 ### Manually 
 
 This is for Ubuntu 18.04, it will vary slightly for other OSs.     
@@ -50,27 +75,3 @@ $ python manage.py migrate
 $ python manage.py createsuperuser
 ```
 When you start the server again, you should now be able to log in and enter a book at http://localhost:8000/book/new .
-
-
-### Using Docker
-
-You will need [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/) installed
-
-
-Build containers and run services in detached mode:     
-
-```
-docker-compose up -d
-```
-
-Run Django commands to migrate data and create superuser:
-```
-docker-compose exec web python manage.py migrate
-docker-compose exec web python manage.py createsuperuser
-
-```
-
-Run local development server:
-```
-docker-compose exec web python manage.py runserver 0:8000
-```
