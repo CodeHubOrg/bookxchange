@@ -25,7 +25,7 @@ SECRET_KEY = '9n3wb28eugt7rge(9l-9q&xg4v+@5+5yz@*3yt9w42%w!ta27='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','books.local','192.168.30.107']
+ALLOWED_HOSTS = ['localhost','books.local','192.168.30.107','192.168.30.108']
 
 
 # Application definition
