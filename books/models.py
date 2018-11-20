@@ -50,63 +50,52 @@ class Book(models.Model):
     def delete_url(self):
         return reverse('book_delete', kwargs={'pk':self.pk})
 
-    def save(self):
-        # print(self.cover)
-        if self.pk is None:
+    def save(self):                    
+        im = Image.open(self.cover)
+        imagefit = ImageOps.fit(im, (200,300), Image.ANTIALIAS)
 
+        name, extension = os.path.splitext(self.cover.name)
+        extension = extension.lower()
+        thumb_filename = name + '_thumb' + extension
+        FTYPE = self.getFileExtension(extension)
 
-            
-            if not self.make_thumbnail():
-                # set to a default thumbnail
-                raise Exception('Could not create thumbnail - is the file type valid?')
+        output = BytesIO()            
+        imagefit.save(output, format=FTYPE, quality=90)
+        output.seek(0)    
+        self.cover = InMemoryUploadedFile(output,'ImageField', "{0}.{1}".format(self.cover.name.split('.')[0], extension), "image/%s" %extension, sys.getsizeof(output), None)
 
-            
-            im = Image.open(self.cover)
-            imagefit = ImageOps.fit(im, (200,300), Image.ANTIALIAS)
-         
-
-            output = BytesIO()            
-            imagefit.save(output, format='JPEG', quality=90)
-            output.seek(0)    
-            self.cover = InMemoryUploadedFile(output,'ImageField', "%s.jpg" %self.cover.name.split('.')[0], 'image/jpeg', sys.getsizeof(output), None)
-
-
-            # self.make_thumbnail()
-
-            if not self.make_thumbnail():
-                # set to a default thumbnail
-                raise Exception('Could not create thumbnail - is the file type valid?')
-
+       
+        if not self.make_thumbnail(thumb_filename, extension):
+            raise Exception('Could not create thumbnail - is the file type valid?')
             
         super(Book,self).save()
 
 
-    def make_thumbnail(self):
-
+    def make_thumbnail(self, name, ext):
         image = Image.open(self.cover)
         image.thumbnail((100,100), Image.ANTIALIAS)
 
-        thumb_name, thumb_extension = os.path.splitext(self.cover.name)
-        thumb_extension = thumb_extension.lower()
-
-        thumb_filename = thumb_name + '_thumb' + thumb_extension
-        if thumb_extension in ['.jpg', '.jpeg']:
-            FTYPE = 'JPEG'
-        elif thumb_extension == '.gif':
-            FTYPE = 'GIF'
-        elif thumb_extension == '.png':
-            FTYPE = 'PNG'
-        else:
-            return False 
-
         temp_thumb = BytesIO()
-        image.save(temp_thumb, FTYPE)
+        FTYPETHUMB = self.getFileExtension(ext)
+        image.save(temp_thumb, FTYPETHUMB)
         temp_thumb.seek(0)
 
-        self.thumb.save(thumb_filename, ContentFile(temp_thumb.read()), save=False)
+        self.thumb.save(name, ContentFile(temp_thumb.read()), save=False)
         temp_thumb.close()
 
         return True
+
+    def getFileExtension(self, extension):
+        if extension in ['.jpg', '.jpeg']:
+            ext = 'JPEG'
+        elif extension == '.gif':
+            ext = 'GIF'
+        elif extension == '.png':
+            ext = 'PNG'
+        else:
+            return False
+        return ext
+
     
 
     def __str__(self):
