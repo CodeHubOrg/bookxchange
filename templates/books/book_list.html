@@ -8,8 +8,8 @@
 	{% for book in books %}
     <li>
 		<a href="{{ book.absolute_url }}">{{ book.title }}</a> by {{ book.author }} <br />
-		{% if book.cover %}
-		<img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
+		{% if book.thumb %}
+		<img src="{{ book.thumb.url }}" alt="Cover {{ book.title }}" />
 		{% endif %}
 	</li>
 	{% endfor %}
