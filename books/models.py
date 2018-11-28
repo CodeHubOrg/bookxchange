@@ -20,23 +20,22 @@ def get_default_owner():
 class Book(models.Model):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
-    cover = models.ImageField(upload_to='covers/', blank=True)
-    thumb = models.ImageField(upload_to='covers/', blank=True)
+    cover = models.ImageField(upload_to="covers/", blank=True)
+    thumb = models.ImageField(upload_to="covers/", blank=True)
     published_date = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(auto_now_add=True, null=True)
-    owner = models.ForeignKey(get_user_model(),
-                              on_delete=models.SET(get_default_owner))
+    owner = models.ForeignKey(get_user_model(), on_delete=models.SET(get_default_owner))
 
     @property
     def display_author(self):
-        name = self.author.split(' ')
+        name = self.author.split(" ")
         if len(name) > 1:
-            name[-1] = name[-1]+", "
+            name[-1] = name[-1] + ", "
         lastfirst = name[-1:] + name[:-1]
         return "".join(lastfirst)
 
     def get_absolute_url(self):
-        return reverse('book_detail', kwargs={'pk': self.pk})
+        return reverse("book_detail", kwargs={"pk": self.pk})
 
     @property
     def absolute_url(self):
@@ -44,11 +43,11 @@ class Book(models.Model):
 
     @property
     def update_url(self):
-        return reverse('book_update', kwargs={'pk': self.pk})
+        return reverse("book_update", kwargs={"pk": self.pk})
 
     @property
     def delete_url(self):
-        return reverse('book_delete', kwargs={'pk': self.pk})
+        return reverse("book_delete", kwargs={"pk": self.pk})
 
     # ipdb
     # - will also install iPython
@@ -73,11 +72,13 @@ class Book(models.Model):
         imagefit.save(output, format=ftype, quality=90)
         output.seek(0)
         self.cover = InMemoryUploadedFile(
-                output, 'ImageField',
-                "{0}.{1}".format(
-                    self.cover.name.split('.')[0], ext),
-                "image/%s" % ext,
-                sys.getsizeof(output), None)
+            output,
+            "ImageField",
+            "{0}.{1}".format(self.cover.name.split(".")[0], ext),
+            "image/%s" % ext,
+            sys.getsizeof(output),
+            None,
+        )
 
     def make_thumbnail(self, name, ext):
         image = Image.open(self.cover)
@@ -92,12 +93,7 @@ class Book(models.Model):
         temp_thumb.close()
 
     def get_file_extension(self, extension):
-        ext_to_type = {
-            '.jpg': 'JPEG',
-            '.jpeg': 'JPEG',
-            '.png': 'PNG',
-            '.gif': 'GIF'
-        }
+        ext_to_type = {".jpg": "JPEG", ".jpeg": "JPEG", ".png": "PNG", ".gif": "GIF"}
 
         try:
             return ext_to_type[extension.lower()]
@@ -105,10 +101,8 @@ class Book(models.Model):
             valid_extensions = ", ".join(ext_to_type.keys())
             raise InvalidExtension(
                 f"Could not recognise file extension {extension}. \
-                Supported extensions: {valid_extensions}")
+                Supported extensions: {valid_extensions}"
+            )
 
     def __str__(self):
         return self.title
-
-
-

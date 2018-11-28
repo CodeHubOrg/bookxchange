@@ -4,10 +4,10 @@ import sys
 
 import dotenv
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     dotenv.read_dotenv()
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bookx.settings')
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bookx.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

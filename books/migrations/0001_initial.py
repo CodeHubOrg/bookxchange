@@ -9,21 +9,33 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-    ]
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
 
     operations = [
         migrations.CreateModel(
-            name='Book',
+            name="Book",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('author', models.CharField(max_length=100)),
-                ('cover', models.ImageField(blank=True, upload_to='covers/')),
-                ('published_date', models.DateTimeField(blank=True, null=True)),
-                ('last_updated', models.DateTimeField(auto_now_add=True, null=True)),
-                ('owner', models.ForeignKey(on_delete=models.SET(books.models.get_default_owner), to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                ("author", models.CharField(max_length=100)),
+                ("cover", models.ImageField(blank=True, upload_to="covers/")),
+                ("published_date", models.DateTimeField(blank=True, null=True)),
+                ("last_updated", models.DateTimeField(auto_now_add=True, null=True)),
+                (
+                    "owner",
+                    models.ForeignKey(
+                        on_delete=models.SET(books.models.get_default_owner),
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
-        ),
+        )
     ]

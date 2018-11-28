@@ -1,47 +1,63 @@
 import os
 import sys
+from io import BytesIO
+from PIL import Image, ImageOps
+
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
 from .models import Book
 
-from django.core.files.base import ContentFile
-from PIL import Image, ImageOps
-from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
-
 
 class PostBookForm(forms.ModelForm):
-
     class Meta:
         model = Book
-        fields = ('title', 'author', 'cover')
+        fields = ("title", "author", "cover")
 
-    def clean_author(self): 
-        data = self.cleaned_data.get('author')
+    def clean_author(self):
+        data = self.cleaned_data.get("author")
         if len(data) <= 3:
-            raise forms.ValidationError('Author needs to be longer than two characters')
+            raise forms.ValidationError(
+                "Author needs to be longer than \
+                two characters"
+            )
         return data
 
-    def clean_cover(self):
-        cover = self.cleaned_data.get('cover')
-        if cover:
-            name, extension = os.path.splitext(cover.name)
-            extension = extension.lower()
-            cover = self.resize_image(cover, 200, 300, extension, 90)
-        return cover
-    
+    # def clean_cover(self):
+    #     cover = self.cleaned_data.get("cover")
+    #     if cover:
+    #         name, extension = os.path.splitext(cover.name)
+    #         extension = extension.lower()
+    #         cover = self.resize_image(cover, 200, 300, extension, 90)
+
+    #     return cover
+
     def save(self, *args, **kwargs):
+        if self.instance.id:
+            bookId = self.instance.id
+            book = Book.objects.get(pk=bookId)
+
         cover = self.instance.cover
         if cover:
-            # import pdb; pdb.set_trace()
-            # self.make_thumbnail()
             name, extension = os.path.splitext(cover.name)
-            thumb_filename = name + '_thumb' + extension
-            self.instance.thumb = self.make_thumbnail(cover, thumb_filename, extension)
-            # import pdb; pdb.set_trace()
+            thumb_filename = name + "_thumb" + extension
+            if book:
+                if book.cover != cover:
+                    book.cover = self.resize_image(
+                        cover, 200, 300, extension, 90
+                    )
+                if book.thumb != thumb_filename:
+                    self.instance.thumb = self.make_thumbnail(
+                        cover, thumb_filename, extension
+                    )
+            else:
+                if cover:
+                    self.instance.thumb = self.make_thumbnail(
+                        cover, thumb_filename, extension
+                    )
         else:
             self.instance.thumb = None
-        return super().save(*args, **kwargs)
 
+        return super().save(*args, **kwargs)
 
     def resize_image(self, cover, width, height, ext, quality):
         im = Image.open(cover)
@@ -52,11 +68,13 @@ class PostBookForm(forms.ModelForm):
         imagefit.save(output, format=ftype, quality=90)
         output.seek(0)
         return InMemoryUploadedFile(
-                output, 'ImageField',
-                "{0}.{1}".format(
-                    cover.name.split('.')[0], ext),
-                "image/%s" % ext,
-                sys.getsizeof(output), None)
+            output,
+            "ImageField",
+            "{0}.{1}".format(cover.name.split(".")[0], ext),
+            "image/%s" % ext,
+            sys.getsizeof(output),
+            None,
+        )
 
     def make_thumbnail(self, cover, name, ext):
         image = Image.open(cover)
@@ -68,16 +86,20 @@ class PostBookForm(forms.ModelForm):
         temp_thumb.seek(0)
 
         return InMemoryUploadedFile(
-                temp_thumb, 'ImageField', name,
-                "image/%s" % ext,
-                sys.getsizeof(temp_thumb), None)
+            temp_thumb,
+            "ImageField",
+            name,
+            "image/%s" % ext,
+            sys.getsizeof(temp_thumb),
+            None,
+        )
 
     def get_file_extension(self, extension):
         ext_to_type = {
-            '.jpg': 'JPEG',
-            '.jpeg': 'JPEG',
-            '.png': 'PNG',
-            '.gif': 'GIF'
+            ".jpg": "JPEG",
+            ".jpeg": "JPEG",
+            ".png": "PNG",
+            ".gif": "GIF",
         }
 
         try:
@@ -86,7 +108,9 @@ class PostBookForm(forms.ModelForm):
             valid_extensions = ", ".join(ext_to_type.keys())
             raise InvalidExtension(
                 f"Could not recognise file extension {extension}. \
-                Supported extensions: {valid_extensions}")
+                Supported extensions: {valid_extensions}"
+            )
+
 
 class InvalidExtension(Exception):
     """Raise for invalid image extension"""
