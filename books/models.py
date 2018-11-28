@@ -50,16 +50,19 @@ class Book(models.Model):
     def delete_url(self):
         return reverse('book_delete', kwargs={'pk': self.pk})
 
-    def save(self):
-        if(self.cover):
-            name, extension = os.path.splitext(self.cover.name)
-            extension = extension.lower()
-            thumb_filename = name + '_thumb' + extension
+    # ipdb
+    # - will also install iPython
 
-            self.resize_image(200, 300, extension, 90)
-            self.make_thumbnail(thumb_filename, extension)
+    # def save(self):
+    #     if(self.cover):
+    #         name, extension = os.path.splitext(self.cover.name)
+    #         extension = extension.lower()
+    #         thumb_filename = name + '_thumb' + extension
 
-        super(Book, self).save()
+    #         self.resize_image(200, 300, extension, 90)
+    #         self.make_thumbnail(thumb_filename, extension)
+
+    #     super(Book, self).save()
 
     def resize_image(self, width, height, ext, quality):
         im = Image.open(self.cover)
@@ -108,5 +111,4 @@ class Book(models.Model):
         return self.title
 
 
-class InvalidExtension(Exception):
-    """Raise for invalid image extension"""
+
