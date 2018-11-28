@@ -22,42 +22,42 @@ class PostBookForm(forms.ModelForm):
             )
         return data
 
-    # def clean_cover(self):
-    #     cover = self.cleaned_data.get("cover")
-    #     if cover:
-    #         name, extension = os.path.splitext(cover.name)
-    #         extension = extension.lower()
-    #         cover = self.resize_image(cover, 200, 300, extension, 90)
-
-    #     return cover
+    def clean_cover(self):
+        cover = self.cleaned_data.get("cover")
+        if cover:
+            name, extension = os.path.splitext(cover.name)
+            extension = extension.lower()
+            book = self.getBookIfExists()
+            if not book or (book.cover != cover):
+                cover = self.resize_image(cover, 200, 300, extension, 90)
+        return cover
 
     def save(self, *args, **kwargs):
-        if self.instance.id:
-            bookId = self.instance.id
-            book = Book.objects.get(pk=bookId)
+        import ipdb
 
+        ipdb.set_trace()
         cover = self.instance.cover
         if cover:
             name, extension = os.path.splitext(cover.name)
             thumb_filename = name + "_thumb" + extension
-            if book:
-                if book.cover != cover:
-                    book.cover = self.resize_image(
-                        cover, 200, 300, extension, 90
-                    )
-                if book.thumb != thumb_filename:
-                    self.instance.thumb = self.make_thumbnail(
-                        cover, thumb_filename, extension
-                    )
-            else:
-                if cover:
-                    self.instance.thumb = self.make_thumbnail(
-                        cover, thumb_filename, extension
-                    )
+
+            book = self.getBookIfExists()
+            if not book or (book.thumb != thumb_filename):
+                self.instance.thumb = self.make_thumbnail(
+                    cover, thumb_filename, extension
+                )
         else:
             self.instance.thumb = None
 
         return super().save(*args, **kwargs)
+
+    def getBookIfExists(self):
+        if self.instance.id:
+            bookId = self.instance.id
+            book = Book.objects.get(pk=bookId)
+            return book
+        else:
+            return None
 
     def resize_image(self, cover, width, height, ext, quality):
         im = Image.open(cover)
