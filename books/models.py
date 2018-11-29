@@ -20,11 +20,6 @@ class Book(models.Model):
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.SET(get_default_owner)
     )
-    holder = models.ManyToMany(
-        get_user_model(),
-        through="BookHolder",
-        through_fields=("book", "holder"),
-    )
 
     @property
     def display_author(self):
@@ -51,11 +46,3 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Loan(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    holder = models.ForeignKey(get_user_model(), on_deletete=models.CASCADE)
-    date_requested = models.DateTimeField(blank=True, null=True)
-    date_borrowed = models.DateTimeField(blank=True, null=True)
-    date_returned = models.DateTimeField(blank=True, null=True)

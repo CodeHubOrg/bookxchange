@@ -25,7 +25,12 @@ SECRET_KEY = "9n3wb28eugt7rge(9l-9q&xg4v+@5+5yz@*3yt9w42%w!ta27="
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "books.local", "192.168.30.107", "192.168.30.108"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "books.local",
+    "192.168.30.107",
+    "192.168.30.108",
+]
 
 
 # Application definition
@@ -93,8 +98,12 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
+    },
 ]
 
 
@@ -140,4 +149,5 @@ LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
 # custom setting by kd
+DEFAULT_OWNER = "Codehub"
 UIKIT_ROOT = os.path.join(BASE_DIR, "static/vendor/uikit-3.0.0-rc.20/")
