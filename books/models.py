@@ -1,20 +1,13 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-
-from django.core.files.base import ContentFile
-from PIL import Image, ImageOps
-from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
-import sys
-import os
-
-
-default_owner_name = "Codehub"
+from django.conf import settings
 
 
 def get_default_owner():
-    return get_user_model().objects.get_or_create(username=default_owner_name)
+    return get_user_model().objects.get_or_create(
+        username=settings.DEFAULT_OWNER
+    )
 
 
 class Book(models.Model):
@@ -24,7 +17,14 @@ class Book(models.Model):
     thumb = models.ImageField(upload_to="covers/", blank=True)
     published_date = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(auto_now_add=True, null=True)
-    owner = models.ForeignKey(get_user_model(), on_delete=models.SET(get_default_owner))
+    owner = models.ForeignKey(
+        get_user_model(), on_delete=models.SET(get_default_owner)
+    )
+    holder = models.ManyToMany(
+        get_user_model(),
+        through="BookHolder",
+        through_fields=("book", "holder"),
+    )
 
     @property
     def display_author(self):
@@ -49,60 +49,13 @@ class Book(models.Model):
     def delete_url(self):
         return reverse("book_delete", kwargs={"pk": self.pk})
 
-    # ipdb
-    # - will also install iPython
-
-    # def save(self):
-    #     if(self.cover):
-    #         name, extension = os.path.splitext(self.cover.name)
-    #         extension = extension.lower()
-    #         thumb_filename = name + '_thumb' + extension
-
-    #         self.resize_image(200, 300, extension, 90)
-    #         self.make_thumbnail(thumb_filename, extension)
-
-    #     super(Book, self).save()
-
-    def resize_image(self, width, height, ext, quality):
-        im = Image.open(self.cover)
-        imagefit = ImageOps.fit(im, (width, height), Image.ANTIALIAS)
-        ftype = self.get_file_extension(ext)
-
-        output = BytesIO()
-        imagefit.save(output, format=ftype, quality=90)
-        output.seek(0)
-        self.cover = InMemoryUploadedFile(
-            output,
-            "ImageField",
-            "{0}.{1}".format(self.cover.name.split(".")[0], ext),
-            "image/%s" % ext,
-            sys.getsizeof(output),
-            None,
-        )
-
-    def make_thumbnail(self, name, ext):
-        image = Image.open(self.cover)
-        image.thumbnail((100, 100), Image.ANTIALIAS)
-
-        temp_thumb = BytesIO()
-        ftype = self.get_file_extension(ext)
-        image.save(temp_thumb, ftype)
-        temp_thumb.seek(0)
-
-        self.thumb.save(name, ContentFile(temp_thumb.read()), save=False)
-        temp_thumb.close()
-
-    def get_file_extension(self, extension):
-        ext_to_type = {".jpg": "JPEG", ".jpeg": "JPEG", ".png": "PNG", ".gif": "GIF"}
-
-        try:
-            return ext_to_type[extension.lower()]
-        except KeyError:
-            valid_extensions = ", ".join(ext_to_type.keys())
-            raise InvalidExtension(
-                f"Could not recognise file extension {extension}. \
-                Supported extensions: {valid_extensions}"
-            )
-
     def __str__(self):
         return self.title
+
+
+class Loan(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    holder = models.ForeignKey(get_user_model(), on_deletete=models.CASCADE)
+    date_requested = models.DateTimeField(blank=True, null=True)
+    date_borrowed = models.DateTimeField(blank=True, null=True)
+    date_returned = models.DateTimeField(blank=True, null=True)
