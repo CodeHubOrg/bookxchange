@@ -20,6 +20,9 @@ class Book(models.Model):
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.SET(get_default_owner)
     )
+    holder = models.ManyToManyField(
+        get_user_model(), related_name="holder", through="BookHolder"
+    )
 
     @property
     def display_author(self):
@@ -46,3 +49,11 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class BookHolder(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    holder = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    date_requested = models.DateField(blank=True, null=True)
+    date_borrowed = models.DateField(blank=True, null=True)
+    date_returned = models.DateField(blank=True, null=True)
