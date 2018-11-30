@@ -24,27 +24,23 @@ class PostBookForm(forms.ModelForm):
 
     def clean_cover(self):
         cover = self.cleaned_data.get("cover")
-        if not cover:
-            cover = None
-        if cover is not None:
-            if self.has_changed() and "cover" in self.changed_data:
-                name, extension = os.path.splitext(cover.name)
-                extension = extension.lower()
-                cover = self.resize_image(cover, 200, 300, extension, 90)
+        if cover and "cover" in self.changed_data:
+            name, extension = os.path.splitext(cover.name)
+            extension = extension.lower()
+            cover = self.resize_image(cover, 200, 300, extension, 90)
         return cover
 
     def save(self, *args, **kwargs):
-        if self.cleaned_data.get("cover") is not None:
-            if self.has_changed() and "cover" in self.changed_data:
-                cover = self.instance.cover
-                name, extension = os.path.splitext(cover.name)
-                thumb_filename = name + "_thumb" + extension
-                self.instance.thumb = self.make_thumbnail(
-                    cover, thumb_filename, extension
-                )
+        cover = self.instance.cover
+        if cover and "cover" in self.changed_data:
+            cover = self.instance.cover
+            name, extension = os.path.splitext(cover.name)
+            thumb_filename = name + "_thumb" + extension
+            self.instance.thumb = self.make_thumbnail(
+                cover, thumb_filename, extension
+            )
         else:
             self.instance.thumb = None
-            self.instance.cover = None
         return super().save(*args, **kwargs)
 
     def resize_image(self, cover, width, height, ext, quality):
