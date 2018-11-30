@@ -28,7 +28,7 @@ class Book(models.Model):
     status = models.CharField(
         max_length=50,
         choices=[(tag.name, tag.value) for tag in LoanStatus],
-        default=(LoanStatus.AV.name, LoanStatus.AV.value),
+        default=(LoanStatus.AV.name),
     )
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.SET(get_default_owner)
