@@ -98,3 +98,10 @@ class PostBookForm(forms.ModelForm):
 
 class InvalidExtension(Exception):
     """Raise for invalid image extension"""
+
+
+class RequestBookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ("status",)
+        widgets = {"status": forms.HiddenInput()}

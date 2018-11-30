@@ -6,12 +6,42 @@
 <p>by {{ book.author }}</p>
 
 {% if user.is_authenticated %}
-<p><a href="{{ book.update_url }}">Update this book</a></p>
+  <p><a href="{{ book.update_url }}">Update this book</a></p>
 {% endif %}
+
 
 <p>&nbsp;</p>
 {% if book.cover %}
-<img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
+  <img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
 {% endif %}
+
+
+{% if book.status == 'AV' %}
+  <p>This book is available.</p>
+{% elif book.status == 'RQ' %}
+  <p>Somebody has requested this book.</p>
+{% elif book.status == 'OL' %}
+  <p>This book is currently on loan.</p>
+{% elif book.status == 'NA' %}
+  <p>This book is not on loan, but not available for other reasons.</p>
+{% endif %}
+
+
+
+<form method="post" class="book__form" action="">
+{% csrf_token %}
+
+{% if book.status == 'AV' %}
+
+  <input type="hidden" name="status" value="RQ" id="id_status">
+  <button type="submit">Request this book</button>
+
+{% else %}
+
+  <input type="hidden" name="status" value="{{ book.status }}" id="id_status">
+  <button type="submit">Register your interest</button>
+{% endif %}
+
+</form>
 
 {% endblock %}

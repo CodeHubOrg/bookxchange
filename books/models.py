@@ -67,6 +67,6 @@ class Book(models.Model):
 class BookHolder(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     holder = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    date_requested = models.DateField(blank=True, null=True)
-    date_borrowed = models.DateField(blank=True, null=True)
-    date_returned = models.DateField(blank=True, null=True)
+    date_requested = models.DateTimeField(blank=True, null=True)
+    date_borrowed = models.DateTimeField(blank=True, null=True)
+    date_returned = models.DateTimeField(blank=True, null=True)

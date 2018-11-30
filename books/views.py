@@ -7,8 +7,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from .models import Book
-from .forms import PostBookForm
+from .models import Book, BookHolder
+from .forms import PostBookForm, RequestBookForm
 
 
 class HomePageView(TemplateView):
@@ -60,8 +60,28 @@ class BookListView(TemplateView):
 
 
 class BookDetailView(TemplateView):
+    form_class = RequestBookForm
     template_name = "books/book_detail.html"
 
     def get(self, request, pk):
         book = Book.objects.get(pk=pk)
-        return render(request, self.template_name, {"book": book})
+        form = self.form_class()
+        return render(
+            request, self.template_name, {"book": book, "form": form}
+        )
+
+    def post(self, request, pk):
+        book = Book.objects.get(pk=pk)
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            if request.user.is_authenticated:
+                if book.status == "AV":
+                    BookHolder.objects.create(
+                        book=book,
+                        holder=request.user,
+                        date_requested=timezone.now(),
+                    )
+                book.status = form.instance.status
+            book.save()
+            return HttpResponseRedirect("/books")
+        return render(request, self.template_name, {"form": form})
