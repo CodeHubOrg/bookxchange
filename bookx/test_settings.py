@@ -1,4 +1,4 @@
-from .settings import *             # NOQA
+from .settings import *  # NOQA
 
 # DATABASES = {
 #     'default': {
@@ -7,4 +7,4 @@ from .settings import *             # NOQA
 #     }
 # }
 
-EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
