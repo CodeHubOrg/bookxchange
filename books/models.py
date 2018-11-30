@@ -1,8 +1,8 @@
-from enum import Enum
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from bookx.utils import ChoiceEnum
 
 
 def get_default_owner():
@@ -11,10 +11,10 @@ def get_default_owner():
     )
 
 
-class LoanStatus(Enum):
+class LoanStatus(ChoiceEnum):
+    AV = "available"
     OL = "on loan"
     RQ = "requested"
-    AV = "available"
     NA = "not available"
 
 
@@ -25,7 +25,11 @@ class Book(models.Model):
     thumb = models.ImageField(upload_to="covers/", blank=True)
     published_date = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(auto_now_add=True, null=True)
-    status = models.CharField(choices=[(tag, tag.value) for tag in LoanStatus])
+    status = models.CharField(
+        max_length=50,
+        choices=[(tag.name, tag.value) for tag in LoanStatus],
+        default=(LoanStatus.AV.name, LoanStatus.AV.value),
+    )
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.SET(get_default_owner)
     )
