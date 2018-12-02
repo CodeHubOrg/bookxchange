@@ -1,13 +1,11 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
-from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from .models import Book, BookHolder
+from .models import Book
 from .forms import PostBookForm, RequestBookForm
 
 
@@ -73,15 +71,10 @@ class BookDetailView(TemplateView):
     def post(self, request, pk):
         book = Book.objects.get(pk=pk)
         form = self.form_class(request.POST)
+        form.instance = book
         if form.is_valid():
-            if request.user.is_authenticated:
-                if book.status == "AV":
-                    BookHolder.objects.create(
-                        book=book,
-                        holder=request.user,
-                        date_requested=timezone.now(),
-                    )
-                book.status = form.instance.status
-            book.save()
+            form.save(request)
             return HttpResponseRedirect("/books")
-        return render(request, self.template_name, {"form": form})
+        return render(
+            request, self.template_name, {"book": book, "form": form}
+        )

@@ -11,13 +11,15 @@ class TestPostBookForm:
 
         form = forms.PostBookForm(
             data={
-                "title": "Lorem ipsum dolor sit amet \
-            consectetur adipisicing elit. \
-            Asperiores quia corrupti laborum \
-            veritatis eum. Maiores numquam est \
-            repellat adipisci porro a fuga, itaque \
-            de animi, rerum officia minima hic \
-            necessitatibus?",
+                "title": (
+                    "Lorem ipsum dolor sit amet "
+                    "consectetur adipisicing elit. "
+                    "Asperiores quia corrupti laborum "
+                    "veritatis eum. Maiores numquam est "
+                    "repellat adipisci porro a fuga, itaque "
+                    "de animi, rerum officia minima hic "
+                    "necessitatibus?"
+                ),
                 "author": "Kate Raworth",
             }
         )

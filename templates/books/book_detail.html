@@ -31,14 +31,14 @@
 <form method="post" class="book__form" action="">
 {% csrf_token %}
 
+<input type="hidden" name="status" value="{{ book.status }}" id="id_status">
+
 {% if book.status == 'AV' %}
 
-  <input type="hidden" name="status" value="RQ" id="id_status">
   <button type="submit">Request this book</button>
 
 {% else %}
 
-  <input type="hidden" name="status" value="{{ book.status }}" id="id_status">
   <button type="submit">Register your interest</button>
 {% endif %}
 

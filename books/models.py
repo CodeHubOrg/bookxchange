@@ -31,10 +31,12 @@ class Book(models.Model):
         default=(LoanStatus.AV.name),
     )
     owner = models.ForeignKey(
-        get_user_model(), on_delete=models.SET(get_default_owner)
+        get_user_model(),
+        related_name="books_owned",
+        on_delete=models.SET(get_default_owner),
     )
-    holder = models.ManyToManyField(
-        get_user_model(), related_name="holder", through="BookHolder"
+    holders = models.ManyToManyField(
+        get_user_model(), related_name="books_held", through="BookHolder"
     )
 
     @property

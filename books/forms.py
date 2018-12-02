@@ -5,7 +5,8 @@ from PIL import Image, ImageOps
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
-from .models import Book
+from django.utils import timezone
+from .models import Book, BookHolder
 
 
 class PostBookForm(forms.ModelForm):
@@ -105,3 +106,13 @@ class RequestBookForm(forms.ModelForm):
         model = Book
         fields = ("status",)
         widgets = {"status": forms.HiddenInput()}
+
+    def save(self, request):
+        book = self.instance
+        if book.status == "AV":
+            BookHolder.objects.create(
+                book=book, holder=request.user, date_requested=timezone.now()
+            )
+            book.status = "RQ"
+        book = super().save(request)
+        return book
