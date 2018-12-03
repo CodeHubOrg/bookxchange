@@ -1,4 +1,11 @@
 language: python
-python: 
+python:
   - "3.6"
+addons:
+  postgresql: "10.5"
+env:
+  - POSTGRES_DB=testing_db
+  - POSTGRES_USER=testuser
+  - POSTGRES_PASSWORD=test
+  - POSTGRES_HOST=localhost
 script: pytest
