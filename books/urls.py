@@ -16,5 +16,5 @@ urlpatterns = [
         login_required(views.BookDelete.as_view()),
         name="book_delete",
     ),
-    path("<int:pk>", views.BookDetailView.as_view(), name="book_detail"),
+    path("<int:pk>/", views.BookDetailView.as_view(), name="book_detail"),
 ]

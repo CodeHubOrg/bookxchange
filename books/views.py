@@ -59,7 +59,7 @@ class BookDetailView(TemplateView):
 
     def get(self, request, pk):
         book = Book.objects.get(pk=pk)
-        form = self.form_class()
+        form = self.form_class(request, instance=book)
         return render(
             request, self.template_name, {"book": book, "form": form}
         )
