@@ -2,12 +2,20 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from bookx.utils import ChoiceEnum
 
 
 def get_default_owner():
     return get_user_model().objects.get_or_create(
         username=settings.DEFAULT_OWNER
     )
+
+
+class LoanStatus(ChoiceEnum):
+    AV = "available"
+    OL = "on loan"
+    RQ = "requested"
+    NA = "not available"
 
 
 class Book(models.Model):
@@ -17,8 +25,18 @@ class Book(models.Model):
     thumb = models.ImageField(upload_to="covers/", blank=True)
     published_date = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(auto_now_add=True, null=True)
+    status = models.CharField(
+        max_length=50,
+        choices=[(tag.name, tag.value) for tag in LoanStatus],
+        default=(LoanStatus.AV.name),
+    )
     owner = models.ForeignKey(
-        get_user_model(), on_delete=models.SET(get_default_owner)
+        get_user_model(),
+        related_name="books_owned",
+        on_delete=models.SET(get_default_owner),
+    )
+    holders = models.ManyToManyField(
+        get_user_model(), related_name="books_held", through="BookHolder"
     )
 
     @property
@@ -46,3 +64,11 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class BookHolder(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    holder = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    date_requested = models.DateTimeField(blank=True, null=True)
+    date_borrowed = models.DateTimeField(blank=True, null=True)
+    date_returned = models.DateTimeField(blank=True, null=True)

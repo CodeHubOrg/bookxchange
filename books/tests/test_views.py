@@ -57,7 +57,9 @@ class TestBookUpdate:
     def test_get(self, client):
         username = "user3"
         password = "letmein"
-        user3 = CustomUser.objects.create_user(username=username, password=password)
+        user3 = CustomUser.objects.create_user(
+            username=username, password=password
+        )
         book = mixer.blend("books.Book", author="Kate Raworth", owner=user3)
         client.login(username=username, password=password)
         resp = client.get(book.update_url)
