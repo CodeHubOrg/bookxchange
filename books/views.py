@@ -9,10 +9,6 @@ from .models import Book
 from .forms import PostBookForm, RequestBookForm
 
 
-class HomePageView(TemplateView):
-    template_name = "home.html"
-
-
 class BookNewView(TemplateView):
     form_class = PostBookForm
     template_name = "books/book_edit.html"

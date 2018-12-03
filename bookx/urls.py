@@ -3,9 +3,11 @@ from django.conf import settings
 from django.urls import include, path
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from bookx import views
 
 urlpatterns = [
-    path("", include("books.urls")),
+    path("", views.HomePageView.as_view(), name="home"),
+    path("books/", include("books.urls")),
     path("users/", include("users.urls")),  # new
     path("users/", include("django.contrib.auth.urls")),  # new
     path("admin/", admin.site.urls),
@@ -14,4 +16,6 @@ urlpatterns = [
 urlpatterns += staticfiles_urlpatterns()
 
 if settings.DEBUG is True:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

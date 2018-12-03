@@ -55,12 +55,20 @@ class Book(models.Model):
         return self.get_absolute_url()
 
     @property
+    def new_url(self):
+        return reverse("book_new")
+
+    @property
     def update_url(self):
         return reverse("book_update", kwargs={"pk": self.pk})
 
     @property
     def delete_url(self):
         return reverse("book_delete", kwargs={"pk": self.pk})
+
+    @property
+    def list_url(self):
+        return reverse("book_list")
 
     def __str__(self):
         return self.title

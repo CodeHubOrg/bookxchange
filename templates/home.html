@@ -8,4 +8,9 @@
 <p><a href="{% url 'signup' %}">Sign Up</a></p>
 <p><a href="{% url 'login' %}">Log In </a></p>
 {% endif %}
+
+<p>View <a href="{{ books.list_url }}">all books</a></p>
+{% if user.is_authenticated %}
+<p>Add a <a href="{{ books.new_url }}">new book</a></p>
+{% endif %}
 {% endblock %}
