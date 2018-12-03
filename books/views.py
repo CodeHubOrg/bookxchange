@@ -70,8 +70,7 @@ class BookDetailView(TemplateView):
 
     def post(self, request, pk):
         book = Book.objects.get(pk=pk)
-        form = self.form_class(request.POST)
-        form.instance = book
+        form = self.form_class(request.POST, instance=book)
         if form.is_valid():
             form.save(request)
             return HttpResponseRedirect("/books")
