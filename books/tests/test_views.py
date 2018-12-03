@@ -45,11 +45,11 @@ class TestBookNewView:
         password = "hiya"
         CustomUser.objects.create_user(username=username, password=password)
         client.login(username=username, password=password)
-        resp = client.get("/books/new")
+        resp = client.get(reverse("book_new"))
         assert resp.status_code == 200
 
     def test_with_admin_client(self, admin_client):
-        resp = admin_client.get("/books/new")
+        resp = admin_client.get(reverse("book_new"))
         assert resp.status_code == 200
 
 
@@ -63,7 +63,7 @@ class TestBookUpdate:
         )
         book = mixer.blend("books.Book", author="Kate Raworth", owner=user3)
         client.login(username=username, password=password)
-        resp = client.get(book.update_url)
+        resp = client.get(reverse("book_update", kwargs={"pk": book.id}))
         assert "Add" in str(resp.content)
 
 
