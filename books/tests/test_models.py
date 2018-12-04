@@ -1,17 +1,18 @@
 import pytest
 from mixer.backend.django import mixer
+
 from django.contrib.auth import get_user_model
 
 
-@pytest.mark.django_db
 class TestBook:
+    @pytest.mark.django_db
     def test_model(self):
         book = mixer.blend("books.Book", title="A book")
         assert book.__str__() == "A book", "Should return title"
 
 
-@pytest.mark.django_db
 class TestBookHolder:
+    @pytest.mark.django_db
     def test_model(self):
         book = mixer.blend("books.Book", title="A book")
         user1 = mixer.blend(

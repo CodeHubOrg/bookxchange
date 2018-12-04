@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
 from books import views
+from bookx import views as views_bookx
 
 CustomUser = get_user_model()
 
@@ -13,7 +14,7 @@ class TestHomePageView:
     @pytest.mark.django_db
     def test_anonymous(self):
         req = RequestFactory().get("/")
-        resp = views.HomePageView.as_view()(req)
+        resp = views_bookx.HomePageView.as_view()(req)
         assert resp.status_code == 200, "Should be callable by anyone"
 
 
@@ -35,7 +36,7 @@ class TestBookNewView:
         assert resp.status_code == 200, "Authenticated user can access"
 
     def test_with_unauth_client(self, client):
-        resp = client.get("/book/new")
+        resp = client.get("/books/new")
         assert "login" in resp.url
 
     @pytest.mark.django_db
@@ -44,11 +45,11 @@ class TestBookNewView:
         password = "hiya"
         CustomUser.objects.create_user(username=username, password=password)
         client.login(username=username, password=password)
-        resp = client.get("/book/new")
+        resp = client.get(reverse("book_new"))
         assert resp.status_code == 200
 
     def test_with_admin_client(self, admin_client):
-        resp = admin_client.get("/book/new")
+        resp = admin_client.get(reverse("book_new"))
         assert resp.status_code == 200
 
 
@@ -62,7 +63,7 @@ class TestBookUpdate:
         )
         book = mixer.blend("books.Book", author="Kate Raworth", owner=user3)
         client.login(username=username, password=password)
-        resp = client.get(book.update_url)
+        resp = client.get(reverse("book_update", kwargs={"pk": book.id}))
         assert "Add" in str(resp.content)
 
 

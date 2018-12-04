@@ -9,10 +9,6 @@ from .models import Book
 from .forms import PostBookForm, RequestBookForm
 
 
-class HomePageView(TemplateView):
-    template_name = "home.html"
-
-
 class BookNewView(TemplateView):
     form_class = PostBookForm
     template_name = "books/book_edit.html"
@@ -63,7 +59,7 @@ class BookDetailView(TemplateView):
 
     def get(self, request, pk):
         book = Book.objects.get(pk=pk)
-        form = self.form_class()
+        form = self.form_class(request, instance=book)
         return render(
             request, self.template_name, {"book": book, "form": form}
         )
