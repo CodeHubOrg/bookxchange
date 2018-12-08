@@ -1,3 +1,4 @@
+from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
@@ -39,8 +40,9 @@ class BookUpdate(UpdateView):
     template_name = "books/book_edit.html"
 
 
-class BookDelete(TemplateView):
-    pass
+class BookDelete(DeleteView):
+    model = Book
+    success_url = reverse_lazy("book_list")
 
 
 class BookListView(TemplateView):

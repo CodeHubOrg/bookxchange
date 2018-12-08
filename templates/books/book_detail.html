@@ -5,8 +5,18 @@
 <h2>{{ book.title }}</h2>
 <p>by {{ book.author }}</p>
 
+
+
+
+
+{{ book.owner.id }}
+
 {% if user.is_authenticated %}
+  {% if book.owner == user or user.is_superuser %}
   <p><a href="{% url 'book_update' pk=book.id %}">Update this book</a></p>
+
+  <p><a href="{% url 'book_delete' pk=book.id %}">Delete this book</a></p>
+  {% endif %}
 {% endif %}
 
 
