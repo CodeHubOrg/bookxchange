@@ -12,6 +12,11 @@ urlpatterns = [
         name="book_update",
     ),
     path(
+        "<int:pk>/request_item/<int:userid>",
+        login_required(views.BookRequest.as_view()),
+        name="book_request_item",
+    ),
+    path(
         "<int:pk>/delete",
         login_required(views.BookDelete.as_view()),
         name="book_delete",

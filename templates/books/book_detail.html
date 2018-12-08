@@ -5,12 +5,6 @@
 <h2>{{ book.title }}</h2>
 <p>by {{ book.author }}</p>
 
-
-
-
-
-{{ book.owner.id }}
-
 {% if user.is_authenticated %}
   {% if book.owner == user or user.is_superuser %}
   <p><a href="{% url 'book_update' pk=book.id %}">Update this book</a></p>
@@ -36,7 +30,7 @@
   <p>This book is not on loan, but not available for other reasons.</p>
 {% endif %}
 
-
+{% comment %}
 
 <form method="post" class="book__form" action="">
 {% csrf_token %}
@@ -53,5 +47,7 @@
 {% endif %}
 
 </form>
+
+{% endcomment %}
 
 {% endblock %}

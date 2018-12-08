@@ -2,12 +2,14 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.views.generic.edit import DeleteView, UpdateView
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from .models import Book
-from .forms import PostBookForm, RequestBookForm
+from .forms import PostBookForm  # , RequestBookForm
+from .mixins import RequestView
 
 
 class BookNewView(TemplateView):
@@ -56,22 +58,33 @@ class BookListView(TemplateView):
 
 
 class BookDetailView(TemplateView):
-    form_class = RequestBookForm
+    #    form_class = RequestBookForm
     template_name = "books/book_detail.html"
 
     def get(self, request, pk):
         book = Book.objects.get(pk=pk)
-        form = self.form_class(request, instance=book)
+        # form = self.form_class(request, instance=book)
         return render(
-            request, self.template_name, {"book": book, "form": form}
+            request,
+            self.template_name,
+            {
+                "book": book,
+                # "form": form
+            },
         )
 
-    def post(self, request, pk):
-        book = Book.objects.get(pk=pk)
-        form = self.form_class(request.POST, instance=book)
-        if form.is_valid():
-            form.save(request)
-            return HttpResponseRedirect("/books")
-        return render(
-            request, self.template_name, {"book": book, "form": form}
-        )
+    # def post(self, request, pk):
+    #     book = Book.objects.get(pk=pk)
+    #     form = self.form_class(request.POST, instance=book)
+    #     if form.is_valid():
+    #         form.save(request)
+    #         return HttpResponseRedirect("/books")
+    #     return render(
+    #         request, self.template_name, {"book": book, "form": form}
+    #     )
+
+
+class BookRequest(RequestView):
+    model = Book
+    # fields = ("status",)
+    success_url = reverse_lazy("book_list")

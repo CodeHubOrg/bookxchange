@@ -3,9 +3,9 @@
 {% block content %}
 
 {% if not book %}
-<h2>Add a book</h2>
+  <h2>Add a book</h2>
 {% else %}
-<h2>Update <em>{{ book.title }}</em></h2>
+  <h2>Update <em><a href="{{ book.absolute_url }}">{{ book.title }}</a></em></h2>
 {% endif %}
 <form method="post" enctype="multipart/form-data" class="book__form">
 {% csrf_token %}
