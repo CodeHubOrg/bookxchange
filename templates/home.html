@@ -2,15 +2,10 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<p>Hi {{ user.username }}
-<p><a href="{% url 'logout' %}">Log out</a></p>
-{% else %}
-<p><a href="{% url 'signup' %}">Sign Up</a></p>
-<p><a href="{% url 'login' %}">Log In </a></p>
+<p>Hi {{ user.username }}</p>
+
 {% endif %}
 
-<p>View <a href="{% url 'book_list' %}">all books</a></p>
-{% if user.is_authenticated %}
-<p>Add a <a href="{% url 'book_new' %}">new book</a></p>
-{% endif %}
+
+
 {% endblock %}

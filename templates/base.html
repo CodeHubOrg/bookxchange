@@ -2,15 +2,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Book Xchange</title>       
+    <title>Book Xchange</title>
         <link rel="stylesheet" href="{% static 'bookx/css/styles.css' %}">
     </head>
     <body>
 
     <div class="uk-container uk-container-large">
         <div class="page-header">
-            <h1>Boox Xchange</h1>
-            
+
+            <h1><a href="/">Boox Xchange</a></h1>
+
+            {% if user.is_authenticated %}
+            <p><a href="{% url 'logout' %}">Log out</a></p>
+            {% else %}
+            <p><a href="{% url 'signup' %}">Sign Up</a><br />
+            <a href="{% url 'login' %}">Log In </a></p>
+            {% endif %}
+
+
+            <p>
+                {% url 'book_list' as book_list %}
+                {% url 'book_new' as book_new %}
+
+                {% if request.get_full_path != book_list %}
+                <a href="{% url 'book_list' %}">See all books</a><br />
+                {% endif %}
+                {% if request.get_full_path != book_new %}
+                Add a <a href="{% url 'book_new' %}">new book</a>
+                {% endif %}
+            </p>
+
         </div>
         {% block content %}
             {{ content }}
@@ -18,5 +39,5 @@
     </div>
     <script type="text/javascript" src="{% static 'vendor/uikit-3.0.0-rc.20/dist/js/uikit.min.js' %}"></script>
     </body>
-    
+
 </html>

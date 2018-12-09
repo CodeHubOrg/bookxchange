@@ -64,7 +64,12 @@ Status:
 
 {% if book.status == 'AV' %}
 
+  {% if user.is_authenticated %}
   <a href="{% url 'book_request_item' pk=book.id userid=user.id %}">Request this book</a>
+  {% else %}
+  <a href="{% url 'login' %}">Log in to request this book</a>
+  {% endif %}
+
 
 {% else %}
   Register your interest
