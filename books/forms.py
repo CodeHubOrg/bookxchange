@@ -5,9 +5,7 @@ from PIL import Image, ImageOps
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
-
-# from django.utils import timezone
-from .models import Book  # , BookHolder
+from .models import Book
 
 
 class PostBookForm(forms.ModelForm):
