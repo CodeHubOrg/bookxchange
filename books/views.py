@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from .models import Book
 from .forms import PostBookForm  # , RequestBookForm
-from .mixins import RequestView
+from .mixins import RequestView, LendView, ReturnView
 
 
 class BookNewView(TemplateView):
@@ -64,27 +64,20 @@ class BookDetailView(TemplateView):
     def get(self, request, pk):
         book = Book.objects.get(pk=pk)
         # form = self.form_class(request, instance=book)
-        return render(
-            request,
-            self.template_name,
-            {
-                "book": book,
-                # "form": form
-            },
-        )
-
-    # def post(self, request, pk):
-    #     book = Book.objects.get(pk=pk)
-    #     form = self.form_class(request.POST, instance=book)
-    #     if form.is_valid():
-    #         form.save(request)
-    #         return HttpResponseRedirect("/books")
-    #     return render(
-    #         request, self.template_name, {"book": book, "form": form}
-    #     )
+        return render(request, self.template_name, {"book": book})
 
 
 class BookRequest(RequestView):
     model = Book
-    # fields = ("status",)
-    success_url = reverse_lazy("book_list")
+    new_status = "RQ"
+    allowed_status = ["AV"]
+
+
+class BookLend(LendView):
+    model = Book
+    new_status = "OL"
+
+
+class BookReturn(ReturnView):
+    model = Book
+    new_status = "AV"

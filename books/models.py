@@ -39,6 +39,48 @@ class Book(models.Model):
         get_user_model(), related_name="books_held", through="BookHolder"
     )
 
+    def get_loan(self, status, latestby):
+        return BookHolder.objects.filter(status=status, book=self).latest(
+            latestby
+        )
+
+    def get_holder_for_status(self, status, latestby):
+        loan = self.get_loan(status, latestby)
+        return loan.holder
+
+    # Book requested
+
+    @property
+    def last_requested(self):
+        loan = self.get_loan("RQ", "date_requested")
+        return loan.date_requested
+
+    @property
+    def latest_requester(self):
+        return self.get_holder_for_status("RQ", "date_requested")
+
+    # Book borrowed
+
+    @property
+    def last_borrowed(self):
+        loan = self.get_loan("OL", "date_borrowed")
+        return loan.date_borrowed
+
+    @property
+    def latest_borrower(self):
+        return self.get_holder_for_status("OL", "date_borrowed")
+
+    # Book returned
+
+    @property
+    def last_returned(self):
+        loan = self.get_loan("AV", "date_returned")
+        return loan.date_returned
+
+    @property
+    def returned_from(self):
+        return self.get_holder_for_status("AV", "date_returned")
+
     @property
     def display_author(self):
         name = self.author.split(" ")
@@ -61,6 +103,7 @@ class Book(models.Model):
 class BookHolder(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     holder = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    status = models.CharField(max_length=2, default="RQ")
     date_requested = models.DateTimeField(blank=True, null=True)
     date_borrowed = models.DateTimeField(blank=True, null=True)
     date_returned = models.DateTimeField(blank=True, null=True)
