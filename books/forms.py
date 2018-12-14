@@ -1,7 +1,7 @@
 import os
 import sys
 from io import BytesIO
-from PIL import Image, ImageOps
+from PIL import Image
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
@@ -45,11 +45,12 @@ class PostBookForm(forms.ModelForm):
 
     def resize_image(self, cover, width, height, ext, quality):
         im = Image.open(cover)
-        imagefit = ImageOps.fit(im, (width, height), Image.ANTIALIAS)
+        im.thumbnail((width, height), Image.ANTIALIAS)
+        # imagefit = ImageOps.fit(im, (width, height), Image.ANTIALIAS)
         ftype = self.get_file_extension(ext)
 
         output = BytesIO()
-        imagefit.save(output, format=ftype, quality=90)
+        im.save(output, format=ftype, quality=90)
         output.seek(0)
         return InMemoryUploadedFile(
             output,
@@ -62,7 +63,7 @@ class PostBookForm(forms.ModelForm):
 
     def make_thumbnail(self, cover, name, ext):
         image = Image.open(cover)
-        image.thumbnail((100, 100), Image.ANTIALIAS)
+        image.thumbnail((50, 150), Image.ANTIALIAS)
 
         temp_thumb = BytesIO()
         ftype = self.get_file_extension(ext)
