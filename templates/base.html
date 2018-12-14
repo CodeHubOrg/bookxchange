@@ -3,14 +3,15 @@
 <html>
 <head>
     <title>Book Xchange</title>
-        <link rel="stylesheet" href="{% static 'bookx/css/styles.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'bookx/css/main.css' %}?{% now 'U' %}">
     </head>
     <body>
 
-    <div class="uk-container uk-container-large">
-        <div class="page-header">
+    <div class="uk-container uk-container-expand" >
+        <div class="page-header" style="padding-top: 28px">
 
-            <h1><a href="/">Boox Xchange</a></h1>
+            <h1><a href="/"><img src="{% static '/bookx/img/bookx_logo160x73_blue.png' %}"  alt="Boox Xchange" /></a></h1>
 
             {% if user.is_authenticated %}
             <p><a href="{% url 'logout' %}">Log out</a></p>
@@ -20,7 +21,7 @@
             {% endif %}
 
 
-            <p>
+            <nav class="book-menu">
                 {% url 'book_list' as book_list %}
                 {% url 'book_new' as book_new %}
 
@@ -30,9 +31,10 @@
                 {% if request.get_full_path != book_new %}
                 Add a <a href="{% url 'book_new' %}">new book</a>
                 {% endif %}
-            </p>
+            </nav>
 
         </div>
+
         {% block content %}
             {{ content }}
         {% endblock %}
