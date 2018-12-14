@@ -6,9 +6,10 @@ from bookx.utils import ChoiceEnum
 
 
 def get_default_owner():
-    return get_user_model().objects.get_or_create(
-        username=settings.DEFAULT_OWNER
+    def_user = get_user_model().objects.get_or_create(
+        username=settings.DEFAULT_OWNER, email=settings.DEFAULT_OWNER_EMAIL
     )
+    return def_user[0]
 
 
 class LoanStatus(ChoiceEnum):
@@ -39,47 +40,46 @@ class Book(models.Model):
         get_user_model(), related_name="books_held", through="BookHolder"
     )
 
-    def get_loan(self, status, latestby):
-        return BookHolder.objects.filter(status=status, book=self).latest(
-            latestby
-        )
+    def get_loan(self, status):
+        latestby = self.get_latestby_for_status(status)
+        try:
+            loan = BookHolder.objects.filter(status=status, book=self).latest(
+                latestby
+            )
+        except BookHolder.DoesNotExist:
+            loan = None
+        return loan
 
-    def get_holder_for_status(self, status, latestby):
-        loan = self.get_loan(status, latestby)
-        return loan.holder
+    def get_holder_for_status(self, status):
+        loan = self.get_loan(status)
+        if loan:
+            return loan.holder
+        else:
+            return None
 
-    # Book requested
+    def get_holder_for_current_status(self):
+        return self.get_holder_for_status(self.status)
 
-    @property
-    def last_requested(self):
-        loan = self.get_loan("RQ", "date_requested")
-        return loan.date_requested
+    def get_latestby_for_status(self, status):
+        status_latestby = {
+            "RQ": "date_requested",
+            "OL": "date_borrowed",
+            "AV": "date_returned",
+            "NA": None,
+        }
+        return status_latestby[status]
 
-    @property
-    def latest_requester(self):
-        return self.get_holder_for_status("RQ", "date_requested")
-
-    # Book borrowed
-
-    @property
-    def last_borrowed(self):
-        loan = self.get_loan("OL", "date_borrowed")
-        return loan.date_borrowed
-
-    @property
-    def latest_borrower(self):
-        return self.get_holder_for_status("OL", "date_borrowed")
-
-    # Book returned
-
-    @property
-    def last_returned(self):
-        loan = self.get_loan("AV", "date_returned")
-        return loan.date_returned
-
-    @property
-    def returned_from(self):
-        return self.get_holder_for_status("AV", "date_returned")
+    def get_date_for_status(self, status):
+        loan = self.get_loan(status)
+        if status == "RQ":
+            date = loan.date_requested
+        elif status == "OL":
+            date = loan.date_borrowed
+        elif status == "AV":
+            date = loan.date_returned
+        else:
+            date = None
+        return date
 
     @property
     def display_author(self):

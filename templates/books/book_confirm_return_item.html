@@ -5,23 +5,24 @@
 {% if object.status != 'AV' %}
 
 {% if object.status == 'OL' %}
-<p>According to our records, {{ object.latest_borrower }} has borrowed this book.</p>
+<p>According to our records, <strong>{{ holder.username }}</strong> has borrowed this book.</p>
 {% elif object.status == 'RQ' %}
-<p>According to our records, {{ object.latest_requester }} has requested this book. </p>
+<p>According to our records, <strong>{{ holder.username }}</strong> has requested this book. </p>
 {% endif %}
+
 
 <form method="post">{% csrf_token %}
     {% if object.status == 'OL' %}
-    <p>Return <em>{{object}}</em>?</p>
+    <p>Return <em>{{object.title }}</em>?</p>
     {% else %}
-    <p>Make <em>{{ object }}</em> available?</p>
+    <p>Make <em>{{ object.title }}</em> available?</p>
     {% endif %}
     <input type="submit" value="Confirm">
 </form>
 
 {% else %}
 
-<p><em>{{ object }}</em> is already set to available.</p>
+<p><em>{{ object.item }}</em> is already set to available.</p>
 
 {% endif %}
 

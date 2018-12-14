@@ -8,12 +8,29 @@
 {% if user.is_authenticated %}
   {% if book.owner == user or user.is_superuser %}
 
-  {% if book.status == 'RQ' %}
-  <a href="{% url 'book_lend_item' pk=book.id userid=book.latest_requester.id %}">Confirm loan to {{ book.latest_requester }}</a>
-  {% elif book.status == 'OL' %}
-  <a href="{% url 'book_return_item' pk=book.id userid=book.latest_borrower.id %}">Return the book from {{ book.latest_borrower }}</a>
+
+
+    {% if book.status == 'RQ' %}
+    <a href="{% url 'book_lend_item' pk=book.id %}">Confirm loan to
+      {% if holder %}
+      {{ holder.username }}
+      {% endif %}
+
+    </a>
+      {% if date_action != "" %} (requested on {{ date|date:"d M Y" }}){% endif %}
+
+    {% elif book.status == 'OL' %}
+    <a href="{% url 'book_return_item' pk=book.id  %}">Return the book from
+      {% if holder %}
+      {{ holder.username }}
+      {% endif %}
+
+    </a>
+     {% if date_action != "" %} (borrowed on {{ date|date:"d M Y" }}){% endif %}
 
   {% endif %}
+
+
 
   <p><a href="{% url 'book_update' pk=book.id %}">Update this book</a></p>
 
@@ -21,14 +38,15 @@
 
    <!-- use this for just date |date:'d M Y' -->
 
-  Last requested by {{ book.latest_requester }} on {{ book.last_requested }}<br />
-  Last borrowed by {{ book.latest_borrower }} on {{ book.last_borrowed }} <br />
-  Last returned from {{ book.returned_from }} on {{ book.last_returned }}
-  <div style="height:30px"></div>
-  {% endif %}
-
+   {% endif %}
 
 {% endif %}
+
+{% comment %}
+{% if holder %}
+Holder: {{ holder.username }} <br />
+{% endif %}
+{% endcomment %}
 
 
 Status:
@@ -36,19 +54,9 @@ Status:
 {% if book.status == 'AV' %}
   <p>Available</p>
 {% elif book.status == 'RQ' %}
-
-  <p>Requested (by {{ book.latest_requester }}
-  {% if book.latest_requester == user %}
-- that's you :)
-  {% endif %})
-  </p>
-
+<p>Requested</p>
 {% elif book.status == 'OL' %}
-  <p>On loan (Borrowed by {{ book.latest_borrower }}
-  {% if book.latest_borrower == user %}
-- that's you :)
-  {% endif %}
-  )</p>
+<p>On loan</p>
 {% elif book.status == 'NA' %}
   <p>Unavailable for other reaons</p>
 {% endif %}
@@ -65,7 +73,7 @@ Status:
 {% if book.status == 'AV' %}
 
   {% if user.is_authenticated %}
-  <a href="{% url 'book_request_item' pk=book.id userid=user.id %}">Request this book</a>
+  <a href="{% url 'book_request_item' pk=book.id %}">Request this book</a>
   {% else %}
   <a href="{% url 'login' %}">Log in to request this book</a>
   {% endif %}
@@ -74,6 +82,7 @@ Status:
 {% else %}
   Register your interest
 {% endif %}
+
 
 </form>
 
