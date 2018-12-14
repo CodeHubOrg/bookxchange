@@ -2,13 +2,8 @@
 
 {% block content %}
 
-
-{% if object.status == 'RQ' %}
-{{ object.latest_requester }} has requested this book.
-{% endif %}
-
 <form method="post">{% csrf_token %}
-    <p>Confirm the loan of <em>{{object}}</em> by {{ holder }} ?</p>
+    <p>Confirm the loan of <em>{{object}}</em> by {{ holder.username }} ?</p>
     <input type="submit" value="Confirm">
 </form>
 
