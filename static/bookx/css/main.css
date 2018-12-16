@@ -1888,20 +1888,20 @@ select.uk-form-width-xsmall {
  * Secondary
  */
 .uk-button-secondary {
-  background-color: #222;
+  background-color: #1bb11f;
   color: #fff;
   border: 1px solid transparent; }
 
 /* Hover + Focus */
 .uk-button-secondary:hover,
 .uk-button-secondary:focus {
-  background-color: #151515;
+  background-color: #189b1b;
   color: #fff; }
 
 /* OnClick + Active */
 .uk-button-secondary:active,
 .uk-button-secondary.uk-active {
-  background-color: #090909;
+  background-color: #148517;
   color: #fff; }
 
 /*
@@ -2148,7 +2148,7 @@ select.uk-form-width-xsmall {
  * Secondary
  */
 .uk-section-secondary {
-  background: #222; }
+  background: #1bb11f; }
 
 /* Overlap modifier
  ========================================================================== */
@@ -2625,7 +2625,7 @@ select.uk-form-width-xsmall {
  * Secondary
  */
 .uk-tile-secondary {
-  background: #222; }
+  background: #1bb11f; }
 
 /* ========================================================================
    Component: Card
@@ -2755,7 +2755,7 @@ select.uk-form-width-xsmall {
  * Secondary
  */
 .uk-card-secondary {
-  background: #222;
+  background: #1bb11f;
   color: #fff;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); }
 
@@ -2763,7 +2763,7 @@ select.uk-form-width-xsmall {
   color: #fff; }
 
 .uk-card-secondary.uk-card-hover:hover {
-  background-color: #222;
+  background-color: #1bb11f;
   box-shadow: 0 14px 25px rgba(0, 0, 0, 0.16); }
 
 /* Size modifier
@@ -2951,7 +2951,7 @@ select.uk-form-width-xsmall {
  */
 .uk-marker {
   padding: 5px;
-  background: #222;
+  background: #1bb11f;
   color: #fff;
   border-radius: 500px; }
 
@@ -3150,7 +3150,7 @@ select.uk-form-width-xsmall {
  * Primary
  */
 .uk-overlay-primary {
-  background: rgba(34, 34, 34, 0.8); }
+  background: rgba(27, 177, 31, 0.8); }
 
 /* ========================================================================
    Component: Article
@@ -5317,7 +5317,7 @@ ul.uk-nav-sub {
   box-sizing: border-box;
   width: 270px;
   padding: 20px 20px;
-  background: #222;
+  background: #1bb11f;
   /* 3 */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -7007,7 +7007,7 @@ iframe.uk-cover {
   background-color: #3ea9e1; }
 
 .uk-background-secondary {
-  background-color: #222; }
+  background-color: #1bb11f; }
 
 /* Size
  ========================================================================== */
@@ -8969,3 +8969,100 @@ iframe.uk-cover {
   h2,
   h3 {
     page-break-after: avoid; } }
+
+/** custom vars **/
+main, header, section,
+footer, .logo {
+  margin: 0;
+  padding: 10px; }
+
+header {
+  background: #afdfff;
+  color: #222; }
+
+.flex-container-s {
+  display: flex; }
+
+@media screen and (min-width: 640px) {
+  .flex-container-m {
+    display: flex; } }
+
+.flex-sidebar {
+  flex: 0 1 160px; }
+  @media screen and (min-width: 640px) {
+    .flex-sidebar {
+      flex: 0 1 240px; } }
+
+.flex-content {
+  flex: 1; }
+  @media screen and (min-width: 640px) {
+    .flex-content {
+      display: flex;
+      flex-direction: column;
+      width: 100%; } }
+
+.logo {
+  flex: 1;
+  width: 160px;
+  border: none; }
+  @media screen and (min-width: 768px) {
+    .logo {
+      width: 240px; } }
+
+.nav-login {
+  display: block;
+  padding: 20px 0; }
+  @media screen and (min-width: 420px) {
+    .nav-login {
+      flex: 0 1 140px;
+      display: flex; } }
+  .nav-login li a {
+    color: #777;
+    justify-content: flex-start;
+    letter-spacing: 0.05em;
+    min-height: 32px; }
+  .nav-login li.active a {
+    font-weight: bold; }
+
+ul.nav-books {
+  display: flex;
+  justify-content: space-around; }
+  ul.nav-books li {
+    flex: 1;
+    margin: 0 3px; }
+    ul.nav-books li.active {
+      background: #ccc; }
+    ul.nav-books li a {
+      color: #fff; }
+    @media screen and (min-width: 640px) {
+      ul.nav-books li {
+        width: 90%;
+        margin-right: 8%;
+        margin-bottom: 10px; } }
+  @media screen and (min-width: 640px) {
+    ul.nav-books {
+      display: block; } }
+
+ul.nav-bookupdate {
+  display: flex;
+  justify-content: space-around; }
+  ul.nav-bookupdate li {
+    flex: 1; }
+    ul.nav-bookupdate li:first-child {
+      margin-right: 8px; }
+    ul.nav-bookupdate li.active {
+      background: #ccc; }
+    ul.nav-bookupdate li a {
+      color: #fff; }
+
+/** buttons **/
+.uk-button-bookupdate {
+  background: #e1763e;
+  color: #fff; }
+
+.uk-button-bookrequest {
+  background: #e13e57;
+  color: #fff; }
+
+.uk-button.pad-15 {
+  padding: 0 15px !important; }

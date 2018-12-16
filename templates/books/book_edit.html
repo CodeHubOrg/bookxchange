@@ -1,15 +1,16 @@
-{% extends 'books/base.html' %}
+{% extends 'books/book_confirm_loan_item.html' %}
 
 {% block content %}
 
-{% if not book %}
-  <h2>Add a book</h2>
-{% else %}
-  <h2>Update <em><a href="{{ book.absolute_url }}">{{ book.title }}</a></em></h2>
-{% endif %}
-<form method="post" enctype="multipart/form-data" class="book__form">
-{% csrf_token %}
-{{ form.as_p }}
-<button type="submit">Save</button>
-</form>
+  {% if not book %}
+    <h2>Add a book</h2>
+  {% else %}
+    <h2>Update <em><a href="{{ book.absolute_url }}">{{ book.title }}</a></em></h2>
+  {% endif %}
+    <form method="post" enctype="multipart/form-data" class="book__form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+
 {% endblock %}
