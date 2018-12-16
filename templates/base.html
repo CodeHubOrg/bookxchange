@@ -6,39 +6,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'bookx/css/main.css' %}?{% now 'U' %}">
     </head>
+
     <body>
 
-    <div class="uk-container uk-container-expand" >
-        <div class="page-header" style="padding-top: 28px">
-
-            <h1><a href="/"><img src="{% static '/bookx/img/bookx_logo160x73_blue.png' %}"  alt="Boox Xchange" /></a></h1>
-
-            {% if user.is_authenticated %}
-            <p><a href="{% url 'logout' %}">Log out</a></p>
-            {% else %}
-            <p><a href="{% url 'signup' %}">Sign Up</a><br />
-            <a href="{% url 'login' %}">Log In </a></p>
-            {% endif %}
 
 
-            <nav class="book-menu">
-                {% url 'book_list' as book_list %}
-                {% url 'book_new' as book_new %}
+    <header>
+    <div class="flex-container-s">
+    <section class="logo">
+    <a href="/"><img src="{% static '/bookx/img/bookx_logo160x73_blue.png' %}"  alt="Logo BookXchange" /></a>
+    </section>
+            <nav>
 
-                {% if request.get_full_path != book_list %}
-                <a href="{% url 'book_list' %}">See all books</a><br />
+                {% url 'signup' as register %}
+                {% url 'login' as login %}
+
+
+                <ul class="uk-navbar-nav nav-login">
+                {% if not user.is_authenticated %}
+                    <li
+                     {% if request.get_full_path == register %} class="active" {% endif %}
+                    >
+                        <a href="{% url 'signup' %}">Register</a></li>
+                    <li
+                    {% if request.get_full_path == login %} class="active" {% endif %}
+                    ><a href="{% url 'login' %}">Log In </a></li>
+                {% else %}
+                    <li><a href="{% url 'logout' %}">Log out</a></li>
                 {% endif %}
-                {% if request.get_full_path != book_new %}
-                Add a <a href="{% url 'book_new' %}">new book</a>
-                {% endif %}
+                </ul>
             </nav>
+    </div>
+    </header>
 
-        </div>
+
+    <main>
+    {% block main %}
+
+   <!--  <div class="uk-container uk-container-expand content" > -->
+
+        <section class="content">
+
+
+
+
+
+
+
+
 
         {% block content %}
             {{ content }}
         {% endblock %}
-    </div>
+        </section>
+
+    {% endblock %}
+    </main>
+    <footer>
+        Here's the footer.
+
+    </footer>
+
     <script type="text/javascript" src="{% static 'vendor/uikit-3.0.0-rc.20/dist/js/uikit.min.js' %}"></script>
     </body>
 
