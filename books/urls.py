@@ -12,6 +12,21 @@ urlpatterns = [
         name="book_update",
     ),
     path(
+        "<int:pk>/request_item/",
+        login_required(views.BookRequest.as_view()),
+        name="book_request_item",
+    ),
+    path(
+        "<int:pk>/lend_item/",
+        login_required(views.BookLend.as_view()),
+        name="book_lend_item",
+    ),
+    path(
+        "<int:pk>/return_item/",
+        login_required(views.BookReturn.as_view()),
+        name="book_return_item",
+    ),
+    path(
         "<int:pk>/delete",
         login_required(views.BookDelete.as_view()),
         name="book_delete",

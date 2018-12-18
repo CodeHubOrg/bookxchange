@@ -6,42 +6,86 @@
 <p>by {{ book.author }}</p>
 
 {% if user.is_authenticated %}
+  {% if book.owner == user or user.is_superuser %}
+
+
+
+    {% if book.status == 'RQ' %}
+    <a href="{% url 'book_lend_item' pk=book.id %}">Confirm loan to
+      {% if holder %}
+      {{ holder.username }}
+      {% endif %}
+
+    </a>
+      {% if date_action != "" %} (requested on {{ date|date:"d M Y" }}){% endif %}
+
+    {% elif book.status == 'OL' %}
+    <a href="{% url 'book_return_item' pk=book.id  %}">Return the book from
+      {% if holder %}
+      {{ holder.username }}
+      {% endif %}
+
+    </a>
+     {% if date_action != "" %} (borrowed on {{ date|date:"d M Y" }}){% endif %}
+
+  {% endif %}
+
+
+
   <p><a href="{% url 'book_update' pk=book.id %}">Update this book</a></p>
+
+  <p><a href="{% url 'book_delete' pk=book.id %}">Delete this book</a></p>
+
+   <!-- use this for just date |date:'d M Y' -->
+
+   {% endif %}
+
 {% endif %}
 
+{% comment %}
+{% if holder %}
+Holder: {{ holder.username }} <br />
+{% endif %}
+{% endcomment %}
 
-<p>&nbsp;</p>
+
+Status:
+<strong>
+{% if book.status == 'AV' %}
+  <p>Available</p>
+{% elif book.status == 'RQ' %}
+<p>Requested</p>
+{% elif book.status == 'OL' %}
+<p>On loan</p>
+{% elif book.status == 'NA' %}
+  <p>Unavailable for other reaons</p>
+{% endif %}
+</strong>
+<div style="height:30px"></div>
+
 {% if book.cover %}
   <img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
-{% endif %}
-
-
-{% if book.status == 'AV' %}
-  <p>This book is available.</p>
-{% elif book.status == 'RQ' %}
-  <p>Somebody has requested this book.</p>
-{% elif book.status == 'OL' %}
-  <p>This book is currently on loan.</p>
-{% elif book.status == 'NA' %}
-  <p>This book is not on loan, but not available for other reasons.</p>
+  <div style="height:30px"></div>
 {% endif %}
 
 
 
-<form method="post" class="book__form" action="">
-{% csrf_token %}
-
-<input type="hidden" name="status" value="{{ book.status }}" id="id_status">
-
 {% if book.status == 'AV' %}
 
-  <button type="submit">Request this book</button>
+  {% if user.is_authenticated %}
+  <a href="{% url 'book_request_item' pk=book.id %}">Request this book</a>
+  {% else %}
+  <a href="{% url 'login' %}">Log in to request this book</a>
+  {% endif %}
+
 
 {% else %}
-
-  <button type="submit">Register your interest</button>
+  Register your interest
 {% endif %}
 
+
 </form>
+
+
 
 {% endblock %}

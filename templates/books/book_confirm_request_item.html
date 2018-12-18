@@ -1,0 +1,15 @@
+{% extends 'books/base.html' %}
+
+{% block content %}
+
+{% if object.status == 'RQ' %}
+<p>This book has already been requested.</p>
+{% else %}
+<form method="post">{% csrf_token %}
+    <p>Request <em>{{ object.title }}</em> ?</p>
+    <input type="submit" value="Confirm">
+</form>
+{% endif %}
+
+
+{% endblock %}

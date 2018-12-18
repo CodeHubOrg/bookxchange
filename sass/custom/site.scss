@@ -1,0 +1,12 @@
+// 1. Your custom variables and variable overwrites.
+@import "theme/alert.scss";
+
+// ... import all
+
+// 2. Import default variables and available mixins.
+@import "uikit/src/scss/variables.scss";
+@import "uikit/src/scss/mixins.scss";
+
+// 3. Your custom mixin overwrites.
+
+// ... import all

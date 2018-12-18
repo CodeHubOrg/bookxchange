@@ -6,9 +6,10 @@ from bookx.utils import ChoiceEnum
 
 
 def get_default_owner():
-    return get_user_model().objects.get_or_create(
-        username=settings.DEFAULT_OWNER
+    def_user = get_user_model().objects.get_or_create(
+        username=settings.DEFAULT_OWNER, email=settings.DEFAULT_OWNER_EMAIL
     )
+    return def_user[0]
 
 
 class LoanStatus(ChoiceEnum):
@@ -39,6 +40,47 @@ class Book(models.Model):
         get_user_model(), related_name="books_held", through="BookHolder"
     )
 
+    def get_loan(self, status):
+        latestby = self.get_latestby_for_status(status)
+        try:
+            loan = BookHolder.objects.filter(status=status, book=self).latest(
+                latestby
+            )
+        except BookHolder.DoesNotExist:
+            loan = None
+        return loan
+
+    def get_holder_for_status(self, status):
+        loan = self.get_loan(status)
+        if loan:
+            return loan.holder
+        else:
+            return None
+
+    def get_holder_for_current_status(self):
+        return self.get_holder_for_status(self.status)
+
+    def get_latestby_for_status(self, status):
+        status_latestby = {
+            "RQ": "date_requested",
+            "OL": "date_borrowed",
+            "AV": "date_returned",
+            "NA": None,
+        }
+        return status_latestby[status]
+
+    def get_date_for_status(self, status):
+        loan = self.get_loan(status)
+        if status == "RQ":
+            date = loan.date_requested
+        elif status == "OL":
+            date = loan.date_borrowed
+        elif status == "AV":
+            date = loan.date_returned
+        else:
+            date = None
+        return date
+
     @property
     def display_author(self):
         name = self.author.split(" ")
@@ -61,6 +103,7 @@ class Book(models.Model):
 class BookHolder(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     holder = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    status = models.CharField(max_length=2, default="RQ")
     date_requested = models.DateTimeField(blank=True, null=True)
     date_borrowed = models.DateTimeField(blank=True, null=True)
     date_returned = models.DateTimeField(blank=True, null=True)

@@ -150,4 +150,5 @@ LOGOUT_REDIRECT_URL = "home"
 
 # custom setting by kd
 DEFAULT_OWNER = "Codehub"
+DEFAULT_OWNER_EMAIL = "info@codehub.org.uk"
 UIKIT_ROOT = os.path.join(BASE_DIR, "static/vendor/uikit-3.0.0-rc.20/")

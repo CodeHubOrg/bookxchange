@@ -1,0 +1,13 @@
+{% extends 'books/base.html' %}
+
+{% block content %}
+
+<form method="post">{% csrf_token %}
+    <p>Confirm the loan of <em>{{object}}</em> by {{ holder.username }} ?</p>
+    <input type="submit" value="Confirm">
+</form>
+
+
+
+
+{% endblock %}
