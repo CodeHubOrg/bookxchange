@@ -9001,8 +9001,10 @@ header {
       flex-direction: column;
       width: 100%; } }
 
+.flex-logo {
+  flex: 1; }
+
 .logo {
-  flex: 1;
   width: 160px;
   border: none; }
   @media screen and (min-width: 768px) {
