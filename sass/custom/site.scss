@@ -54,8 +54,11 @@ $bookrequest: #e13e57;
       }
   }
 
-  .logo {
+  .flex-logo {
     flex: 1;
+  }
+
+  .logo {
     width: 160px;
     @media screen and (min-width: 768px){
       width: 240px;
@@ -137,8 +140,4 @@ $bookrequest: #e13e57;
     }
     .uk-button.pad-15 {
       padding: 0 15px !important;
-    }
-
-
-    footer {
     }
