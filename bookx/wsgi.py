@@ -16,6 +16,6 @@ dotenv.read_dotenv(
     os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
 )
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bookx.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bookx.production_settings")
 
 application = get_wsgi_application()
