@@ -28,6 +28,21 @@ $bookrequest: #e13e57;
       color: #222;
   }
 
+  footer {
+    min-height: 20px;
+    background: #e2f3ff;
+  }
+
+  .flex-site {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  .flex-site-content {
+    flex: 1;
+  }
+
   .flex-container-s {
     display: flex;
   }
@@ -58,6 +73,14 @@ $bookrequest: #e13e57;
     flex: 1;
   }
 
+  .maxw600, .uk-button.maxw600, div.maxw600, .book-menu.maxw600, .uk-alert.maxw600 {
+    box-sizing: border-box;
+    width: 100%;
+    @media screen and (min-width: 950px){
+      width: 600px;
+    }
+  }
+
   .logo {
     width: 160px;
     @media screen and (min-width: 768px){
@@ -67,13 +90,31 @@ $bookrequest: #e13e57;
 
   }
 
+  ul.flex-nav-login {
+    @media screen and (min-width: 420px){
+            flex: 0 1 140px;
+            display: flex;
+    }
+  }
+
+  ul.flex-nav-books {
+    display: flex;
+    justify-content: space-around;
+    li {
+      flex: 1;
+    }
+  }
+
+  ul.flex-to-block-l {
+    @media screen and (min-width: 640px){
+          display: block;
+    }
+  }
+
   .nav-login {
     display: block;
     padding: 20px 0;
-      @media screen and (min-width: 420px){
-            flex: 0 1 140px;
-            display: flex;
-      }
+
       li{
         a {
         color: #777;
@@ -85,14 +126,10 @@ $bookrequest: #e13e57;
       li.active a {
         font-weight: bold;
       }
-    }
+  }
 
-    ul.nav-books {
-      display: flex;
-      justify-content: space-around;
-
+  ul.nav-books {
       li {
-        flex: 1;
         margin: 0 3px;
         &.active {
           background: #ccc;
@@ -106,16 +143,11 @@ $bookrequest: #e13e57;
           margin-bottom: 10px;
         }
       }
-      @media screen and (min-width: 640px){
-          display: block;
-      }
+
     }
 
-    ul.nav-bookupdate {
-      display: flex;
-      justify-content: space-around;
+  ul.nav-bookupdate {
       li {
-        flex: 1;
         &:first-child{
           margin-right: 8px;
         }
@@ -126,7 +158,7 @@ $bookrequest: #e13e57;
           color: #fff;
         }
       }
-    }
+  }
 
 
     /** buttons **/

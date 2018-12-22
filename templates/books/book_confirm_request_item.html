@@ -7,7 +7,7 @@
   {% else %}
     <form method="post">{% csrf_token %}
         <p>Request <em>{{ object.title }}</em> ?</p>
-        <input type="submit" value="Confirm">
+        <input class="uk-button uk-button-bookupdate" type="submit" value="Confirm">
     </form>
   {% endif %}
 

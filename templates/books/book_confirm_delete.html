@@ -5,7 +5,7 @@
   {% if book.owner == user or user.is_superuser %}
     <form method="post">{% csrf_token %}
         <p>Are you sure you want to delete "{{ object }}"?</p>
-        <input type="submit" value="Confirm">
+        <input class="uk-button uk-button-bookupdate" type="submit" value="Confirm">
     </form>
   {% else %}
     <p>You are not authorised to delete this book.</p>

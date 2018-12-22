@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'bookx/css/main.css' %}?{% now 'U' %}">
     </head>
 
-    <body>
+    <body class="flex-site">
 
 
 
@@ -22,7 +22,7 @@
                 {% url 'login' as login %}
 
 
-                <ul class="uk-navbar-nav nav-login">
+                <ul class="uk-navbar-nav nav-login flex-nav-login">
                 {% if not user.is_authenticated %}
                     <li
                      {% if request.get_full_path == register %} class="active" {% endif %}
@@ -40,21 +40,11 @@
     </header>
 
 
-    <main>
+    <main class="flex-site-content">
     {% block main %}
 
    <!--  <div class="uk-container uk-container-expand content" > -->
-
         <section class="content">
-
-
-
-
-
-
-
-
-
         {% block content %}
             {{ content }}
         {% endblock %}
@@ -63,7 +53,7 @@
     {% endblock %}
     </main>
     <footer>
-        Here's the footer.
+
 
     </footer>
 

@@ -4,7 +4,7 @@
 
             {% url 'book_list' as book_list %}
             {% url 'book_new' as book_new %}
-            <ul class="uk-nav nav-books">
+            <ul class="uk-nav nav-books flex-nav-books flex-to-block-l">
 
             <li class="uk-button uk-button-primary pad-15
              {% if request.get_full_path == book_list %}  active {% endif %}"><a href="{% url 'book_list' %}">All books</a></li>

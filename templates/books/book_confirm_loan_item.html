@@ -4,7 +4,7 @@
 
       <form method="post">{% csrf_token %}
           <p>Confirm the loan of <em>{{object}}</em> to {{ holder.username }} ?</p>
-          <input type="submit" value="Confirm">
+          <input class="uk-button uk-button-bookupdate" type="submit" value="Confirm">
       </form>
 
   {% endblock %}

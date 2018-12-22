@@ -8980,6 +8980,18 @@ header {
   background: #afdfff;
   color: #222; }
 
+footer {
+  min-height: 20px;
+  background: #e2f3ff; }
+
+.flex-site {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column; }
+
+.flex-site-content {
+  flex: 1; }
+
 .flex-container-s {
   display: flex; }
 
@@ -9004,6 +9016,13 @@ header {
 .flex-logo {
   flex: 1; }
 
+.maxw600, .uk-button.maxw600, div.maxw600, .book-menu.maxw600, .uk-alert.maxw600 {
+  box-sizing: border-box;
+  width: 100%; }
+  @media screen and (min-width: 950px) {
+    .maxw600, .uk-button.maxw600, div.maxw600, .book-menu.maxw600, .uk-alert.maxw600 {
+      width: 600px; } }
+
 .logo {
   width: 160px;
   border: none; }
@@ -9011,13 +9030,24 @@ header {
     .logo {
       width: 240px; } }
 
+@media screen and (min-width: 420px) {
+  ul.flex-nav-login {
+    flex: 0 1 140px;
+    display: flex; } }
+
+ul.flex-nav-books {
+  display: flex;
+  justify-content: space-around; }
+  ul.flex-nav-books li {
+    flex: 1; }
+
+@media screen and (min-width: 640px) {
+  ul.flex-to-block-l {
+    display: block; } }
+
 .nav-login {
   display: block;
   padding: 20px 0; }
-  @media screen and (min-width: 420px) {
-    .nav-login {
-      flex: 0 1 140px;
-      display: flex; } }
   .nav-login li a {
     color: #777;
     justify-content: flex-start;
@@ -9026,36 +9056,26 @@ header {
   .nav-login li.active a {
     font-weight: bold; }
 
-ul.nav-books {
-  display: flex;
-  justify-content: space-around; }
-  ul.nav-books li {
-    flex: 1;
-    margin: 0 3px; }
-    ul.nav-books li.active {
-      background: #ccc; }
-    ul.nav-books li a {
-      color: #fff; }
-    @media screen and (min-width: 640px) {
-      ul.nav-books li {
-        width: 90%;
-        margin-right: 8%;
-        margin-bottom: 10px; } }
+ul.nav-books li {
+  margin: 0 3px; }
+  ul.nav-books li.active {
+    background: #ccc; }
+  ul.nav-books li a {
+    color: #fff; }
   @media screen and (min-width: 640px) {
-    ul.nav-books {
-      display: block; } }
+    ul.nav-books li {
+      width: 90%;
+      margin-right: 8%;
+      margin-bottom: 10px; } }
 
-ul.nav-bookupdate {
-  display: flex;
-  justify-content: space-around; }
-  ul.nav-bookupdate li {
-    flex: 1; }
-    ul.nav-bookupdate li:first-child {
-      margin-right: 8px; }
-    ul.nav-bookupdate li.active {
-      background: #ccc; }
-    ul.nav-bookupdate li a {
-      color: #fff; }
+ul.nav-bookupdate li:first-child {
+  margin-right: 8px; }
+
+ul.nav-bookupdate li.active {
+  background: #ccc; }
+
+ul.nav-bookupdate li a {
+  color: #fff; }
 
 /** buttons **/
 .uk-button-bookupdate {
