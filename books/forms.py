@@ -11,7 +11,21 @@ from .models import Book
 class PostBookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ("title", "author", "cover")
+        fields = (
+            "title",
+            "author",
+            "cover",
+            "isbn",
+            "description",
+            "category",
+        )
+
+    def __init__(self, *args, **kwargs):
+        # first call parent's constructor
+        super(PostBookForm, self).__init__(*args, **kwargs)
+        self.fields["isbn"].required = False
+        self.fields["description"].required = False
+        self.fields["category"]
 
     def clean_author(self):
         data = self.cleaned_data.get("author")

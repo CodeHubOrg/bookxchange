@@ -26,6 +26,19 @@ class Book(models.Model):
     thumb = models.ImageField(upload_to="covers/", blank=True)
     published_date = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(auto_now_add=True, null=True)
+    isbn = models.CharField(
+        "ISBN",
+        max_length=13,
+        help_text='13 Character \
+        <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>',
+        null=True,
+    )
+    description = models.TextField(
+        max_length=1000,
+        help_text="Enter \
+        a brief description of the book",
+        null=True,
+    )
     status = models.CharField(
         max_length=50,
         choices=[(tag.name, tag.value) for tag in LoanStatus],
@@ -38,6 +51,9 @@ class Book(models.Model):
     )
     holders = models.ManyToManyField(
         get_user_model(), related_name="books_held", through="BookHolder"
+    )
+    category = models.ForeignKey(
+        "Category", null=True, blank=True, on_delete=models.CASCADE
     )
 
     def get_loan(self, status):
@@ -107,3 +123,13 @@ class BookHolder(models.Model):
     date_requested = models.DateTimeField(blank=True, null=True)
     date_borrowed = models.DateTimeField(blank=True, null=True)
     date_returned = models.DateTimeField(blank=True, null=True)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name_plural = "categories"
+
+    def __str__(self):
+        return self.name

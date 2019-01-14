@@ -28,7 +28,9 @@ class TestPostBookForm:
         form = forms.PostBookForm(data={"title": "Hi", "author": "KD"})
         assert form.is_valid() is False
 
-        form = forms.PostBookForm(data={"title": "Hi", "author": "Katja D"})
+        form = forms.PostBookForm(
+            data={"title": "Hi there", "author": "Katja D"}
+        )
         assert form.is_valid() is True
 
         form = forms.PostBookForm(

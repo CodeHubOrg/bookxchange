@@ -42,9 +42,22 @@
   <h1>{{ book.title }}</h1>
   <p>by {{ book.author }}</p>
 
+  {% if book.isbn %}
+    <p>ISBN: {{ book.isbn }}</p>
+  {% endif %}
+
   {% if book.cover %}
     <img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
   {% endif %}
+
+  {% if book.description %}
+    <p>{{ book.description }}</p>
+  {% endif %}
+
+  {% if book.category %}
+    Category: {{ book.category }}
+  {% endif %}
+
   </div>
 
 
