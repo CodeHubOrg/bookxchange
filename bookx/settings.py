@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users",
     "books",
+    "sendemail",
 ]
 
 MIDDLEWARE = [
@@ -140,7 +141,11 @@ AUTHENTICATION_BACKENDS = [
     "users.backends.EmailBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_SANDBOX_MODE_IN_DEBUG = True
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+
 
 LOGIN_URL = "/users/login/"
 # this is a bit confusing because it is not the url
