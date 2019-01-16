@@ -1,0 +1,10 @@
+{% extends 'books/base.html' %}
+
+{% block content %}
+
+    <form method="post">{% csrf_token %}
+        <p>Notify current holder of your interest in <em>{{ object.title }}</em> ?</p>
+        <input class="uk-button uk-button-bookupdate" type="submit" value="Confirm">
+    </form>
+
+{% endblock %}

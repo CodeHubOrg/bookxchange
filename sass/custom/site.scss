@@ -15,6 +15,7 @@
 /** custom vars **/
 $bookupdate: #e1763e;
 $bookrequest: #e13e57;
+$bookinterest: #cccccc;
 
   main, header, section,
    footer, .logo
@@ -168,6 +169,10 @@ $bookrequest: #e13e57;
     }
     .uk-button-bookrequest {
       background: $bookrequest;
+      color: #fff;
+    }
+    .uk-button-bookinterest {
+      background: #cccccc;
       color: #fff;
     }
     .uk-button.pad-15 {

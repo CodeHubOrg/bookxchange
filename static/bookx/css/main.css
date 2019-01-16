@@ -9086,5 +9086,9 @@ ul.nav-bookupdate li a {
   background: #e13e57;
   color: #fff; }
 
+.uk-button-bookinterest {
+  background: #cccccc;
+  color: #fff; }
+
 .uk-button.pad-15 {
   padding: 0 15px !important; }

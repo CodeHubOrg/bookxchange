@@ -10,7 +10,6 @@ urlpatterns = [
     path("books/", include("books.urls")),
     path("users/", include("users.urls")),  # new
     path("users/", include("django.contrib.auth.urls")),  # new
-    path("", include("sendemail.urls")),
     path("admin/", admin.site.urls),
 ]
 
