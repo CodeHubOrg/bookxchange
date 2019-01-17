@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,13 +26,16 @@ SECRET_KEY = "9n3wb28eugt7rge(9l-9q&xg4v+@5+5yz@*3yt9w42%w!ta27="
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "books.local",
-    "192.168.30.107",
-    "192.168.30.108",
-]
+# ALLOWED_HOSTS = [
+#     "localhost",
+#     "books.local",
+#     "192.168.30.107",
+#     "192.168.30.108",
+# ]
 
+ALLOWED_HOSTS = json.loads(os.environ.get("ALLOWED_HOSTS"))
+
+# ALLOWED_HOSTS = ["books.local"]
 
 # Application definition
 
