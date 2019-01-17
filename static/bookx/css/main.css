@@ -8970,6 +8970,7 @@ iframe.uk-cover {
   h3 {
     page-break-after: avoid; } }
 
+/** breakpoints: 420, 640, 768, 950; **/
 /** custom vars **/
 main, header, section,
 footer, .logo {
@@ -8983,6 +8984,12 @@ header {
 footer {
   min-height: 20px;
   background: #e2f3ff; }
+
+.inline-b {
+  display: inline-block; }
+
+.m-bottom {
+  margin-bottom: 5px; }
 
 .flex-site {
   display: flex;
@@ -9090,5 +9097,25 @@ ul.nav-bookupdate li a {
   background: #cccccc;
   color: #fff; }
 
+.uk-button-form {
+  background: #444;
+  color: #fff; }
+
 .uk-button.pad-15 {
   padding: 0 15px !important; }
+
+/** forms **/
+.file-upload {
+  position: relative;
+  display: inline-block; }
+
+.file-upload__input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 1;
+  width: 0;
+  height: 100%;
+  opacity: 0; }
