@@ -1,11 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'books/base.html' %}
 
-{% block content %}
-{% if user.is_authenticated %}
-<p>Hi {{ user.username }}</p>
-
-{% endif %}
-
-
-
-{% endblock %}
+    {% block content %}
+        {{ content }}
+        Hi {{ user.username }}
+    {% endblock %}

@@ -10,3 +10,166 @@
 // 3. Your custom mixin overwrites.
 
 // ... import all
+
+
+/** custom vars **/
+$bookupdate: #e1763e;
+$bookrequest: #e13e57;
+
+  main, header, section,
+   footer, .logo
+  {
+      margin: 0;
+      padding: 10px;
+  }
+
+  header {
+      background: #afdfff;
+      color: #222;
+  }
+
+  footer {
+    min-height: 20px;
+    background: #e2f3ff;
+  }
+
+  .flex-site {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  .flex-site-content {
+    flex: 1;
+  }
+
+  .flex-container-s {
+    display: flex;
+  }
+
+  .flex-container-m {
+      @media screen and (min-width: 640px){
+          display: flex;
+      }
+  }
+
+  .flex-sidebar {
+      flex: 0 1 160px;
+      @media screen and (min-width: 640px){
+        flex: 0 1 240px;
+      }
+  }
+
+  .flex-content {
+    flex: 1;
+      @media screen and (min-width: 640px){
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+  }
+
+  .flex-logo {
+    flex: 1;
+  }
+
+  .maxw600, .uk-button.maxw600, div.maxw600, .book-menu.maxw600, .uk-alert.maxw600 {
+    box-sizing: border-box;
+    width: 100%;
+    @media screen and (min-width: 950px){
+      width: 600px;
+    }
+  }
+
+  .logo {
+    width: 160px;
+    @media screen and (min-width: 768px){
+      width: 240px;
+    }
+    border: none;
+
+  }
+
+  ul.flex-nav-login {
+    @media screen and (min-width: 420px){
+            flex: 0 1 140px;
+            display: flex;
+    }
+  }
+
+  ul.flex-nav-books {
+    display: flex;
+    justify-content: space-around;
+    li {
+      flex: 1;
+    }
+  }
+
+  ul.flex-to-block-l {
+    @media screen and (min-width: 640px){
+          display: block;
+    }
+  }
+
+  .nav-login {
+    display: block;
+    padding: 20px 0;
+
+      li{
+        a {
+        color: #777;
+        justify-content: flex-start;
+        letter-spacing: 0.05em;
+        min-height: 32px;
+        }
+      }
+      li.active a {
+        font-weight: bold;
+      }
+  }
+
+  ul.nav-books {
+      li {
+        margin: 0 3px;
+        &.active {
+          background: #ccc;
+        }
+        a {
+          color: #fff;
+        }
+        @media screen and (min-width: 640px){
+          width: 90%;
+          margin-right: 8%;
+          margin-bottom: 10px;
+        }
+      }
+
+    }
+
+  ul.nav-bookupdate {
+      li {
+        &:first-child{
+          margin-right: 8px;
+        }
+        &.active {
+          background: #ccc;
+        }
+        a {
+          color: #fff;
+        }
+      }
+  }
+
+
+    /** buttons **/
+    .uk-button-bookupdate {
+      background: $bookupdate;
+      color: #fff;
+    }
+    .uk-button-bookrequest {
+      background: $bookrequest;
+      color: #fff;
+    }
+    .uk-button.pad-15 {
+      padding: 0 15px !important;
+    }

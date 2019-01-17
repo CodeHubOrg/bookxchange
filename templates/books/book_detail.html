@@ -1,91 +1,111 @@
 {% extends 'books/base.html' %}
 
+
 {% block content %}
 
-<h2>{{ book.title }}</h2>
-<p>by {{ book.author }}</p>
+  {% if user.is_authenticated %}
+    {% if book.owner == user or user.is_superuser %}
 
-{% if user.is_authenticated %}
-  {% if book.owner == user or user.is_superuser %}
+      {% if book.status == 'RQ' %}
 
+        <div class="uk-alert uk-alert-primary maxw600"><strong>This book was requested
+          {% if holder %} by
+          @{{ holder.username }}{% endif %}</strong>
+          {% if date_action != "" %}<p>Date requested:  {{ date|date:"d M Y" }}</p>{% endif %}
+        </div>
 
+        <a class="uk-button uk-button-secondary maxw600" href="{% url 'book_lend_item' pk=book.id %}">Confirm loan
+          {% if holder %}
+          to @{{ holder.username }}
+          {% endif %}
+        </a>
 
-    {% if book.status == 'RQ' %}
-    <a href="{% url 'book_lend_item' pk=book.id %}">Confirm loan to
-      {% if holder %}
-      {{ holder.username }}
+      {% elif book.status == 'OL' %}
+
+        <div class="uk-alert uk-alert-primary maxw600"><strong>This book is on loan
+          {% if holder %} to
+          @{{ holder.username }}{% endif %}</strong>
+          {% if date_action != "" %}<p>Date borrowed:  {{ date|date:"d M Y" }}</p>{% endif %}
+        </div>
+
+        <a class="uk-button uk-button-secondary maxw600" href="{% url 'book_return_item' pk=book.id  %}">
+          Confirm that book has been returned.
+        </a>
+
       {% endif %}
 
-    </a>
-      {% if date_action != "" %} (requested on {{ date|date:"d M Y" }}){% endif %}
-
-    {% elif book.status == 'OL' %}
-    <a href="{% url 'book_return_item' pk=book.id  %}">Return the book from
-      {% if holder %}
-      {{ holder.username }}
-      {% endif %}
-
-    </a>
-     {% if date_action != "" %} (borrowed on {{ date|date:"d M Y" }}){% endif %}
-
+     {% endif %}
   {% endif %}
 
 
+  <div class="uk-container-expand uk-margin-top">
+  <h1>{{ book.title }}</h1>
+  <p>by {{ book.author }}</p>
 
-  <p><a href="{% url 'book_update' pk=book.id %}">Update this book</a></p>
+  {% if book.isbn %}
+    <p>ISBN: {{ book.isbn }}</p>
+  {% endif %}
 
-  <p><a href="{% url 'book_delete' pk=book.id %}">Delete this book</a></p>
+  {% if book.cover %}
+    <img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
+  {% endif %}
 
-   <!-- use this for just date |date:'d M Y' -->
+  {% if book.description %}
+    <p>{{ book.description }}</p>
+  {% endif %}
 
-   {% endif %}
+  {% if book.category %}
+    Category: {{ book.category }}
+  {% endif %}
 
-{% endif %}
-
-{% comment %}
-{% if holder %}
-Holder: {{ holder.username }} <br />
-{% endif %}
-{% endcomment %}
-
-
-Status:
-<strong>
-{% if book.status == 'AV' %}
-  <p>Available</p>
-{% elif book.status == 'RQ' %}
-<p>Requested</p>
-{% elif book.status == 'OL' %}
-<p>On loan</p>
-{% elif book.status == 'NA' %}
-  <p>Unavailable for other reaons</p>
-{% endif %}
-</strong>
-<div style="height:30px"></div>
-
-{% if book.cover %}
-  <img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
-  <div style="height:30px"></div>
-{% endif %}
+  </div>
 
 
+  <div class="uk-container-expand uk-margin-top">
+  Status:
+  <strong>
+  {% if book.status == 'AV' %}
+    <p>Available</p>
+  {% elif book.status == 'RQ' %}
+  <p>Requested</p>
+  {% elif book.status == 'OL' %}
+  <p>On loan</p>
+  {% elif book.status == 'NA' %}
+    <p>Unavailable for other reaons</p>
+  {% endif %}
+  </strong>
+  </div>
 
-{% if book.status == 'AV' %}
+  {% if book.status == 'AV' %}
+
+    {% if user.is_authenticated %}
+      <a class="uk-button uk-button-secondary maxw600" href="{% url 'book_request_item' pk=book.id %}">Request this book</a>
+    {% else %}
+      <a href="{% url 'login' %}">Log in to request this book</a>
+    {% endif %}
+
+  {% else %}
+    Register your interest
+  {% endif %}
+
 
   {% if user.is_authenticated %}
-  <a href="{% url 'book_request_item' pk=book.id %}">Request this book</a>
-  {% else %}
-  <a href="{% url 'login' %}">Log in to request this book</a>
+    {% if book.owner == user or user.is_superuser %}
+    <div class="uk-container-expand uk-margin-top">
+    {% url 'book_update' pk=book.id as book_update %}
+    {% url 'book_delete' pk=book.id as book_delete %}
+    <nav class="book-menu maxw600">
+      <ul class="uk-nav nav-bookupdate flex-nav-books">
+        <li><a class="uk-button uk-button-bookupdate
+        {% if request.get_full_path == book_update %} active{% endif %}"
+         href="{% url 'book_update' pk=book.id %}">Update this book</a></li>
+
+        <li><a class="uk-button uk-button-bookupdate
+          {% if request.get_full_path == book_delete %}active {% endif %}"
+          href="{% url 'book_delete' pk=book.id %}">Delete this book</a></li>
+      </ul>
+    </nav>
+    {% endif %}
   {% endif %}
-
-
-{% else %}
-  Register your interest
-{% endif %}
-
-
-</form>
-
-
 
 {% endblock %}

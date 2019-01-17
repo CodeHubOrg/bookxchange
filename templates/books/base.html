@@ -1,1 +1,16 @@
 {% extends 'base.html' %}
+
+{% block main %}
+  <div class="flex-container-m">
+    {% block sidebar %}
+      {% include '../partials/sidebar.html' %}
+    {% endblock %}
+
+    <section class="content flex-content">
+      {% block content %}
+          {{ content }}
+      {% endblock %}
+    </section>
+  </div>
+
+{% endblock %}
