@@ -51,6 +51,10 @@ class PostBookForm(forms.ModelForm):
             cover = self.resize_image(cover, 200, 300, extension, 90)
         return cover
 
+    def clean_isbn(self):
+        isbn = self.cleaned_data.get("isbn")
+        return "".join(isbn.split("-"))
+
     def save(self, *args, **kwargs):
         cover = self.instance.cover
         if cover and "cover" in self.changed_data:
