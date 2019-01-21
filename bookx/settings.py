@@ -135,7 +135,7 @@ AUTH_USER_MODEL = "users.CustomUser"
 #     "users.backends.EmailBackend",
 #     "django.contrib.auth.backends.ModelBackend",
 # ]
-AUTHENTICATION_BACKENDS = ["users.backends.EmailBackend"]
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
