@@ -11,6 +11,7 @@ class TestPostBookForm:
 
         form = forms.PostBookForm(
             data={
+                "isbn": "978-1847941374",
                 "title": (
                     "Lorem ipsum dolor sit amet "
                     "consectetur adipisicing elit. "
@@ -29,11 +30,19 @@ class TestPostBookForm:
         assert form.is_valid() is False
 
         form = forms.PostBookForm(
-            data={"title": "Hi there", "author": "Katja D"}
+            data={
+                "isbn": "978-1847941374",
+                "title": "Hi there",
+                "author": "Katja D",
+            }
         )
         assert form.is_valid() is True
 
         form = forms.PostBookForm(
-            data={"title": "Doughnot Economics", "author": "Kate Raworth"}
+            data={
+                "isbn": "978-1847941374",
+                "title": "Doughnot Economics",
+                "author": "Kate Raworth",
+            }
         )
         assert form.is_valid() is True
