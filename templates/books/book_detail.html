@@ -85,7 +85,9 @@
     {% endif %}
 
   {% else %}
-    Register your interest
+    <a class="uk-button uk-button-bookinterest maxw600" href="{% url 'book_interest' pk=book.id %}">
+    Register your interest (notifies the current holder)
+    </a>
   {% endif %}
 
 

@@ -19,6 +19,13 @@ class PostBookForm(forms.ModelForm):
             "description",
             "category",
         )
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "uk-input"}),
+            "author": forms.TextInput(attrs={"class": "uk-input"}),
+            "isbn": forms.TextInput(attrs={"class": "uk-input"}),
+            "description": forms.Textarea(attrs={"class": "uk-textarea"}),
+            "category": forms.Select(attrs={"class": "uk-select"}),
+        }
 
     def __init__(self, *args, **kwargs):
         # first call parent's constructor
@@ -44,6 +51,13 @@ class PostBookForm(forms.ModelForm):
             cover = self.resize_image(cover, 200, 300, extension, 90)
         return cover
 
+    def clean_isbn(self):
+        isbn = self.cleaned_data.get("isbn")
+        if isbn:
+            return "".join(isbn.split("-"))
+        else:
+            return None
+
     def save(self, *args, **kwargs):
         cover = self.instance.cover
         if cover and "cover" in self.changed_data:
@@ -53,7 +67,7 @@ class PostBookForm(forms.ModelForm):
             self.instance.thumb = self.make_thumbnail(
                 cover, thumb_filename, extension
             )
-        else:
+        if not cover and "cover" in self.changed_data:
             self.instance.thumb = None
         return super().save(*args, **kwargs)
 

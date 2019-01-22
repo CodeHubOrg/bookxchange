@@ -7,10 +7,54 @@
   {% else %}
     <h2>Update <em><a href="{{ book.absolute_url }}">{{ book.title }}</a></em></h2>
   {% endif %}
-    <form method="post" enctype="multipart/form-data" class="book__form">
+    <form method="post" enctype="multipart/form-data" class="uk-form uk-form-horizontal book__form maxw600">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
+        {% for field in form %}
+
+            <div class="uk-form-row uk-margin">
+
+                {% if field.name != 'cover' %}
+
+                  <label for="id_{{ field.name }}" class="uk-form-label">{{ field.label }}: </label>
+                  <div class="uk-form-controls">
+                     {{ field }}
+                  </div>
+
+                {% else %}
+
+
+                  {% if book.cover %}
+                    <div class="uk-form-label">Cover:</div>
+                    <div class="uk-form-controls">
+                      Currently: <a href="{{book.cover.url}}">{{ book.cover.url }}</a>
+                      <div class="inline-b m-bottom">
+                        <input type="checkbox" name="cover-clear" id="cover-clear_id">
+                        <label for="cover-clear_id">Clear</label><br>
+                      </div>
+                    </div>
+                  {% endif %}
+
+                  <div class="uk-form-label">&nbsp;</div>
+
+                  <div class="uk-form-controls">
+                    <div class="file-upload">
+                      <label for="id_cover" class="uk-button uk-button-bookupdate">Upload
+                        {% if book.cover %} new {% endif %}
+                       cover image
+                         <input class="file-upload__input" type="file" name="cover" accept="image/*" id="id_cover" name="id_cover" />
+
+                      </label>
+                    </div>
+                  </div>
+
+              {% endif %}
+
+            </div>
+
+
+
+        {% endfor %}
+        <button class="uk-button uk-button-bookupdate" type="submit">Save</button>
     </form>
 
 {% endblock %}

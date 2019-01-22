@@ -28,7 +28,7 @@ class Book(models.Model):
     last_updated = models.DateTimeField(auto_now_add=True, null=True)
     isbn = models.CharField(
         "ISBN",
-        max_length=13,
+        max_length=17,
         help_text='13 Character \
         <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>',
         null=True,

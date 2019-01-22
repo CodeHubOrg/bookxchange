@@ -25,12 +25,7 @@ SECRET_KEY = "9n3wb28eugt7rge(9l-9q&xg4v+@5+5yz@*3yt9w42%w!ta27="
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "books.local",
-    "192.168.30.107",
-    "192.168.30.108",
-]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
 
 # Application definition
@@ -136,11 +131,17 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 AUTH_USER_MODEL = "users.CustomUser"
-AUTHENTICATION_BACKENDS = [
-    "users.backends.EmailBackend",
-    "django.contrib.auth.backends.ModelBackend",
-]
+# AUTHENTICATION_BACKENDS = [
+#     "users.backends.EmailBackend",
+#     "django.contrib.auth.backends.ModelBackend",
+# ]
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_SANDBOX_MODE_IN_DEBUG = True
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+
 
 LOGIN_URL = "/users/login/"
 # this is a bit confusing because it is not the url

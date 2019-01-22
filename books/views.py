@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.mail import send_mail, BadHeaderError
 from django.core.exceptions import ImproperlyConfigured
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.edit import DeleteView, UpdateView
@@ -7,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+
 from .models import Book, BookHolder
 from .forms import PostBookForm  # , RequestBookForm
 
@@ -195,3 +197,38 @@ class BookReturn(BaseLoanView):
             status=status,
         )
         book.save()
+
+
+class BookInterest(BaseLoanView):
+    model = Book
+    success_url = "email_success"
+    template_name_suffix = "_confirm_interest_item"
+    new_status = "OL"
+
+    # def get_new_holder(self, request, *args, **kwargs):
+    #     return request.user
+
+    def create_book_holder(self, book, holder, status):
+        # add entry in Holder table?
+        # probably better to create some other log
+
+        current_user = self.request.user
+        from_email = current_user.email
+        to_email = [holder.email]
+        subject = "Bookx: " + current_user.username + " and " + book.title
+        message = (
+            "Our records show that you have borrowed the book "
+            + book.title
+            + ". "
+            + current_user.username
+            + " is interested in this book. Please could you let them know "
+            + "when you will return the book."
+        )
+        try:
+            send_mail(subject, message, from_email, to_email)
+        except BadHeaderError:
+            return HttpResponse("Invalid header found.")
+
+
+class Success(TemplateView):
+    template_name = "success.html"
