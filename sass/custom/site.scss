@@ -83,6 +83,14 @@ $bookinterest: #cccccc;
     flex: 1;
   }
 
+  .maxw480, .uk-button.maxw480, div.maxw480, .book-menu.maxw480, .uk-alert.maxw480 {
+    box-sizing: border-box;
+    width: 100%;
+    @media screen and (min-width: 950px){
+      width: 480px;
+    }
+  }
+
   .maxw600, .uk-button.maxw600, div.maxw600, .book-menu.maxw600, .uk-alert.maxw600 {
     box-sizing: border-box;
     width: 100%;

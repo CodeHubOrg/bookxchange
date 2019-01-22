@@ -16,25 +16,34 @@
   {% endif %}
 {% endif %}
 
-<form method="post" action="{% url 'login' %}">
+<form method="post" action="{% url 'login' %}" class="uk-form uk-form-horizontal maxw600">
 {% csrf_token %}
 
-<div>
-  <td>Email:</td>
-  <td>{{ form.username }}</td>
-</div>
-<div>
-  <td>{{ form.password.label_tag }}</td>
-  <td>{{ form.password }}</td>
-</div>
+      <div class="uk-form-row uk-margin">
+          <label class="uk-form-label" for="id_username">
+          Email: </label>
+          <div class="uk-form-controls">
+            <input class="uk-input" type="email" name="username" autofocus required id="id_username">
+            {{ field.errors }}
+          </div>
+      </div>
 
-<div>
-  <input type="submit" value="login" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</div>
+      <div class="uk-form-row uk-margin">
+          <label class="uk-form-label" for="id_password">
+          Password: </label>
+          <div class="uk-form-controls">
+            <input class="uk-input" type="password" name="password" required id="id_password">
+          </div>
+          {{ field.errors }}
+      </div>
+
+
+
+      <input class="uk-button uk-button-primary" type="submit" class="btn btn-primary" value="login" />
+      <input type="hidden" name="next" value="{{ next }}" />
+
 </form>
 
-{# Assumes you setup the password_reset view in your URLconf #}
 <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
 
 {% endblock %}

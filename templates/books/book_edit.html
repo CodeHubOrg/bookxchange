@@ -15,7 +15,7 @@
 
                 {% if field.name != 'cover' %}
 
-                  <label for="id_{{ field.name }}" class="uk-form-label">{{ field.label }}: </label>
+                  <label for="{{ field.id_for_label }}" class="uk-form-label">{{ field.label }}: </label>
                   <div class="uk-form-controls">
                      {{ field }}
                   </div>
