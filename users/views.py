@@ -1,7 +1,8 @@
 from django.urls import reverse_lazy
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic
 from django.core.mail import send_mail, BadHeaderError
+from django.views.generic import TemplateView
 from django.shortcuts import render
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
@@ -49,13 +50,19 @@ class SignUp(generic.CreateView):
 
             try:
                 send_mail(subject, message, "info@codehub.org.uk", to_email)
-                return HttpResponse(
-                    "Please confirm your email address to complete the registration"
-                )
+                return HttpResponseRedirect(reverse_lazy("confirm_email"))
             except BadHeaderError:
                 return HttpResponse("Invalid header found.")
 
         return render(request, self.template_name, {"form": form})
+
+
+class ConfirmEmail(TemplateView):
+    template_name = "registration/confirmation_sent.html"
+
+
+class ConfirmationComplete(TemplateView):
+    template_name = "registration/confirmation_complete.html"
 
 
 def activate(request, uidb64, token):
@@ -69,8 +76,6 @@ def activate(request, uidb64, token):
         user.save()
         login(request, user)
         # return redirect('home')
-        return HttpResponse(
-            "Thank you for your email confirmation. Now you can login your account."
-        )
+        return HttpResponseRedirect(reverse_lazy("confirmation_complete"))
     else:
         return HttpResponse("Activation link is invalid!")

@@ -53,10 +53,7 @@ class PostBookForm(forms.ModelForm):
 
     def clean_isbn(self):
         isbn = self.cleaned_data.get("isbn")
-        if isbn:
-            return "".join(isbn.split("-"))
-        else:
-            return None
+        return isbn and isbn.replace("-", "")
 
     def save(self, *args, **kwargs):
         cover = self.instance.cover
