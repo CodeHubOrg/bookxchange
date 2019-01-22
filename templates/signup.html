@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>Register</h2>
-<form method="post">
+<form class="uk-form uk-form-horizontal  maxw600" method="post">
   {% csrf_token %}
   {{ form.non_field_errors }}
   {% for field in form %}
