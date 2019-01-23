@@ -19,22 +19,39 @@
 <form method="post" action="{% url 'login' %}" class="uk-form uk-form-horizontal maxw600">
 {% csrf_token %}
 
+      {% if form.non_field.errors %}
+      <div class="uk-alert uk-alert-warning">
+        {{ form.non_field.errors }}
+      </div>
+      {% endif %}
+
       <div class="uk-form-row uk-margin">
-          <label class="uk-form-label" for="id_username">
+          <label class="uk-form-label" for="{{ form.username.id_for_label }}">
           Email: </label>
           <div class="uk-form-controls">
-            <input class="uk-input" type="email" name="username" autofocus required id="id_username">
-            {{ field.errors }}
+            <input class="uk-input" type="email" name="{{ form.username.html_name }}" autofocus required id="{{ form.username.id_for_label }}">
+            {% if form.username.errors %}
+            <div class="uk-alert uk-alert-warning">
+              {{ form.username.errors }}
+            </div>
+            {% endif %}
           </div>
       </div>
 
       <div class="uk-form-row uk-margin">
-          <label class="uk-form-label" for="id_password">
+          <label class="uk-form-label" for="{{ form.password.id_for_label }}">
           Password: </label>
           <div class="uk-form-controls">
-            <input class="uk-input" type="password" name="password" required id="id_password">
-          </div>
-          {{ field.errors }}
+            <input class="uk-input" type="password" name="{{ form.password.html_name }}" required id="{{ form.password.id_for_label }}">
+
+            {% if form.password.errors %}
+            <div class="uk-alert uk-alert-warning">
+              {{ form.password.errors }}
+            </div>
+            {% endif %}
+
+        </div>
+
       </div>
 
 

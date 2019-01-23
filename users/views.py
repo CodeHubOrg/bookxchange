@@ -1,4 +1,4 @@
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic
 from django.core.mail import send_mail, BadHeaderError
@@ -28,9 +28,7 @@ class SignUp(generic.CreateView):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            # import ipdb
 
-            # ipdb.set_trace()
             user = form.save(commit=False)
             user.save()
             current_site = get_current_site(request)
@@ -50,7 +48,7 @@ class SignUp(generic.CreateView):
 
             try:
                 send_mail(subject, message, "info@codehub.org.uk", to_email)
-                return HttpResponseRedirect(reverse_lazy("confirm_email"))
+                return HttpResponseRedirect(reverse("confirm_email"))
             except BadHeaderError:
                 return HttpResponse("Invalid header found.")
 
@@ -76,6 +74,6 @@ def activate(request, uidb64, token):
         user.save()
         login(request, user)
         # return redirect('home')
-        return HttpResponseRedirect(reverse_lazy("confirmation_complete"))
+        return HttpResponseRedirect(reverse("confirmation_complete"))
     else:
         return HttpResponse("Activation link is invalid!")
