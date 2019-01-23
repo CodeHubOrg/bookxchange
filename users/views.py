@@ -63,17 +63,25 @@ class ConfirmationComplete(TemplateView):
     template_name = "registration/confirmation_complete.html"
 
 
-def activate(request, uidb64, token):
+def parse_uid(uidb64):
     try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
+        return int(urlsafe_base64_decode(uidb64))
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
+def handle_activation_success(request, user):
+    user.is_active = True
+    user.save()
+    login(request, user)
+
+
+def activate(request, uidb64, token):
+    uid = parse_uid(uidb64)
+    if uid:
         user = CustomUser.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        login(request, user)
-        # return redirect('home')
+        if user and account_activation_token.check_token(user, token):
+            handle_activation_success(request, user)
         return HttpResponseRedirect(reverse("confirmation_complete"))
     else:
         return HttpResponse("Activation link is invalid!")
