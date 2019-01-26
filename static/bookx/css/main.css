@@ -9111,18 +9111,27 @@ ul.nav-bookupdate li a {
 .uk-button.pad-15 {
   padding: 0 15px !important; }
 
-/** forms **/
+.file-upload input {
+  border: none; }
+
+/*    /** forms **/
 .file-upload {
   position: relative;
   display: inline-block; }
 
 .file-upload__input {
+  /*        position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            font-size: 1;
+            width:0;
+            height: 100%;
+            opacity: 0;*/
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
   position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  font-size: 1;
-  width: 0;
-  height: 100%;
-  opacity: 0; }
+  z-index: -1; }

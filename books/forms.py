@@ -66,7 +66,7 @@ class PostBookForm(forms.ModelForm):
             self.instance.thumb = self.make_thumbnail(
                 cover, thumb_filename, extension
             )
-        elif not cover and "cover" in self.changed_data:
+        if not cover and "cover" in self.changed_data:
             self.instance.thumb = None
         # else:
         #     openlib = self.cleaned_data.get("openlibcover")

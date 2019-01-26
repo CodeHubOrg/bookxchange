@@ -200,8 +200,11 @@ $bookinterest: #cccccc;
       padding: 0 15px !important;
     }
 
+    .file-upload input {
+      border: none;
+    }
 
-    /** forms **/
+/*    /** forms **/
 
         .file-upload {
           position: relative;
@@ -209,7 +212,7 @@ $bookinterest: #cccccc;
         }
 
         .file-upload__input {
-            position: absolute;
+    /*        position: absolute;
             left: 0;
             top: 0;
             right: 0;
@@ -217,7 +220,15 @@ $bookinterest: #cccccc;
             font-size: 1;
             width:0;
             height: 100%;
+            opacity: 0;*/
+
+
+            width: 0.1px;
+            height: 0.1px;
             opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
         }
 
 

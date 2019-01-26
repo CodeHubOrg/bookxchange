@@ -35,7 +35,7 @@
                   {% if field.name == 'cover' %}
 
                     {% if book.cover %}
-                      <div class="uk-form-label">Cover:</div>
+                      <label class="uk-form-label" label for="id_cover">Cover:</label>
                       <div class="uk-form-controls">
                         Currently: <a href="{{book.cover.url}}">{{ book.cover.url }}</a>
                         <div class="inline-b m-bottom">
@@ -53,6 +53,7 @@
                       </div>
                     {% endif %}
 
+
                     <div class="uk-form-label">&nbsp;</div>
 
                     <div class="uk-form-controls">
@@ -62,8 +63,20 @@
                          cover image
                            <input class="file-upload__input" type="file" name="cover" accept="image/*" id="id_cover" name="id_cover" />
                         </label>
+                        <span id="upload"></span>
                       </div>
                     </div>
+<!--
+                    <div  class="uk-form-label">Cover:</div>
+
+                    <div class="uk-form-controls">
+
+                        <label class="file-upload" for="id_cover">
+                          <input type="file" name="cover" accept="image/*" id="id_cover">
+                        </label>
+
+                    </div> -->
+
 
                     {% endif %}
 
@@ -81,6 +94,17 @@
     </form>
 {% endblock %}
 {% block scripts %}
+<script type="text/javascript">
+
+    const upload = document.querySelector(".file-upload")
+    upload.addEventListener('change', function(e){
+      let fakepath = e.target.value
+      let name = fakepath.split("\\").slice(-1)[0]
+      let uploadspan = document.getElementById("upload")
+      uploadspan.innerHTML = name
+    })
+
+</script>
 <script type="text/javascript">
 // write a getISBN str func
 
