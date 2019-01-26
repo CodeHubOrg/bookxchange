@@ -13,7 +13,7 @@
 
             <div class="uk-form-row uk-margin">
 
-                {% if field.name != 'cover' %}
+                {% if field.name not in "['cover','openlibcover']" %}
 
                   <label for="{{ field.id_for_label }}" class="uk-form-label">{{ field.label }}: </label>
                   <div class="uk-form-controls">
@@ -32,37 +32,46 @@
 
                 {% else %}
 
+                  {% if field.name == 'cover' %}
 
-                  {% if book.cover %}
-                    <div class="uk-form-label">Cover:</div>
-                    <div class="uk-form-controls">
-                      Currently: <a href="{{book.cover.url}}">{{ book.cover.url }}</a>
-                      <div class="inline-b m-bottom">
-                        <input type="checkbox" name="cover-clear" id="cover-clear_id">
-                        <label for="cover-clear_id">Clear</label><br>
-                      </div>
-                      {% if form.cover.errors %}
-                        <div class="uk-alert uk-alert-warning">{{ form.cover.errors }}</div>
-                      {% endif %}
-                      {% if form.cover.help_text %}
-                        <div class="uk-alert">
-                          {{ form.cover.help_text }}
+                    {% if book.cover %}
+                      <div class="uk-form-label">Cover:</div>
+                      <div class="uk-form-controls">
+                        Currently: <a href="{{book.cover.url}}">{{ book.cover.url }}</a>
+                        <div class="inline-b m-bottom">
+                          <input type="checkbox" name="cover-clear" id="cover-clear_id">
+                          <label for="cover-clear_id">Clear</label><br>
                         </div>
-                      {% endif %}
-                    </div>
-                  {% endif %}
+                        {% if form.cover.errors %}
+                          <div class="uk-alert uk-alert-warning">{{ form.cover.errors }}</div>
+                        {% endif %}
+                        {% if form.cover.help_text %}
+                          <div class="uk-alert">
+                            {{ form.cover.help_text }}
+                          </div>
+                        {% endif %}
+                      </div>
+                    {% endif %}
 
-                  <div class="uk-form-label">&nbsp;</div>
+                    <div class="uk-form-label">&nbsp;</div>
 
-                  <div class="uk-form-controls">
-                    <div class="file-upload">
-                      <label for="id_cover" class="uk-button uk-button-bookupdate">Upload
-                        {% if book.cover %} new {% endif %}
-                       cover image
-                         <input class="file-upload__input" type="file" name="cover" accept="image/*" id="id_cover" name="id_cover" />
-                      </label>
+                    <div class="uk-form-controls">
+                      <div class="file-upload">
+                        <label for="id_cover" class="uk-button uk-button-bookupdate">Upload
+                          {% if book.cover %} new {% endif %}
+                         cover image
+                           <input class="file-upload__input" type="file" name="cover" accept="image/*" id="id_cover" name="id_cover" />
+                        </label>
+                      </div>
                     </div>
-                  </div>
+
+                    {% endif %}
+
+                    {% if field.name == 'openlibcover' %}
+                    <div class="uk-form-controls">
+                      {{ field }}
+                    </div>
+                    {% endif %}
 
               {% endif %}
             </div>
@@ -70,5 +79,62 @@
         {% endfor %}
         <button class="uk-button uk-button-bookupdate" type="submit">Save</button>
     </form>
-
 {% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+// write a getISBN str func
+
+// const isbn = "9780099575061"
+// const isbn_id = "ISBN:" + isbn
+// const url = "https://openlibrary.org/api/books?bibkeys=" + isbn_id + "&jscmd=data&format=json"
+//  fetch(url)
+//   .then(function(response) {
+//       return response.json()
+//     }).then(function(data) {
+
+//       root =  data[isbn_id]
+
+//       if(root){
+
+//         console.log(root)
+
+//       const bookauthor = root.by_statement || root.authors[0].name || ''
+
+//       const bookobj = {
+//         "title" : root.title,
+//         "author" : bookauthor,
+//         "cover" : root.cover.medium
+//       }
+
+//       const title = document.getElementById("id_title")
+//       const author = document.getElementById("id_author")
+//       const upload = document.getElementsByClassName("file-upload")[0]
+
+//       title.value = bookobj.title
+//       author.value = bookobj.author
+
+//       if (bookobj.cover) {
+//         const img = document.createElement("img");
+//         img.src = bookobj.cover
+//         upload.parentNode.appendChild(img)
+//         upload.parentNode.removeChild(upload)
+
+//         // check first if there is a cover value?
+//         const oplibcover = document.getElementById("id_openlibcover")
+//         oplibcover.value = bookobj.cover
+//       }
+
+//     } else {
+//     return Promise.reject("Sorry, we could not retrieve any information for this book.")
+//   }})
+//   .catch(function(error) {
+//       const alert = document.createElement("div")
+//       alert.innerHTML = error
+//       alert.classList.add("uk-alert","uk-alert-warning")
+//       const firstRow = document.getElementsByClassName("uk-form-row")[0]
+//       const form = document.forms[0]
+//       form.insertBefore(alert, firstRow)
+//   });
+</script>
+{% endblock %}
+

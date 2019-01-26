@@ -1,5 +1,6 @@
 import os
 import sys
+from urllib import request as urlreq
 from io import BytesIO
 from PIL import Image
 
@@ -9,6 +10,8 @@ from .models import Book
 
 
 class PostBookForm(forms.ModelForm):
+    openlibcover = forms.CharField(max_length=200, widget=forms.HiddenInput())
+
     class Meta:
         model = Book
         fields = (
@@ -18,6 +21,7 @@ class PostBookForm(forms.ModelForm):
             "cover",
             "description",
             "category",
+            "openlibcover",
         )
         widgets = {
             "title": forms.TextInput(attrs={"class": "uk-input"}),
@@ -31,7 +35,6 @@ class PostBookForm(forms.ModelForm):
         # first call parent's constructor
         super(PostBookForm, self).__init__(*args, **kwargs)
         self.fields["description"].required = False
-        self.fields["category"]
 
     def clean_author(self):
         data = self.cleaned_data.get("author")
@@ -63,8 +66,26 @@ class PostBookForm(forms.ModelForm):
             self.instance.thumb = self.make_thumbnail(
                 cover, thumb_filename, extension
             )
-        if not cover and "cover" in self.changed_data:
+        elif not cover and "cover" in self.changed_data:
             self.instance.thumb = None
+        # else:
+        #     openlib = self.cleaned_data.get("openlibcover")
+
+        #     if not cover and openlib:
+        #         # self.instance.cover = openlib
+
+        #         openlib_file = os.path.basename(openlib)
+        #         openlib_local = (
+        #             f"{settings.BASE_DIR}/media/covers/{openlib_file}"
+        #         )
+        #         import ipdb
+
+        #         ipdb.set_trace()
+        #         urlreq.urlretrieve(openlib, openlib_local)
+        #         self.instance.cover = f"coevers/{openlib_file}"
+        # self.instance.thumb = self.make_thumbnail(
+        #     cover, thumb_filename, extension
+        # )
         return super().save(*args, **kwargs)
 
     def resize_image(self, cover, width, height, ext, quality):
