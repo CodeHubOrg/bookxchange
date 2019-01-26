@@ -133,48 +133,46 @@ function getBookDetails(isbn){
       }).then(function(data) {
 
         root =  data[isbn_id]
-
         if(root){
 
-        //console.log(root)
-
-        function getAuthors(arr_authors){
-          console.log("here")
-          let authors = arr_authors.reduce(function(auths, auth){
-            return auths + auth.name + ", "
-          }, '')
-          return authors.substring(0, authors.length - 2)
-        }
-
-        const bookauthor = root.by_statement || (root.authors) ? getAuthors(root.authors) : ''
+          function getAuthors(arr_authors){
+            let authors = arr_authors.reduce(function(auths, auth){
+              return auths + auth.name + ", "
+            }, '')
+            return authors.substring(0, authors.length - 2)
+          }
 
 
+          const bookauthor = root.by_statement || (root.authors) ? getAuthors(root.authors) : ''
 
-        const bookobj = {
-          "title" : root.title,
-          "author" : bookauthor,
-          "cover" : root.cover.medium
-        }
-
-        const title = document.getElementById("id_title")
-        const author = document.getElementById("id_author")
-        const upload = document.getElementsByClassName("file-upload")[0]
-
-        title.value = bookobj.title
-        author.value = bookobj.author
+          const cover = (root.cover) ? root.cover.medium : ''
 
 
+          const bookobj = {
+            "title" : root.title,
+            "author" : bookauthor,
+            "cover" : cover
+          }
 
-        if (bookobj.cover) {
-          const img = document.createElement("img");
-          img.src = bookobj.cover
-          upload.parentNode.appendChild(img)
-          upload.parentNode.removeChild(upload)
+          const title = document.getElementById("id_title")
+          const author = document.getElementById("id_author")
+          const upload = document.getElementsByClassName("file-upload")[0]
 
-          // check first if there is a cover value?
-          const oplibcover = document.getElementById("id_openlibcover")
-          oplibcover.value = bookobj.cover
-        }
+          title.value = bookobj.title
+          author.value = bookobj.author
+
+
+
+          if (bookobj.cover) {
+            const img = document.createElement("img");
+            img.src = bookobj.cover
+            upload.parentNode.appendChild(img)
+            upload.parentNode.removeChild(upload)
+
+            // check first if there is a cover value?
+            const oplibcover = document.getElementById("id_openlibcover")
+            oplibcover.value = bookobj.cover
+          }
 
       } else {
       return Promise.reject("Sorry, we could not retrieve any information for this book.")
