@@ -3,7 +3,7 @@ import sys
 from urllib import request as urlreq
 from io import BytesIO
 from PIL import Image
-
+from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
 from .models import Book
@@ -35,6 +35,7 @@ class PostBookForm(forms.ModelForm):
         # first call parent's constructor
         super(PostBookForm, self).__init__(*args, **kwargs)
         self.fields["description"].required = False
+        self.fields["openlibcover"].required = False
 
     def clean_author(self):
         data = self.cleaned_data.get("author")
@@ -59,33 +60,27 @@ class PostBookForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         cover = self.instance.cover
+        openlib = self.cleaned_data.get("openlibcover")
         if cover and "cover" in self.changed_data:
             cover = self.instance.cover
             name, extension = os.path.splitext(cover.name)
-            thumb_filename = name + "_thumb" + extension
+            thumb_filename = f"{name}_thumb{extension}"
+            self.instance.thumb = self.make_thumbnail(
+                cover, thumb_filename, extension
+            )
+        if not cover and openlib:
+            openlib_file = os.path.basename(openlib)
+            self.instance.cover = f"covers/{openlib_file}"
+            openlib_local = f"{settings.BASE_DIR}/media/covers/{openlib_file}"
+            urlreq.urlretrieve(openlib, openlib_local)
+            cover = self.instance.cover
+            name, extension = os.path.splitext(openlib_file)
+            thumb_filename = f"{name}_thumb{extension}"
             self.instance.thumb = self.make_thumbnail(
                 cover, thumb_filename, extension
             )
         if not cover and "cover" in self.changed_data:
             self.instance.thumb = None
-        # else:
-        #     openlib = self.cleaned_data.get("openlibcover")
-
-        #     if not cover and openlib:
-        #         # self.instance.cover = openlib
-
-        #         openlib_file = os.path.basename(openlib)
-        #         openlib_local = (
-        #             f"{settings.BASE_DIR}/media/covers/{openlib_file}"
-        #         )
-        #         import ipdb
-
-        #         ipdb.set_trace()
-        #         urlreq.urlretrieve(openlib, openlib_local)
-        #         self.instance.cover = f"coevers/{openlib_file}"
-        # self.instance.thumb = self.make_thumbnail(
-        #     cover, thumb_filename, extension
-        # )
         return super().save(*args, **kwargs)
 
     def resize_image(self, cover, width, height, ext, quality):

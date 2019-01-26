@@ -18,6 +18,14 @@
                   <label for="{{ field.id_for_label }}" class="uk-form-label">{{ field.label }}: </label>
                   <div class="uk-form-controls">
                      {{ field }}
+                     {% if field.name == 'isbn' %}
+                        {% if not book.title %}
+                        <div id="lookup-errors"></div>
+                        <div id="lookup" class="uk-button uk-button-bookupdate uk-margin">Lookup from ISBN</div>
+
+                        {% endif %}
+
+                     {% endif %}
                      {% if field.errors %}
                         <div class="uk-alert uk-alert-warning">
                           {{ field.errors }}
@@ -66,17 +74,6 @@
                         <span id="upload"></span>
                       </div>
                     </div>
-<!--
-                    <div  class="uk-form-label">Cover:</div>
-
-                    <div class="uk-form-controls">
-
-                        <label class="file-upload" for="id_cover">
-                          <input type="file" name="cover" accept="image/*" id="id_cover">
-                        </label>
-
-                    </div> -->
-
 
                     {% endif %}
 
@@ -106,59 +103,87 @@
 
 </script>
 <script type="text/javascript">
-// write a getISBN str func
 
-// const isbn = "9780099575061"
-// const isbn_id = "ISBN:" + isbn
-// const url = "https://openlibrary.org/api/books?bibkeys=" + isbn_id + "&jscmd=data&format=json"
-//  fetch(url)
-//   .then(function(response) {
-//       return response.json()
-//     }).then(function(data) {
+const lookup = document.getElementById("lookup")
+const errordiv = document.getElementById("lookup-errors")
 
-//       root =  data[isbn_id]
+lookup.addEventListener("click", function(){
+  const isbn_raw = document.getElementById("id_isbn").value
+  const isbn_clean = isbn_raw.trim().replace(/-/g,'')
+  getBookDetails(isbn_clean)
+})
 
-//       if(root){
+function getBookDetails(isbn){
 
-//         console.log(root)
+  errordiv.innerHTML = ''
+  errordiv.classList.remove("uk-alert","uk-alert-warning")
+  if (!isbn) {
+       errordiv.innerHTML = "Please enter ISBN"
+       errordiv.classList.add("uk-alert","uk-alert-warning")
+       return
+  }
 
-//       const bookauthor = root.by_statement || root.authors[0].name || ''
+  const isbn_id = "ISBN:" + isbn
+  const url = "https://openlibrary.org/api/books?bibkeys=" + isbn_id + "&jscmd=data&format=json"
 
-//       const bookobj = {
-//         "title" : root.title,
-//         "author" : bookauthor,
-//         "cover" : root.cover.medium
-//       }
 
-//       const title = document.getElementById("id_title")
-//       const author = document.getElementById("id_author")
-//       const upload = document.getElementsByClassName("file-upload")[0]
+  fetch(url)
+    .then(function(response) {
+        return response.json()
+      }).then(function(data) {
 
-//       title.value = bookobj.title
-//       author.value = bookobj.author
+        root =  data[isbn_id]
 
-//       if (bookobj.cover) {
-//         const img = document.createElement("img");
-//         img.src = bookobj.cover
-//         upload.parentNode.appendChild(img)
-//         upload.parentNode.removeChild(upload)
+        if(root){
 
-//         // check first if there is a cover value?
-//         const oplibcover = document.getElementById("id_openlibcover")
-//         oplibcover.value = bookobj.cover
-//       }
+        //console.log(root)
 
-//     } else {
-//     return Promise.reject("Sorry, we could not retrieve any information for this book.")
-//   }})
-//   .catch(function(error) {
-//       const alert = document.createElement("div")
-//       alert.innerHTML = error
-//       alert.classList.add("uk-alert","uk-alert-warning")
-//       const firstRow = document.getElementsByClassName("uk-form-row")[0]
-//       const form = document.forms[0]
-//       form.insertBefore(alert, firstRow)
-//   });
+        function getAuthors(arr_authors){
+          console.log("here")
+          let authors = arr_authors.reduce(function(auths, auth){
+            return auths + auth.name + ", "
+          }, '')
+          return authors.substring(0, authors.length - 2)
+        }
+
+        const bookauthor = root.by_statement || (root.authors) ? getAuthors(root.authors) : ''
+
+
+
+        const bookobj = {
+          "title" : root.title,
+          "author" : bookauthor,
+          "cover" : root.cover.medium
+        }
+
+        const title = document.getElementById("id_title")
+        const author = document.getElementById("id_author")
+        const upload = document.getElementsByClassName("file-upload")[0]
+
+        title.value = bookobj.title
+        author.value = bookobj.author
+
+
+
+        if (bookobj.cover) {
+          const img = document.createElement("img");
+          img.src = bookobj.cover
+          upload.parentNode.appendChild(img)
+          upload.parentNode.removeChild(upload)
+
+          // check first if there is a cover value?
+          const oplibcover = document.getElementById("id_openlibcover")
+          oplibcover.value = bookobj.cover
+        }
+
+      } else {
+      return Promise.reject("Sorry, we could not retrieve any information for this book.")
+    }})
+    .catch(function(error) {
+        errordiv.innerHTML = error
+        errordiv.classList.add("uk-alert","uk-alert-warning")
+    });
+}
 </script>
 {% endblock %}
 
