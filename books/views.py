@@ -1,6 +1,5 @@
 from django.urls import reverse_lazy
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponseRedirect
 from django.core.exceptions import ImproperlyConfigured
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.edit import DeleteView, UpdateView
@@ -199,7 +198,7 @@ class BookLend(BaseLoanView):
             status=status,
         )
         book.save()
-        notify_of_loan_or_return(self.request, book, holder)
+        notify_of_loan_or_return(self.request, book, holder, type="Loan")
 
 
 class BookReturn(BaseLoanView):

@@ -17,7 +17,7 @@ def notify_of_loan_or_return(request, book, holder, type="Loan"):
         "emails/loan_or_return_confirmation.html",
         {"type": type, "book": book, "holder": holder},
     )
-    to_email = [book.owner.email, request.user.email]
+    to_email = [book.owner.email, holder.email]
     send_mail(subject, message, "info@codehub.org.uk", to_email)
 
 
