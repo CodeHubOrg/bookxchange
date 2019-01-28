@@ -16,25 +16,51 @@
   {% endif %}
 {% endif %}
 
-<form method="post" action="{% url 'login' %}">
+<form method="post" action="{% url 'login' %}" class="uk-form uk-form-horizontal maxw600">
 {% csrf_token %}
 
-<div>
-  <td>Email:</td>
-  <td>{{ form.username }}</td>
-</div>
-<div>
-  <td>{{ form.password.label_tag }}</td>
-  <td>{{ form.password }}</td>
-</div>
+      {% if form.non_field.errors %}
+      <div class="uk-alert uk-alert-warning">
+        {{ form.non_field.errors }}
+      </div>
+      {% endif %}
 
-<div>
-  <input type="submit" value="login" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</div>
+      <div class="uk-form-row uk-margin">
+          <label class="uk-form-label" for="{{ form.username.id_for_label }}">
+          Email: </label>
+          <div class="uk-form-controls">
+            <input class="uk-input" type="email" name="{{ form.username.html_name }}" autofocus required id="{{ form.username.id_for_label }}">
+            {% if form.username.errors %}
+            <div class="uk-alert uk-alert-warning">
+              {{ form.username.errors }}
+            </div>
+            {% endif %}
+          </div>
+      </div>
+
+      <div class="uk-form-row uk-margin">
+          <label class="uk-form-label" for="{{ form.password.id_for_label }}">
+          Password: </label>
+          <div class="uk-form-controls">
+            <input class="uk-input" type="password" name="{{ form.password.html_name }}" required id="{{ form.password.id_for_label }}">
+
+            {% if form.password.errors %}
+            <div class="uk-alert uk-alert-warning">
+              {{ form.password.errors }}
+            </div>
+            {% endif %}
+
+        </div>
+
+      </div>
+
+
+
+      <input class="uk-button uk-button-primary" type="submit" class="btn btn-primary" value="login" />
+      <input type="hidden" name="next" value="{{ next }}" />
+
 </form>
 
-{# Assumes you setup the password_reset view in your URLconf #}
 <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
 
 {% endblock %}

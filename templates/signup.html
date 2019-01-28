@@ -2,9 +2,29 @@
 
 {% block content %}
 <h2>Register</h2>
-<form method="post">
+<form class="uk-form uk-form-horizontal  maxw600" method="post">
   {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Sign up</button>
+  {{ form.non_field_errors }}
+  {% for field in form %}
+    <div class="uk-form-row uk-margin">
+      <label class="uk-form-label" for="{{ field.id_for_label }}">{{ field.label }}:</label>
+
+      <div class="uk-form-controls">
+        {{ field }}
+        {% if field.errors %}
+          <div class="uk-alert uk-alert-warning">{{ field.errors }}</div>
+        {% endif %}
+        {% if field.help_text %}
+          <div class="uk-alert">
+            {{ field.help_text }}
+          </div>
+        {% endif %}
+      </div>
+
+
+    </div>
+  {% endfor %}
+  <button class="uk-button uk-button-primary" type="submit">Sign up</button>
+
 </form>
 {% endblock %}

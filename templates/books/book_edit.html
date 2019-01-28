@@ -15,9 +15,19 @@
 
                 {% if field.name != 'cover' %}
 
-                  <label for="id_{{ field.name }}" class="uk-form-label">{{ field.label }}: </label>
+                  <label for="{{ field.id_for_label }}" class="uk-form-label">{{ field.label }}: </label>
                   <div class="uk-form-controls">
                      {{ field }}
+                     {% if field.errors %}
+                        <div class="uk-alert uk-alert-warning">
+                          {{ field.errors }}
+                        </div>
+                     {% endif %}
+                     {% if field.help_text %}
+                        <div class="uk-alert">
+                          {{ field.help_text }}
+                        </div>
+                     {% endif %}
                   </div>
 
                 {% else %}
@@ -31,6 +41,14 @@
                         <input type="checkbox" name="cover-clear" id="cover-clear_id">
                         <label for="cover-clear_id">Clear</label><br>
                       </div>
+                      {% if form.cover.errors %}
+                        <div class="uk-alert uk-alert-warning">{{ form.cover.errors }}</div>
+                      {% endif %}
+                      {% if form.cover.help_text %}
+                        <div class="uk-alert">
+                          {{ form.cover.help_text }}
+                        </div>
+                      {% endif %}
                     </div>
                   {% endif %}
 
@@ -42,16 +60,12 @@
                         {% if book.cover %} new {% endif %}
                        cover image
                          <input class="file-upload__input" type="file" name="cover" accept="image/*" id="id_cover" name="id_cover" />
-
                       </label>
                     </div>
                   </div>
 
               {% endif %}
-
             </div>
-
-
 
         {% endfor %}
         <button class="uk-button uk-button-bookupdate" type="submit">Save</button>

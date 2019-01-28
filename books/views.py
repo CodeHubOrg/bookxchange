@@ -211,7 +211,6 @@ class BookInterest(BaseLoanView):
     def create_book_holder(self, book, holder, status):
         # add entry in Holder table?
         # probably better to create some other log
-
         current_user = self.request.user
         from_email = current_user.email
         to_email = [holder.email]
