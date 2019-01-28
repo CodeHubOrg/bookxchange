@@ -1,9 +1,12 @@
-{% autoescape off %}
-This is a confirmation about {% if type == 'Loan' %}the loan{% else %}the return{% endif %} of a book from the Bookx library.
+{% extends 'emails/base_email.html' %}}
+{% block heading %}
+Confirmation - Book {% if type == 'Loan' %}Loan{% else %}Return{% endif %}
+----------------------------
+{% endblock %}
+{% block content %}
+This is to confirm {% if type == 'Loan' %}the loan{% else %}the return{% endif %} of a book from the Bookx library.
 
 Book: {{ book.title }}
 Owner: {{ book.owner.username }}
 Borrowed by: {{ holder.username }}
-
-
-{% endautoescape %}
+{% endblock %}

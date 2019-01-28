@@ -1,4 +1,9 @@
-{% autoescape off %}
+{% extends 'emails/base_email.html' %}}
+{% block heading %}
+Somebody is interested in a book you borrowed
+---------------------------------------------
+{% endblock %}
+{% block content %}
 Hi {{ holder.username }},
 
 Our records show that you have borrowed the book {{ book.title }}.
@@ -6,4 +11,4 @@ Our records show that you have borrowed the book {{ book.title }}.
 Please note that {{ user.username }} is also interested in this book. If you have finished reading it, could you please return it.
 
 Thank you!
-{% endautoescape %}
+{% endblock %}
