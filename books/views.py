@@ -11,6 +11,11 @@ from django.utils.decorators import method_decorator
 
 from .models import Book, BookHolder
 from .forms import PostBookForm  # , RequestBookForm
+from .email_notifications import (
+    notify_owner_of_request,
+    notify_of_loan_or_return,
+    notify_borrower_of_queue,
+)
 
 
 class BookNewView(TemplateView):
@@ -161,6 +166,20 @@ class BookRequest(BaseLoanView):
     template_name_suffix = "_confirm_request_item"
     success_url = "book_detail"
 
+    def create_book_holder(self, book, holder, status):
+        if self.allowed_status and book.status not in self.allowed_status:
+            return HttpResponseRedirect("/")
+        else:
+            book.status = status
+            BookHolder.objects.create(
+                book=book,
+                holder=holder,
+                date_requested=timezone.now(),
+                status=status,
+            )
+            book.save()
+            notify_owner_of_request(self.request, book)
+
     def get_new_holder(self, request, *args, **kwargs):
         return request.user
 
@@ -180,6 +199,7 @@ class BookLend(BaseLoanView):
             status=status,
         )
         book.save()
+        notify_of_loan_or_return(self.request, book, holder)
 
 
 class BookReturn(BaseLoanView):
@@ -197,6 +217,7 @@ class BookReturn(BaseLoanView):
             status=status,
         )
         book.save()
+        notify_of_loan_or_return(self.request, book, holder, type="Return")
 
 
 class BookInterest(BaseLoanView):
@@ -205,28 +226,8 @@ class BookInterest(BaseLoanView):
     template_name_suffix = "_confirm_interest_item"
     new_status = "OL"
 
-    # def get_new_holder(self, request, *args, **kwargs):
-    #     return request.user
-
     def create_book_holder(self, book, holder, status):
-        # add entry in Holder table?
-        # probably better to create some other log
-        current_user = self.request.user
-        from_email = current_user.email
-        to_email = [holder.email]
-        subject = "Bookx: " + current_user.username + " and " + book.title
-        message = (
-            "Our records show that you have borrowed the book "
-            + book.title
-            + ". "
-            + current_user.username
-            + " is interested in this book. Please could you let them know "
-            + "when you will return the book."
-        )
-        try:
-            send_mail(subject, message, from_email, to_email)
-        except BadHeaderError:
-            return HttpResponse("Invalid header found.")
+        notify_borrower_of_queue(self.request, book, holder)
 
 
 class Success(TemplateView):

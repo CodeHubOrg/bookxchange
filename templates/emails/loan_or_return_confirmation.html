@@ -1,0 +1,9 @@
+{% autoescape off %}
+This is a confirmation about {% if type == 'Loan' %}the loan{% else %}the return{% endif %} of a book from the Bookx library.
+
+Book: {{ book.title }}
+Owner: {{ book.owner.username }}
+Borrowed by: {{ holder.username }}
+
+
+{% endautoescape %}

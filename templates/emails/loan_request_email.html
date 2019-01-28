@@ -1,0 +1,6 @@
+{% autoescape off %}
+Hi {{ book.owner.username }}, there has been a request for a book you own. {{ user.username }} would like to borrow {{ book.title }}. Please get in touch with them, the email is {{ user.email }}.
+
+Thank you!
+
+{% endautoescape %}
