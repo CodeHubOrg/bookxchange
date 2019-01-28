@@ -20,7 +20,3 @@ def send_account_confirmation(request, user, to_email):
         },
     )
     send_mail(subject, message, "info@codehub.org.uk", to_email)
-
-
-def notify_owner_about_request():
-    pass
