@@ -1,12 +1,13 @@
 import os
 import sys
+import uuid
 from urllib import request as urlreq
 from io import BytesIO
 from PIL import Image
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
-from .models import Book, Category
+from .models import Book
 
 
 class PostBookForm(forms.ModelForm):
@@ -84,18 +85,18 @@ class PostBookForm(forms.ModelForm):
         return super().save(*args, **kwargs)
 
     def resize_image(self, cover, width, height, ext, quality):
+        covername = cover.name.split(".")[0]
+        img_id = uuid.uuid4().hex
         im = Image.open(cover)
         im.thumbnail((width, height), Image.ANTIALIAS)
-        # imagefit = ImageOps.fit(im, (width, height), Image.ANTIALIAS)
         ftype = self.get_file_extension(ext)
-
         output = BytesIO()
         im.save(output, format=ftype, quality=90)
         output.seek(0)
         return InMemoryUploadedFile(
             output,
             "ImageField",
-            "{0}{1}".format(cover.name.split(".")[0], ext),
+            f"{covername}_{img_id}{ext}",
             "image/%s" % ext,
             sys.getsizeof(output),
             None,
@@ -114,7 +115,7 @@ class PostBookForm(forms.ModelForm):
             temp_thumb,
             "ImageField",
             name,
-            "image/%s" % ext,
+            f"image/{ext}",
             sys.getsizeof(temp_thumb),
             None,
         )
@@ -139,10 +140,3 @@ class PostBookForm(forms.ModelForm):
 
 class InvalidExtension(Exception):
     """Raise for invalid image extension"""
-
-
-class FilterForm(forms.ModelForm):
-    class Meta:
-        model = Category
-        fields = ("name",)
-        widgets = {"name": forms.SelectMultiple()}
