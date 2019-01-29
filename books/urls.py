@@ -5,6 +5,11 @@ from books import views
 
 urlpatterns = [
     path("", views.BookListView.as_view(), name="book_list"),
+    path(
+        "category/<str:category>/",
+        views.BookCategoryView.as_view(),
+        name="book_category",
+    ),
     path("new", login_required(views.BookNewView.as_view()), name="book_new"),
     path(
         "<int:pk>/update",

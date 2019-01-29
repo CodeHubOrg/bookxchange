@@ -6,7 +6,7 @@ from PIL import Image
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
-from .models import Book
+from .models import Book, Category
 
 
 class PostBookForm(forms.ModelForm):
@@ -139,3 +139,10 @@ class PostBookForm(forms.ModelForm):
 
 class InvalidExtension(Exception):
     """Raise for invalid image extension"""
+
+
+class FilterForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ("name",)
+        widgets = {"name": forms.SelectMultiple()}

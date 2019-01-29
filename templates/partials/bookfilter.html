@@ -1,0 +1,17 @@
+
+<nav class="book-menu uk-text-center">
+    {% url 'book_category' category='programming' as cat_prog %}
+    {% url 'book_category' category='technology' as cat_tech %}
+    {% url 'book_category' category='nonfiction' as cat_nonfiction %}
+    {% url 'book_category' category='fiction' as cat_fiction %}
+
+    <ul class="uk-nav nav-filter flex-nav-filter maxw820">
+      <li class="uk-button uk-button-primary pad-15 {% if request.get_full_path == cat_prog %}  active {% endif %}"><a href="{{ cat_prog }}">Programming / Dev</a></li>
+
+      <li class="uk-button uk-button-primary pad-15 {% if request.get_full_path == cat_tech %}  active {% endif %}"><a  href="{{ cat_tech }}">Technology</a></li>
+
+      <li class="uk-button uk-button-primary pad-15 {% if request.get_full_path == cat_nonfiction %}  active {% endif %}"><a  href="{{ cat_nonfiction }}">Other Non-Fiction</a></li>
+
+      <li class="uk-button uk-button-primary pad-15 {% if request.get_full_path == cat_fiction %}  active {% endif %}" ><a href="{{ cat_fiction }}">Fiction</a></li>
+    </ul>
+</nav>

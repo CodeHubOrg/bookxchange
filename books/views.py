@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 
 from .models import Book, BookHolder
+from .filters import get_books_in_category
 from .forms import PostBookForm  # , RequestBookForm
 from .email_notifications import (
     notify_owner_of_request,
@@ -56,9 +57,16 @@ class BookListView(TemplateView):
     template_name = "books/book_list.html"
 
     def get(self, request):
-        books = Book.objects.filter(
-            published_date__lte=timezone.now()
-        ).order_by("published_date")
+        books = Book.objects.filter(published_date__lte=timezone.now())
+        return render(request, self.template_name, {"books": books})
+
+
+class BookCategoryView(BookListView):
+    template_name = "books/book_list.html"
+
+    def get(self, request, category):
+        books = get_books_in_category(category.capitalize())
+        # categories = get_categories_for_filter()
         return render(request, self.template_name, {"books": books})
 
 
