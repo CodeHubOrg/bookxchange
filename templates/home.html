@@ -3,4 +3,6 @@
     {% block content %}
         {{ content }}
         Hi {{ user.username }}
+
+        {% include 'partials/introduction.html' %}
     {% endblock %}
