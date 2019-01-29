@@ -9137,9 +9137,11 @@ ul.nav-filter a {
   background: #e13e57;
   color: #fff; }
 
-.uk-button-bookinterest {
+.uk-button-bookinterest, a.uk-button-bookinterest {
   background: #cccccc;
-  color: #fff; }
+  color: #fff !important; }
+  .uk-button-bookinterest:hover, a.uk-button-bookinterest:hover {
+    background: #aaa; }
 
 .uk-button-form {
   background: #444;

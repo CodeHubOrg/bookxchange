@@ -239,9 +239,12 @@ $bookinterest: #cccccc;
       background: $bookrequest;
       color: #fff;
     }
-    .uk-button-bookinterest {
+    .uk-button-bookinterest, a.uk-button-bookinterest {
       background: #cccccc;
-      color: #fff;
+      color: #fff !important;
+      &:hover {
+        background: #aaa;
+      }
     }
     .uk-button-form {
       background: #444;
@@ -255,7 +258,7 @@ $bookinterest: #cccccc;
       border: none;
     }
 
-/** forms **/
+    /** forms **/
 
         .file-upload {
           position: relative;
