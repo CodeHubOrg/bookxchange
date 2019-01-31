@@ -49,7 +49,7 @@
 
     <div class="uk-container-expand uk-margin-top maxw820">
       {% if book.description %}
-        <p>{{ book.description }}</p>
+        <p>{{ book.description|linebreaks }}</p>
       {% endif %}
 
       {% if book.category %}
