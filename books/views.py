@@ -9,7 +9,6 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 
 from .models import Book, BookHolder
-from .filters import get_books_in_category
 from .forms import PostBookForm  # , RequestBookForm
 from .email_notifications import (
     notify_owner_of_request,
@@ -64,9 +63,10 @@ class BookListView(TemplateView):
 class BookCategoryView(BookListView):
     template_name = "books/book_list.html"
 
-    def get(self, request, category):
-        books = get_books_in_category(category.capitalize())
-        # categories = get_categories_for_filter()
+    def get(self, request, supercategory):
+        books = Book.objects.get_books_in_supercategory(
+            supercategory.capitalize()
+        )
         return render(request, self.template_name, {"books": books})
 
 
@@ -206,7 +206,7 @@ class BookLend(BaseLoanView):
             status=status,
         )
         book.save()
-        notify_of_loan_or_return(self.request, book, holder, type="Loan")
+        notify_of_loan_or_return(self.request, book, holder)
 
 
 class BookReturn(BaseLoanView):
@@ -224,7 +224,7 @@ class BookReturn(BaseLoanView):
             status=status,
         )
         book.save()
-        notify_of_loan_or_return(self.request, book, holder, type="Return")
+        notify_of_loan_or_return(self.request, book, holder, action="Return")
 
 
 class BookInterest(BaseLoanView):

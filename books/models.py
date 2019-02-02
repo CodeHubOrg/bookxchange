@@ -19,6 +19,29 @@ class LoanStatus(ChoiceEnum):
     NA = "not available"
 
 
+class Books(models.QuerySet):
+    def get_books_in_supercategory(self, supercategory):
+        if supercategory == "Nonfiction":
+            books = self.get_books_nonfiction()
+        else:
+            books = self.filter(category__name=supercategory)
+        return books
+
+    def get_category_id(self, category):
+        try:
+            cat = Category.objects.get(name=category)
+            return cat.id
+        except Category.DoesNotExist:
+            return None
+
+    def get_books_nonfiction(self):
+        cat_list = [
+            self.get_category_id(cat)
+            for cat in ["Programming", "Technology", "Fiction"]
+        ]
+        return Book.objects.exclude(category__in=cat_list)
+
+
 class Book(models.Model):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
@@ -49,6 +72,7 @@ class Book(models.Model):
     category = models.ForeignKey(
         "Category", null=True, blank=True, on_delete=models.CASCADE
     )
+    objects = Books.as_manager()
 
     def get_loan(self, status):
         latestby = self.get_latestby_for_status(status)

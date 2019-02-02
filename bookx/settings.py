@@ -136,8 +136,7 @@ AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 LOGIN_URL = "/users/login/"
-# this is a bit confusing because it is not the url
-# but the name used for reverse lookup
+
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 

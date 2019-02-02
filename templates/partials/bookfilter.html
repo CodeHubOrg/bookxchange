@@ -1,8 +1,8 @@
 <nav class="book-menu uk-text-center">
-    {% url 'book_category' category='programming' as cat_prog %}
-    {% url 'book_category' category='technology' as cat_tech %}
-    {% url 'book_category' category='nonfiction' as cat_nonfiction %}
-    {% url 'book_category' category='fiction' as cat_fiction %}
+    {% url 'book_supercategory' supercategory='programming' as cat_prog %}
+    {% url 'book_supercategory' supercategory='technology' as cat_tech %}
+    {% url 'book_supercategory' supercategory='nonfiction' as cat_nonfiction %}
+    {% url 'book_supercategory' supercategory='fiction' as cat_fiction %}
 
     <ul class="uk-nav nav-filter flex-nav-filter maxw820">
       <li class="uk-button uk-button-primary pad-15 {% if request.get_full_path == cat_prog %}  active {% endif %}"><a href="{{ cat_prog }}">Programming / Dev</a></li>

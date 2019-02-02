@@ -1,3 +1,4 @@
+from django.views.generic.base import RedirectView
 from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
@@ -6,7 +7,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from bookx import views
 
 urlpatterns = [
-    path("", views.HomePageView.as_view(), name="home"),
+    path("", RedirectView.as_view(pattern_name="book_list"), name="home"),
+    path("about/", views.AboutPageView.as_view(), name="about"),
     path("books/", include("books.urls")),
     path("users/", include("users.urls")),  # new
     path("users/", include("django.contrib.auth.urls")),  # new
