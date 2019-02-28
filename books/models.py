@@ -19,7 +19,7 @@ class LoanStatus(ChoiceEnum):
     NA = "not available"
 
 
-class Books(models.QuerySet):
+class BookQueryset(models.QuerySet):
     def get_books_in_supercategory(self, supercategory):
         if supercategory == "Nonfiction":
             books = self.get_books_nonfiction()
@@ -72,7 +72,7 @@ class Book(models.Model):
     category = models.ForeignKey(
         "Category", null=True, blank=True, on_delete=models.CASCADE
     )
-    objects = Books.as_manager()
+    objects = BookQueryset.as_manager()
 
     def get_loan(self, status):
         latestby = self.get_latestby_for_status(status)

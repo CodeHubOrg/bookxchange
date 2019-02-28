@@ -10,11 +10,11 @@ from bookx import views as views_bookx
 CustomUser = get_user_model()
 
 
-class TestHomePageView:
+class TestAboutPageView:
     @pytest.mark.django_db
     def test_anonymous(self):
-        req = RequestFactory().get("/")
-        resp = views_bookx.HomePageView.as_view()(req)
+        req = RequestFactory().get("/about")
+        resp = views_bookx.AboutPageView.as_view()(req)
         assert resp.status_code == 200, "Should be callable by anyone"
 
 
