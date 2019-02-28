@@ -11,7 +11,7 @@ from django.utils.http import urlsafe_base64_decode
 from .models import CustomUser
 from .forms import CustomUserCreationForm
 from .tokens import account_activation_token
-from books.email.email_notifications import send_account_confirmation
+from .email_notifications import send_account_confirmation
 
 
 class SignUp(generic.CreateView):

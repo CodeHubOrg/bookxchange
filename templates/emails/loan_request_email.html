@@ -1,0 +1,15 @@
+{% extends 'emails/base_email.html' %}}
+{% block heading %}
+Book Request
+
+-------------------------------------------------------------------------------
+{% endblock %}
+{% block content %}
+Hi {{ book.owner.username }},
+
+There has been a request for a book you own.
+
+{{ user.username }} would like to borrow {{ book.title }}. Please get in touch with them, the email is {{ user.email }}.
+
+Thank you!
+{% endblock %}

@@ -1,6 +1,12 @@
-{% autoescape off %}
+{% extends 'emails/base_email.html' %}}
+{% block heading %}
+Account Activation
+
+-------------------------------------------------------------------------------{% endblock %}
+{% block content %}
 Hi {{ user.username }},
-Please click on the link to confirm your registration,
+
+Please click on the link to confirm your registration.
 
 {{ activate_url }}
-{% endautoescape %}
+{% endblock %}

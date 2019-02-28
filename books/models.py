@@ -19,6 +19,29 @@ class LoanStatus(ChoiceEnum):
     NA = "not available"
 
 
+class BookQueryset(models.QuerySet):
+    def get_books_in_supercategory(self, supercategory):
+        if supercategory == "Nonfiction":
+            books = self.get_books_nonfiction()
+        else:
+            books = self.filter(category__name=supercategory)
+        return books
+
+    def get_category_id(self, category):
+        try:
+            cat = Category.objects.get(name=category)
+            return cat.id
+        except Category.DoesNotExist:
+            return None
+
+    def get_books_nonfiction(self):
+        cat_list = [
+            self.get_category_id(cat)
+            for cat in ["Programming", "Technology", "Fiction"]
+        ]
+        return Book.objects.exclude(category__in=cat_list)
+
+
 class Book(models.Model):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
@@ -26,9 +49,7 @@ class Book(models.Model):
     thumb = models.ImageField(upload_to="covers/", blank=True)
     published_date = models.DateTimeField(blank=True, null=True)
     last_updated = models.DateTimeField(auto_now_add=True, null=True)
-    isbn = models.CharField(
-        "ISBN", max_length=17, help_text="13 Character ISBN Number", null=True
-    )
+    isbn = models.CharField("ISBN", max_length=17, null=True)
     description = models.TextField(
         max_length=1000,
         help_text="Enter \
@@ -51,6 +72,7 @@ class Book(models.Model):
     category = models.ForeignKey(
         "Category", null=True, blank=True, on_delete=models.CASCADE
     )
+    objects = BookQueryset.as_manager()
 
     def get_loan(self, status):
         latestby = self.get_latestby_for_status(status)

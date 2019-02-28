@@ -1,14 +1,18 @@
 import os
 import sys
+import uuid
+from urllib import request as urlreq
 from io import BytesIO
 from PIL import Image
-
+from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
 from .models import Book
 
 
 class PostBookForm(forms.ModelForm):
+    openlibcover = forms.CharField(max_length=200, widget=forms.HiddenInput())
+
     class Meta:
         model = Book
         fields = (
@@ -18,6 +22,7 @@ class PostBookForm(forms.ModelForm):
             "cover",
             "description",
             "category",
+            "openlibcover",
         )
         widgets = {
             "title": forms.TextInput(attrs={"class": "uk-input"}),
@@ -31,7 +36,7 @@ class PostBookForm(forms.ModelForm):
         # first call parent's constructor
         super(PostBookForm, self).__init__(*args, **kwargs)
         self.fields["description"].required = False
-        self.fields["category"]
+        self.fields["openlibcover"].required = False
 
     def clean_author(self):
         data = self.cleaned_data.get("author")
@@ -56,10 +61,22 @@ class PostBookForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         cover = self.instance.cover
+        openlib = self.cleaned_data.get("openlibcover")
         if cover and "cover" in self.changed_data:
             cover = self.instance.cover
             name, extension = os.path.splitext(cover.name)
-            thumb_filename = name + "_thumb" + extension
+            thumb_filename = f"{name}_thumb{extension}"
+            self.instance.thumb = self.make_thumbnail(
+                cover, thumb_filename, extension
+            )
+        if not cover and openlib:
+            openlib_file = os.path.basename(openlib)
+            self.instance.cover = f"covers/{openlib_file}"
+            openlib_local = f"{settings.BASE_DIR}/media/covers/{openlib_file}"
+            urlreq.urlretrieve(openlib, openlib_local)
+            cover = self.instance.cover
+            name, extension = os.path.splitext(openlib_file)
+            thumb_filename = f"{name}_thumb{extension}"
             self.instance.thumb = self.make_thumbnail(
                 cover, thumb_filename, extension
             )
@@ -68,18 +85,18 @@ class PostBookForm(forms.ModelForm):
         return super().save(*args, **kwargs)
 
     def resize_image(self, cover, width, height, ext, quality):
+        covername = cover.name.split(".")[0]
+        img_id = uuid.uuid4().hex
         im = Image.open(cover)
         im.thumbnail((width, height), Image.ANTIALIAS)
-        # imagefit = ImageOps.fit(im, (width, height), Image.ANTIALIAS)
         ftype = self.get_file_extension(ext)
-
         output = BytesIO()
         im.save(output, format=ftype, quality=90)
         output.seek(0)
         return InMemoryUploadedFile(
             output,
             "ImageField",
-            "{0}{1}".format(cover.name.split(".")[0], ext),
+            f"{covername}_{img_id}{ext}",
             "image/%s" % ext,
             sys.getsizeof(output),
             None,
@@ -98,7 +115,7 @@ class PostBookForm(forms.ModelForm):
             temp_thumb,
             "ImageField",
             name,
-            "image/%s" % ext,
+            f"image/{ext}",
             sys.getsizeof(temp_thumb),
             None,
         )

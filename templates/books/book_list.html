@@ -2,7 +2,9 @@
 
 {% block content %}
 
-  <h2>Available books</h2>
+
+  {% include '../partials/bookfilter.html' %}
+  <div class="uk-margin">
 
   <div class="uk-flex-center
   uk-child-width-1-2
@@ -20,6 +22,9 @@
           </div>
       </div>
       {% endfor %}
+  </div>
+
+
   </div>
 
 {% endblock %}

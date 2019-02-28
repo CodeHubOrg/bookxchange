@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from users.tokens import account_activation_token
 from django.utils.http import urlsafe_base64_encode
+from django.conf import settings
 
 
 def send_account_confirmation(request, user, to_email):
@@ -19,8 +20,4 @@ def send_account_confirmation(request, user, to_email):
             ),
         },
     )
-    send_mail(subject, message, "info@codehub.org.uk", to_email)
-
-
-def notify_owner_about_request():
-    pass
+    send_mail(subject, message, settings.DEFAULT_OWNER_EMAIL, to_email)

@@ -42,24 +42,26 @@
   <h1>{{ book.title }}</h1>
   <p>by {{ book.author }}</p>
 
-  {% if book.isbn %}
-    <p>ISBN: {{ book.isbn }}</p>
-  {% endif %}
 
   {% if book.cover %}
     <img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
   {% endif %}
 
-  {% if book.description %}
-    <p>{{ book.description }}</p>
-  {% endif %}
+    <div class="uk-container-expand uk-margin-top maxw820">
+      {% if book.description %}
+        <p>{{ book.description|linebreaks }}</p>
+      {% endif %}
 
-  {% if book.category %}
-    Category: {{ book.category }}
-  {% endif %}
+      {% if book.category %}
+        Category: {{ book.category }}
+      {% endif %}
+    </div>
+
+    {% if book.isbn %}
+    <p>ISBN: {{ book.isbn }}</p>
+    {% endif %}
 
   </div>
-
 
   <div class="uk-container-expand uk-margin-top">
   Status:
@@ -75,6 +77,7 @@
   {% endif %}
   </strong>
   </div>
+  <p>Owned by {{ book.owner.username }}</p>
 
   {% if book.status == 'AV' %}
 

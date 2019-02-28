@@ -99,6 +99,14 @@ $bookinterest: #cccccc;
     }
   }
 
+  .maxw820, .uk-button.maxw820, div.maxw820, .book-menu.maxw820, .uk-alert.maxw820 {
+    box-sizing: border-box;
+    width: 100%;
+    @media screen and (min-width: 950px){
+      max-width: 820px;
+    }
+  }
+
   .logo {
     width: 160px;
     @media screen and (min-width: 768px){
@@ -121,6 +129,37 @@ $bookinterest: #cccccc;
     li {
       flex: 1;
     }
+  }
+
+  ul.flex-nav-filter {
+    margin: 0 auto;
+    li {
+      width: 100%;
+    }
+    @media screen and (min-width: 460px) {
+      li {
+        display: inline-block;
+        width: 48%;
+      }
+    }
+    @media screen and (min-width: 640px) {
+      li {
+        width: 100%;
+      }
+    }
+    @media screen and (min-width: 680px) {
+      li {
+        width: 48%;
+      }
+    }
+    @media screen and (min-width: 1120px) {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        li {
+          flex: 1;
+        }
+      }
   }
 
   ul.flex-to-block-l {
@@ -178,6 +217,18 @@ $bookinterest: #cccccc;
       }
   }
 
+  ul.nav-filter {
+      li {
+          margin: 0 3px 10px;
+          &.active {
+            background: #ccc;
+          }
+        }
+        a {
+          color: #fff;
+        }
+  }
+
 
     /** buttons **/
     .uk-button-bookupdate {
@@ -188,9 +239,12 @@ $bookinterest: #cccccc;
       background: $bookrequest;
       color: #fff;
     }
-    .uk-button-bookinterest {
+    .uk-button-bookinterest, a.uk-button-bookinterest {
       background: #cccccc;
-      color: #fff;
+      color: #fff !important;
+      &:hover {
+        background: #aaa;
+      }
     }
     .uk-button-form {
       background: #444;
@@ -200,6 +254,9 @@ $bookinterest: #cccccc;
       padding: 0 15px !important;
     }
 
+    .file-upload input {
+      border: none;
+    }
 
     /** forms **/
 
@@ -209,15 +266,12 @@ $bookinterest: #cccccc;
         }
 
         .file-upload__input {
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            font-size: 1;
-            width:0;
-            height: 100%;
+            width: 0.1px;
+            height: 0.1px;
             opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
         }
 
 
