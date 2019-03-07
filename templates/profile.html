@@ -1,0 +1,16 @@
+{% extends 'books/base.html' %}
+    {% block content %}
+        <p><strong>My current loans:</strong></p>
+
+        {% if borrowed %}
+          {% for book in borrowed %}
+            {{ book.title  }}<br />
+          {% endfor %}
+        {% endif %}
+
+
+        <p><strong>Books marked for later:</strong></p>
+        <p><strong>Books I own:</strong></p>
+        --- <br />
+        <p><strong>Reviews</strong></p>
+    {% endblock %}

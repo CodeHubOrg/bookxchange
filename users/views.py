@@ -12,6 +12,7 @@ from .models import CustomUser
 from .forms import CustomUserCreationForm
 from .tokens import account_activation_token
 from .email_notifications import send_account_confirmation
+from books.models import Book
 
 
 class SignUp(generic.CreateView):
@@ -45,6 +46,22 @@ class ConfirmEmail(TemplateView):
 
 class ConfirmationComplete(TemplateView):
     template_name = "registration/confirmation_complete.html"
+
+
+def get_books_borrowed(user):
+    loaned = Book.objects.filter(status="OL")
+    loaned_by_user = [
+        x for x in loaned if Book.get_holder_for_current_status(x) == user
+    ]
+    return loaned_by_user
+
+
+class UserProfile(TemplateView):
+    template_name = "profile.html"
+
+    def get(self, request):
+        borrowed = get_books_borrowed(request.user)
+        return render(request, self.template_name, {"borrowed": borrowed})
 
 
 def parse_uid(uidb64):
