@@ -27,7 +27,7 @@
         {% endif %}
 
 
-        <p><strong>OWNED BY ME</strong></p>
+        <p><strong>OWNED BY ME AND CURRENTLY ON LOAN</strong></p>
 
         {% if lending %}
         <table>
@@ -52,8 +52,11 @@
           {% endfor %}
 
         </table>
-
+        {% else %}
+            No books owned by you are currently being borrowed.
         {% endif %}
-        --- <br />
+
+
         <p><strong>REVIEWS</strong></p>
+        (to do)
     {% endblock %}
