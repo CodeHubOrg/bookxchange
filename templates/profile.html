@@ -1,16 +1,59 @@
 {% extends 'books/base.html' %}
     {% block content %}
-        <p><strong>My current loans:</strong></p>
-
         {% if borrowed %}
-          {% for book in borrowed %}
-            {{ book.title  }}<br />
+
+        <p><strong>MY CURRENT LOANS</strong></p>
+          <table>
+          <thead>
+              <td>&nbsp;</td>
+              <td><strong>Title</strong></td>
+              <td><strong>Date borrowed</strong></td>
+              <td><strong>Owner</strong></td>
+          </thead>
+          {% for loan in borrowed %}
+          <tr>
+            <td>
+                {% if loan.book__thumb %}
+                   <img src="/media/{{ loan.book__thumb }}">
+                {% endif %}
+            </td>
+            <td>{{ loan.book__title  }}</td>
+            <td>{{ loan.max_date }}</td>
+            <td>{{ loan.book__owner__username }}</td>
+          </tr>
           {% endfor %}
+
+          </table>
         {% endif %}
 
 
-        <p><strong>Books marked for later:</strong></p>
-        <p><strong>Books I own:</strong></p>
+        <p><strong>OWNED BY ME</strong></p>
+
+        {% if lending %}
+        <table>
+          <thead>
+              <td>&nbsp;</td>
+              <td><strong>Title</strong></td>
+              <td><strong>Date borrowed</strong></td>
+              <td><strong>Borrowed by</strong></td>
+          </thead>
+          {% for loan in lending %}
+
+          <tr>
+            <td>
+                {% if loan.book__thumb %}
+                   <img src="/media/{{ loan.book__thumb }}">
+                {% endif %}
+            </td>
+            <td>{{ loan.book__title  }}</td>
+            <td>{{ loan.max_date }}</td>
+            <td>{{ loan.borrowed_by }}</td>
+          </tr>
+          {% endfor %}
+
+        </table>
+
+        {% endif %}
         --- <br />
-        <p><strong>Reviews</strong></p>
+        <p><strong>REVIEWS</strong></p>
     {% endblock %}

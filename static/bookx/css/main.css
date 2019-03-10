@@ -9165,3 +9165,6 @@ ul.nav-filter a {
   overflow: hidden;
   position: absolute;
   z-index: -1; }
+
+td {
+  padding: 8px 21px 8px 0; }
