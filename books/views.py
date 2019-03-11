@@ -73,9 +73,6 @@ class BookCategoryView(BookListView):
         return url_parts[3].capitalize()
 
     def get(self, request, category):
-        # import ipdb
-
-        # ipdb.set_trace()
         categories = Category.objects.all()
         books = Book.objects.get_books_in_category(category.capitalize())
         query_param = self.get_query_param(request)
