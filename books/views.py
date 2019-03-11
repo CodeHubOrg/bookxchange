@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 
-from .models import Book, BookHolder
+from .models import Book, BookHolder, Category
 from .forms import PostBookForm  # , RequestBookForm
 from .email_notifications import (
     notify_owner_of_request,
@@ -56,18 +56,54 @@ class BookListView(TemplateView):
     template_name = "books/book_list.html"
 
     def get(self, request):
+        categories = Category.objects.all()
         books = Book.objects.filter(published_date__lte=timezone.now())
-        return render(request, self.template_name, {"books": books})
+        return render(
+            request,
+            self.template_name,
+            {"categories": categories, "books": books},
+        )
 
 
 class BookCategoryView(BookListView):
     template_name = "books/book_list.html"
 
+    def get_query_param(self, request):
+        url_parts = request.path.split("/")
+        return url_parts[3].capitalize()
+
+    def get(self, request, category):
+        # import ipdb
+
+        # ipdb.set_trace()
+        categories = Category.objects.all()
+        books = Book.objects.get_books_in_category(category.capitalize())
+        query_param = self.get_query_param(request)
+        return render(
+            request,
+            self.template_name,
+            {"categories": categories, "books": books, "cat": query_param},
+        )
+
+
+class BookSuperCategoryView(BookCategoryView):
+    template_name = "books/book_list.html"
+
     def get(self, request, supercategory):
+        categories = Category.objects.all()
         books = Book.objects.get_books_in_supercategory(
             supercategory.capitalize()
         )
-        return render(request, self.template_name, {"books": books})
+        query_param = self.get_query_param(request)
+        return render(
+            request,
+            self.template_name,
+            {
+                "categories": categories,
+                "books": books,
+                "supercat": query_param,
+            },
+        )
 
 
 class BookDetailView(TemplateView):

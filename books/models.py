@@ -20,11 +20,14 @@ class LoanStatus(ChoiceEnum):
 
 
 class BookQueryset(models.QuerySet):
+    def get_books_in_category(self, category):
+        return self.filter(category__name=category)
+
     def get_books_in_supercategory(self, supercategory):
         if supercategory == "Nonfiction":
             books = self.get_books_nonfiction()
         else:
-            books = self.filter(category__name=supercategory)
+            books = self.get_books_in_category(supercategory)
         return books
 
     def get_category_id(self, category):
