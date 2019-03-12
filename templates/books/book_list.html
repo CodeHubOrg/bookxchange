@@ -26,14 +26,15 @@
     {% if categories %}
     <div uk-dropdown="mode:click">
       <ul class="uk-nav uk-dropdown-nav">
-        {% for category in categories %}
-        <li><a href="{% url 'book_category' category=category.name %}">{{ category.name }}</a></li>
+        {% for cat in categories %}
+          <li><a href="/books/category/{{ cat.name }}">{{ cat.name }}</a></li>
         {% endfor %}
       </ul>
     </div>
     {% endif %}
 
   </div>
+
   <div class="cat-heading">
     {% if cat %}
       {{ cat }}
