@@ -70,7 +70,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "bookx.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -117,6 +116,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
+
+ADMINS = [("Katja", "mail@kdurrani.co.uk")]
 
 STATIC_URL = "/static/"
 
