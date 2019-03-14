@@ -27,7 +27,7 @@
     <div uk-dropdown="mode:click">
       <ul class="uk-nav uk-dropdown-nav">
         {% for cat in categories %}
-          <li><a href="/books/category/{{ cat.name }}">{{ cat.name }}</a></li>
+          <li><a href="{% url 'book_category' category=cat.name %}">{{ cat.name }}</a></li>
         {% endfor %}
       </ul>
     </div>
