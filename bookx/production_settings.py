@@ -11,7 +11,7 @@ LOGGING = {
         "file": {
             "level": "DEBUG",
             "class": "logging.FileHandler",
-            "filename": "/var/log/debug.log",
+            "filename": "/home/katja/kd2django/bookxchange/debug.log",
         }
     },
     "loggers": {
