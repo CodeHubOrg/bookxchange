@@ -6,10 +6,20 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from bookx import views
 
+
+def mod1(message):
+    return True
+
+
+def mod2(message):
+    return True
+
+
 urlpatterns = [
     path("", RedirectView.as_view(pattern_name="book_list"), name="home"),
     path("about/", views.AboutPageView.as_view(), name="about"),
     path("books/", include("books.urls")),
+    path("messages/", include("postman.urls")),
     path("users/", include("users.urls")),  # new
     path("users/", include("django.contrib.auth.urls")),  # new
     path("admin/", admin.site.urls),

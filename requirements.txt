@@ -7,3 +7,6 @@ mixer==6.1.3
 django-dotenv==1.4.2
 gunicorn==19.9.0
 django-sendgrid-v5==0.8.0
+django-ajax-selects==1.7.1
+django-appconf==1.0.3
+django-postman==3.6.2

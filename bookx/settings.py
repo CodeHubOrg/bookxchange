@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users",
     "books",
+    "postman",
+    "ajax_select",
+    "mailer",
 ]
 
 MIDDLEWARE = [
@@ -138,10 +141,15 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# TEMPLATE_CONTEXT_PROCESSORS = ["postman.context_processors.inbox"]
+
 AUTH_USER_MODEL = "users.CustomUser"
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
+POSTMAN_AUTO_MODERATE_AS = True
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 
 LOGIN_URL = "/users/login/"
 

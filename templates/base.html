@@ -2,9 +2,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Book Xchange</title>
+    <title>
+    {% block title %}
+    Book Xchange
+    {% endblock %}
+    </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'bookx/css/main.css' %}?{% now 'U' %}">
+
+    {% block extrahead %}
+
+
+    {% endblock %}
     </head>
 
     <body class="flex-site">
@@ -40,6 +49,8 @@
     {% block main %}
 
    <!--  <div class="uk-container uk-container-expand content" > -->
+    {% block postman_menu %}
+    {% endblock %}
         <section class="content">
         {% block content %}
             {{ content }}
