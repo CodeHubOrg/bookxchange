@@ -1,6 +1,6 @@
 django==2.1.7
 Pillow==5.4.1
-psycopg2==2.7.5
+psycopg2==2.7.7
 pytest==3.8.2
 pytest-django==3.4.3
 mixer==6.1.3
