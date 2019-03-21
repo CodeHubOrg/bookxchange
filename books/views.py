@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 
 from .models import Book, BookHolder, Category
 from .forms import PostBookForm  # , RequestBookForm
-from .email_notifications import (
+from .notifications import (
     notify_owner_of_request,
     notify_of_loan_or_return,
     notify_borrower_of_queue,

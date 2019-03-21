@@ -1,15 +1,17 @@
+from postman.api import pm_write
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 
 
 def notify_owner_of_request(request, book):
-    subject = f"Bookx - Request for {book.title}"
-    message = render_to_string(
-        "emails/loan_request_email.html", {"user": request.user, "book": book}
+    pm_write(
+        sender=request.user,
+        recipient=book.owner,
+        subject=f"Request to borrow your book {book.title}",
+        body=f"{request.user.username} has asked to borrow your book. Please [tbd].",
+        auto_archive=True,
     )
-    to_email = [book.owner.email]
-    send_mail(subject, message, settings.DEFAULT_OWNER_EMAIL, to_email)
 
 
 def notify_of_loan_or_return(request, book, holder, action="Loan"):

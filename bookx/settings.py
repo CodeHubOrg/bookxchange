@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "books",
     "postman",
     "ajax_select",
-    "mailer",
 ]
 
 MIDDLEWARE = [
