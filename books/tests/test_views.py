@@ -47,7 +47,7 @@ class TestBookNewView:
         CustomUser.objects.create_user(
             email=email, username=username, password=password
         )
-        client.login(email=email, password=password)
+        client.login(username=email, password=password)
         resp = client.get(reverse("book_new"))
         assert resp.status_code == 200
 
@@ -70,7 +70,7 @@ class TestBookUpdate:
             username=username, email=email, password=password
         )
         book = mixer.blend("books.Book", author="Kate Raworth", owner=user3)
-        client.login(email=email, password=password)
+        client.login(username=email, password=password)
         resp = client.get(reverse("book_update", kwargs={"pk": book.id}))
         assert "Add" in str(resp.content)
 
