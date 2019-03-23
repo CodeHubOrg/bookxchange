@@ -50,23 +50,25 @@ class ConfirmationComplete(TemplateView):
 
 
 def get_books_borrowed(user):
-    q0 = (
+    records_borrowed_by_user_qs = (
         BookHolder.objects.select_related("book")
         .filter(book__status="OL")
         .exclude(date_borrowed=None)
     )
-    q1 = (
-        q0.filter(holder__id=user.id)
+    latest_records_on_loan_qs = (
+        records_borrowed_by_user_qs.filter(holder__id=user.id)
         .values("book__title", "book__thumb", "book__owner__username")
         .annotate(max_date=Max("date_borrowed"))
         .order_by("book__title", "max_date")
     )
-    q2 = (
-        q0.values("book__title", "book__thumb", "book__owner__username")
+    latest_borrowed_by_user_qs = (
+        records_borrowed_by_user_qs.values(
+            "book__title", "book__thumb", "book__owner__username"
+        )
         .annotate(max_date=Max("date_borrowed"))
         .order_by("book__title", "max_date")
     )
-    return q1.intersection(q2)
+    return latest_records_on_loan_qs.intersection(latest_borrowed_by_user_qs)
 
 
 def get_own_books_on_loan(user):
