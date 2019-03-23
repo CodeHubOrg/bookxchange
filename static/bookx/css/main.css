@@ -9020,6 +9020,9 @@ footer {
       flex-direction: column;
       width: 100%; } }
 
+.flex-content.content {
+  padding-top: 0; }
+
 .flex-logo {
   flex: 1; }
 
@@ -9165,3 +9168,11 @@ ul.nav-filter a {
   overflow: hidden;
   position: absolute;
   z-index: -1; }
+
+.cat-heading {
+  padding: 13px 0 21px;
+  text-transform: uppercase;
+  font-weight: bold; }
+
+td {
+  padding: 8px 21px 8px 0; }

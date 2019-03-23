@@ -1,3 +1,4 @@
+from django.db.models import Max
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import BadHeaderError
@@ -12,6 +13,7 @@ from .models import CustomUser
 from .forms import CustomUserCreationForm
 from .tokens import account_activation_token
 from .email_notifications import send_account_confirmation
+from books.models import Book, BookHolder
 
 
 class SignUp(generic.CreateView):
@@ -45,6 +47,54 @@ class ConfirmEmail(TemplateView):
 
 class ConfirmationComplete(TemplateView):
     template_name = "registration/confirmation_complete.html"
+
+
+def get_books_borrowed(user):
+    records_borrowed_by_user_qs = (
+        BookHolder.objects.select_related("book")
+        .filter(book__status="OL")
+        .exclude(date_borrowed=None)
+    )
+    latest_records_on_loan_qs = (
+        records_borrowed_by_user_qs.filter(holder__id=user.id)
+        .values("book__title", "book__thumb", "book__owner__username")
+        .annotate(max_date=Max("date_borrowed"))
+        .order_by("book__title", "max_date")
+    )
+    latest_borrowed_by_user_qs = (
+        records_borrowed_by_user_qs.values(
+            "book__title", "book__thumb", "book__owner__username"
+        )
+        .annotate(max_date=Max("date_borrowed"))
+        .order_by("book__title", "max_date")
+    )
+    return latest_records_on_loan_qs.intersection(latest_borrowed_by_user_qs)
+
+
+def get_own_books_on_loan(user):
+    return (
+        BookHolder.objects.select_related("book")
+        .filter(book__status="OL", book__owner__id=user.id)
+        .exclude(date_borrowed=None)
+        .values("book__title", "book__thumb")
+        .annotate(
+            max_date=Max("date_borrowed"), borrowed_by=Max("holder__username")
+        )
+        .order_by("book__title", "max_date")
+    )
+
+
+class UserProfile(TemplateView):
+    template_name = "profile.html"
+
+    def get(self, request):
+        borrowed = get_books_borrowed(request.user)
+        lending = get_own_books_on_loan(request.user)
+        return render(
+            request,
+            self.template_name,
+            {"borrowed": borrowed, "lending": lending},
+        )
 
 
 def parse_uid(uidb64):

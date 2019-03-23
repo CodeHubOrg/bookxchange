@@ -1,0 +1,62 @@
+{% extends 'books/base.html' %}
+    {% block content %}
+        {% if borrowed %}
+
+        <p><strong>MY CURRENT LOANS</strong></p>
+          <table>
+          <thead>
+              <td>&nbsp;</td>
+              <td><strong>Title</strong></td>
+              <td><strong>Date borrowed</strong></td>
+              <td><strong>Owner</strong></td>
+          </thead>
+          {% for loan in borrowed %}
+          <tr>
+            <td>
+                {% if loan.book__thumb %}
+                   <img src="/media/{{ loan.book__thumb }}">
+                {% endif %}
+            </td>
+            <td>{{ loan.book__title  }}</td>
+            <td>{{ loan.max_date }}</td>
+            <td>{{ loan.book__owner__username }}</td>
+          </tr>
+          {% endfor %}
+
+          </table>
+        {% endif %}
+
+
+        <p><strong>OWNED BY ME AND CURRENTLY ON LOAN</strong></p>
+
+        {% if lending %}
+        <table>
+          <thead>
+              <td>&nbsp;</td>
+              <td><strong>Title</strong></td>
+              <td><strong>Date borrowed</strong></td>
+              <td><strong>Borrowed by</strong></td>
+          </thead>
+          {% for loan in lending %}
+
+          <tr>
+            <td>
+                {% if loan.book__thumb %}
+                   <img src="/media/{{ loan.book__thumb }}">
+                {% endif %}
+            </td>
+            <td>{{ loan.book__title  }}</td>
+            <td>{{ loan.max_date }}</td>
+            <td>{{ loan.borrowed_by }}</td>
+          </tr>
+          {% endfor %}
+
+        </table>
+        {% else %}
+            No books owned by you are currently being borrowed.
+        {% endif %}
+
+
+        <p><strong>REVIEWS</strong></p>
+        (to do)
+    {% endblock %}

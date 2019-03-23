@@ -68,8 +68,15 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "bookx.wsgi.application"
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.core.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.request",
+)
 
+WSGI_APPLICATION = "bookx.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -118,6 +125,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+ADMINS = [("Katja", "mail@kdurrani.co.uk")]
+
 STATIC_URL = "/static/"
 
 
@@ -136,7 +145,7 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 LOGIN_URL = "/users/login/"
 
-LOGIN_REDIRECT_URL = "home"
+# LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
 # custom setting by kd
