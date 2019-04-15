@@ -10,7 +10,7 @@ from django.conf import settings
 def send_account_confirmation(request, user, to_email):
     subject = "Activate your Bookx account."
     token = account_activation_token.make_token(user)
-    uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
     message = render_to_string(
         "emails/acc_activate_email.html",
         {

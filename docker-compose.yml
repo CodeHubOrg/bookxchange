@@ -15,7 +15,7 @@ services:
 
   web:
     build: .
-    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       - db
     ports:
@@ -25,6 +25,7 @@ services:
       POSTGRES_USER: dj
       POSTGRES_PASSWORD: should_use_env
       POSTGRES_HOST: db
+      ALLOWED_HOSTS: localhost
     volumes:
       - .:/app
     networks:
