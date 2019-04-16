@@ -2,6 +2,7 @@ from postman.api import pm_write
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
+from users.email_notifications import send_book_request
 
 
 def notify_owner_of_request(request, book):
@@ -9,9 +10,10 @@ def notify_owner_of_request(request, book):
         sender=request.user,
         recipient=book.owner,
         subject=f"Request to borrow your book {book.title}",
-        body=f"{request.user.username} has asked to borrow your book. Please [tbd].",
+        body=f"{request.user.username} has asked to borrow your book. Please reply to this message, and arrange a time and place where the book can be picked up. Please also send a message if you cannot lend the book.",
         auto_archive=True,
     )
+    send_book_request(request, book)
 
 
 def notify_of_loan_or_return(request, book, holder, action="Loan"):

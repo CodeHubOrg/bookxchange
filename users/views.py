@@ -13,7 +13,7 @@ from .models import CustomUser
 from .forms import CustomUserCreationForm
 from .tokens import account_activation_token
 from .email_notifications import send_account_confirmation
-from books.models import Book, BookHolder
+from books.models import BookHolder
 
 
 class SignUp(generic.CreateView):
@@ -108,6 +108,15 @@ def handle_activation_success(request, user):
     user.is_active = True
     user.save()
     login(request, user)
+
+
+def emaillogin(request, uidb64, token):
+    uid = parse_uid(uidb64)
+    if uid:
+        user = CustomUser.objects.get(pk=uid)
+        if user and account_activation_token.check_token(user, token):
+            login(request, user)
+    return HttpResponseRedirect(reverse("postman:inbox"))
 
 
 def activate(request, uidb64, token):

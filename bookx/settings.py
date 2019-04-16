@@ -147,6 +147,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 AUTH_USER_MODEL = "users.CustomUser"
 AUTHENTICATION_BACKENDS = ["users.backends.EmailBackend"]
 
+PASSWORD_RESET_TIMEOUT_DAYS = 1
+
 POSTMAN_AUTO_MODERATE_AS = True
 
 
