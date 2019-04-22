@@ -12,11 +12,11 @@
       <ul class="uk-nav nav-bookupdate flex-nav-books">
         <li><a class="uk-button uk-button-bookupdate
         {% if request.get_full_path == book_update %} active{% endif %}"
-         href="{% url 'book_update' pk=book.id %}">Update this book</a></li>
+         href="{{ book_update }}">Update this book</a></li>
 
         <li><a class="uk-button uk-button-bookupdate
           {% if request.get_full_path == book_delete %}active {% endif %}"
-          href="{% url 'book_delete' pk=book.id %}">Delete this book</a></li>
+          href="{{ book_delete }}">Delete this book</a></li>
       </ul>
     </nav>
     {% endif %}

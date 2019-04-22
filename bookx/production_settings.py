@@ -19,8 +19,6 @@ LOGGING = {
     },
 }
 
-SITE_ID = 3
-
 POSTMAN_FROM_EMAIL = "info@codehub.org.uk"
 
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
