@@ -36,8 +36,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "users",
     "books",
+    "postman",
+    "ajax_select",
 ]
 
 MIDDLEWARE = [
@@ -121,7 +124,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
@@ -138,10 +140,18 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# TEMPLATE_CONTEXT_PROCESSORS = ["postman.context_processors.inbox"]
+
 AUTH_USER_MODEL = "users.CustomUser"
-AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
+AUTHENTICATION_BACKENDS = ["users.backends.EmailBackend"]
+
+PASSWORD_RESET_TIMEOUT_DAYS = 1
+
+POSTMAN_AUTO_MODERATE_AS = True
+
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 
 LOGIN_URL = "/users/login/"
 
