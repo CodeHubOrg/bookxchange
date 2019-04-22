@@ -27,9 +27,8 @@ Create the directory used for media uploads in development:
 docker-compose exec mkdir -p media/covers
 ```
 
-The local development server should be running at this point. To stop and start it you can use the following commands:
+The local development server should be running at this point. If it needs to be starteg again, you can use this command:
 ```
-docker-compose exec web pkill -f runserver
 docker-compose exec web python manage.py runserver 0:8000
 ```
 

@@ -17,6 +17,7 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     tty: true
+    stdin_open: True
     depends_on:
       - db
     ports:
