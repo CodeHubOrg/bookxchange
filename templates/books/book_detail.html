@@ -4,16 +4,15 @@
 {% block content %}
 
   {% if user.is_authenticated %}
-    {% if book.owner == user or user.is_superuser %}
-    <div class="uk-container-expand uk-margin-top">
-    {% url 'book_update' pk=book.id as book_update %}
-    {% url 'book_delete' pk=book.id as book_delete %}
+    {% if ct_book.owner == user or user.is_superuser %}
+    <div class="uk-container-expand">
+    {% url 'book_update' pk=ct_book.id as book_update %}
+    {% url 'book_delete' pk=ct_book.id as book_delete %}
     <nav class="book-menu maxw600">
       <ul class="uk-nav nav-bookupdate flex-nav-books">
         <li><a class="uk-button uk-button-bookupdate
         {% if request.get_full_path == book_update %} active{% endif %}"
          href="{{ book_update }}">Update this book</a></li>
-
         <li><a class="uk-button uk-button-bookupdate
           {% if request.get_full_path == book_delete %}active {% endif %}"
           href="{{ book_delete }}">Delete this book</a></li>
@@ -24,26 +23,26 @@
 
 
   <div class="uk-container-expand uk-margin-top">
-  <h1>{{ book.title }}</h1>
-  <p>by {{ book.author }}</p>
+  <h1>{{ ct_book.title }}</h1>
+  <p>by {{ ct_book.author }}</p>
 
 
-  {% if book.cover %}
-    <img src="{{ book.cover.url }}" alt="Cover {{ book.title }}" />
+  {% if ct_book.cover %}
+    <img src="{{ ct_book.cover.url }}" alt="Cover {{ ct_book.title }}" />
   {% endif %}
 
     <div class="uk-container-expand uk-margin-top maxw820">
-      {% if book.description %}
-        <p>{{ book.description|linebreaks }}</p>
+      {% if ct_book.description %}
+        <p>{{ ct_book.description|linebreaks }}</p>
       {% endif %}
 
-      {% if book.category %}
-        Category: {{ book.category }}
+      {% if ct_book.category %}
+        Category: {{ ct_book.category }}
       {% endif %}
     </div>
 
-    {% if book.isbn %}
-    <p>ISBN: {{ book.isbn }}</p>
+    {% if ct_book.isbn %}
+    <p>ISBN: {{ ct_book.isbn }}</p>
     {% endif %}
 
   </div>
@@ -51,69 +50,87 @@
   <div class="uk-container-expand uk-margin-top">
   Status:
   <strong>
-  {% if book.status == 'AV' %}
+  {% if ct_book.status == 'AV' %}
     <p>Available</p>
-  {% elif book.status == 'RQ' %}
+  {% elif ct_book.status == 'RQ' %}
   <p>Requested</p>
-  {% elif book.status == 'OL' %}
+  {% elif ct_book.status == 'OL' %}
   <p>On loan</p>
-  {% elif book.status == 'NA' %}
+  {% elif ct_book.status == 'NA' %}
     <p>Unavailable for other reaons</p>
   {% endif %}
   </strong>
   </div>
-  <p>Owned by {{ book.owner.username }}</p>
+  <p>Owned by {{ ct_book.owner.username }}</p>
 
-  {% if book.status == 'AV' %}
+  {% if ct_book.status == 'AV' %}
 
     {% if user.is_authenticated %}
-      <a class="uk-button uk-button-secondary maxw600" href="{% url 'book_request_item' pk=book.id %}">Request this book</a>
+      <a class="uk-button uk-button-secondary maxw600" href="{% url 'book_request_item' pk=ct_book.id %}">Request this book</a>
     {% else %}
       <a href="{% url 'login' %}">Log in to request this book</a>
     {% endif %}
 
   {% else %}
-    <a class="uk-button uk-button-bookinterest maxw600" href="{% url 'book_interest' pk=book.id %}">
+    <a class="uk-button uk-button-bookinterest maxw600" href="{% url 'book_interest' pk=ct_book.id %}">
     Register your interest (notifies the current holder)
     </a>
   {% endif %}
 
     {% if user.is_authenticated %}
-    {% if book.owner == user or user.is_superuser %}
+    {% if ct_book.owner == user or user.is_superuser %}
 
-      <h3>Admin:</h3>
-      {% if book.status == 'RQ' %}
+      <h3>Loan admin</h3>
 
-        <div class="uk-alert uk-alert-primary maxw600"><strong>This book was requested
-          {% if holder %} by
-          @{{ holder.username }}{% endif %}</strong>
-          {% if date_action != "" %}<p>Date requested:  {{ date|date:"d M Y" }}</p>{% endif %}
-        </div>
+        {% if ct_book.status == 'RQ' %}
+          <div class="uk-alert uk-alert-primary maxw600"><strong>This book was requested
+            {% if ct_holder %} by
+            @{{ ct_holder.username }}{% endif %}</strong>
+            {% if ct_date != "" %} on {{ ct_date|date:"d M Y" }}{% endif %}.
+          </div>
+        {% endif %}
 
-        <a class="uk-button uk-button-secondary maxw600" href="{% url 'book_lend_item' pk=book.id %}">Confirm loan
-          {% if holder %}
-          to @{{ holder.username }}
-          {% endif %}
-        </a>
+        <nav class="book-menu maxw600 m-bottom">
+          <ul class="uk-nav nav-bookupdate flex-nav-books">
+            <li><a class="uk-button uk-button-loan
+             {% if ct_book.status == 'RQ' %}
+              active
+             {% endif %}
+             "
+             href="
+              {% if ct_book.status == 'RQ' %}
+                {% url 'book_lend_item' pk=ct_book.id %}
+              {% endif %}
+              ">Start loan</a></li>
+            <li><a class="uk-button uk-button-loan
+              {% if ct_book.status == 'OL' %}
+                active
+              {% endif %}
+              " href="
+              {% if ct_book.status == 'OL' %}
+                {% url 'book_return_item' pk=ct_book.id  %}
+              {% endif %}
+              ">Book returned</a></li>
+          </ul>
+        </nav>
 
-      {% elif book.status == 'OL' %}
+        <nav class="book-menu maxw600">
+          <ul class="uk-nav nav-bookupdate flex-nav-books">
+            <li><a class="uk-button uk-button-loan
+            {% if ct_book.status != 'AV' %}
+              general
+            {% endif %}
+            " href="">Reset to available</a></li>
+            <li><a class="uk-button uk-button-loan
+            {% if ct_book.status != 'NA' %}
+              general
+            {% endif %}
+            " href="">Withdraw book</a></li>
 
-        <div class="uk-alert uk-alert-primary maxw600"><strong>This book is on loan
-          {% if holder %} to
-          @{{ holder.username }}{% endif %}</strong>
-          {% if date_action != "" %}<p>Date borrowed:  {{ date|date:"d M Y" }}</p>{% endif %}
-        </div>
-
-        <a class="uk-button uk-button-secondary maxw600" href="{% url 'book_return_item' pk=book.id  %}">
-          Confirm that book has been returned.
-        </a>
-
-      {% endif %}
+          </ul>
+        </nav>
 
      {% endif %}
   {% endif %}
-
-
-
 
 {% endblock %}

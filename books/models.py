@@ -79,20 +79,23 @@ class Book(models.Model):
 
     def get_loan(self, status):
         latestby = self.get_latestby_for_status(status)
-        try:
-            loan = BookHolder.objects.filter(status=status, book=self).latest(
-                latestby
-            )
-        except BookHolder.DoesNotExist:
-            loan = None
-        return loan
+        if latestby is None:
+            return None
+        else:
+            try:
+                loan = BookHolder.objects.filter(
+                    status=status, book=self
+                ).latest(latestby)
+            except BookHolder.DoesNotExist:
+                loan = None
+            return loan
 
     def get_holder_for_status(self, status):
         loan = self.get_loan(status)
-        if loan:
-            return loan.holder
-        else:
+        if loan is None:
             return None
+        else:
+            return loan.holder
 
     def get_holder_for_current_status(self):
         return self.get_holder_for_status(self.status)

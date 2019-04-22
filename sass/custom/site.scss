@@ -19,6 +19,8 @@ $bookupdate: #e1763e;
 $bookrequest: #e13e57;
 $bookinterest: #cccccc;
 
+
+
   main, header, section,
    footer, .logo
   {
@@ -172,6 +174,7 @@ $bookinterest: #cccccc;
     }
   }
 
+
   .nav-login {
     display: block;
     padding: 20px 0;
@@ -212,12 +215,7 @@ $bookinterest: #cccccc;
         &:first-child{
           margin-right: 8px;
         }
-        &.active {
-          background: #ccc;
-        }
-        a {
-          color: #fff;
-        }
+
       }
   }
 
@@ -238,6 +236,10 @@ $bookinterest: #cccccc;
     .uk-button-bookupdate {
       background: $bookupdate;
       color: #fff;
+      &:hover {
+        color: #fff;
+      }
+
     }
     .uk-button-bookrequest {
       background: $bookrequest;
@@ -249,6 +251,28 @@ $bookinterest: #cccccc;
       &:hover {
         background: #aaa;
       }
+    }
+    .uk-button-loan {
+        background: #ccc;
+        color: #fff;
+        &:hover {
+          color: #fff;
+        }
+        &.active {
+        background: $global-secondary-background;
+        color: #fff;
+          &:hover {
+            background: #0ba10f;
+            color: #fff;
+          }
+        }
+        &.general {
+          background: #999;
+          &:hover {
+            background: #777;
+          }
+        }
+
     }
     .uk-button-form {
       background: #444;

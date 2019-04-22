@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 
+from bookx.context_processors import books_action
 from .models import Book, BookHolder, Category
 from .forms import PostBookForm  # , RequestBookForm
 from .notifications import (
@@ -107,16 +108,8 @@ class BookDetailView(TemplateView):
     template_name = "books/book_detail.html"
 
     def get(self, request, pk):
-        book = Book.objects.get(pk=pk)
-        holder = book.get_holder_for_current_status()
-        date = None
-        if holder:
-            date = book.get_date_for_status(book.status)
-        return render(
-            request,
-            self.template_name,
-            {"book": book, "holder": holder, "date": date},
-        )
+
+        return render(request, self.template_name)
 
 
 class BaseLoanView(DetailView):
@@ -272,3 +265,23 @@ class BookInterest(BaseLoanView):
 
 class Success(TemplateView):
     template_name = "success.html"
+
+
+class BookChangeStatus(TemplateView):
+    template_name = "books/book_change_status.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, books_action(request))
+
+    def post(self, request, *args, **kwargs):
+        book_id = kwargs["pk"]
+        book = Book.objects.get(id=book_id)
+        action = kwargs["action"]
+        if action == "withdraw":
+            book.status = "NA"
+        elif action == "set_available":
+            book.status = "AV"
+        book.save()
+        return HttpResponseRedirect(
+            reverse_lazy("book_detail", kwargs={"pk": book_id})
+        )

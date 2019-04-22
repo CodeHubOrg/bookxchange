@@ -46,6 +46,11 @@ urlpatterns = [
         login_required(views.BookInterest.as_view()),
         name="book_interest",
     ),
+    path(
+        "<int:pk>/<str:action>",
+        login_required(views.BookChangeStatus.as_view()),
+        name="book_change_status",
+    ),
     path("<int:pk>/success", views.Success.as_view(), name="email_success"),
     path("<int:pk>/", views.BookDetailView.as_view(), name="book_detail"),
 ]
