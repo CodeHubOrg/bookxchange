@@ -120,12 +120,20 @@
             {% if ct_book.status != 'AV' %}
               general
             {% endif %}
-            " href="">Reset to available</a></li>
+            " href="
+            {% if ct_book.status != 'AV' %}
+              {% url 'book_change_status' pk=ct_book.id action='set_available' %}
+            {% endif %}
+            ">Reset to available</a></li>
             <li><a class="uk-button uk-button-loan
             {% if ct_book.status != 'NA' %}
               general
             {% endif %}
-            " href="">Withdraw book</a></li>
+            " href="
+            {% if ct_book.status != 'NA' %}
+              {% url 'book_change_status' pk=ct_book.id action='withdraw' %}
+            {% endif %}
+            ">Withdraw book</a></li>
 
           </ul>
         </nav>
