@@ -1,6 +1,5 @@
 {% extends 'books/base.html' %}
 
-
 {% block content %}
 
   {% if user.is_authenticated %}
@@ -72,9 +71,11 @@
     {% endif %}
 
   {% else %}
+    {% if ct_holder != user %}
     <a class="uk-button uk-button-bookinterest maxw600" href="{% url 'book_interest' pk=ct_book.id %}">
     Register your interest (notifies the current holder)
     </a>
+    {% endif %}
   {% endif %}
 
     {% if user.is_authenticated %}
@@ -138,7 +139,43 @@
           </ul>
         </nav>
 
-     {% endif %}
+    {% elif ct_holder == user and ct_book.status in "['RQ', 'OL']" %}
+
+      <h3>Register loan or return (can be done by you, the owner or an admin)</h3>
+
+       <div class="uk-alert uk-alert-primary maxw600">
+      {% if ct_book.status == 'RQ' %}
+          <strong>You have requested this book.</strong>
+      {% else %}
+          <strong>According to our records, you are currently borrowing this book.</strong>
+      {% endif %}
+      </div>
+      <nav class="book-menu maxw600 m-bottom">
+          <ul class="uk-nav nav-bookupdate flex-nav-books">
+            <li><a class="uk-button uk-button-loan
+             {% if ct_book.status == 'RQ' %}
+              active
+             {% endif %}
+             "
+             href="
+              {% if ct_book.status == 'RQ' %}
+                {% url 'book_lend_item' pk=ct_book.id %}
+              {% endif %}
+              ">Start loan</a></li>
+            <li><a class="uk-button uk-button-loan
+              {% if ct_book.status == 'OL' %}
+                active
+              {% endif %}
+              " href="
+              {% if ct_book.status == 'OL' %}
+                {% url 'book_return_item' pk=ct_book.id  %}
+              {% endif %}
+              ">Book returned</a></li>
+          </ul>
+      </nav>
+
+
+    {% endif %}
   {% endif %}
 
 {% endblock %}

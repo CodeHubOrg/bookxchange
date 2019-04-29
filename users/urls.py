@@ -19,5 +19,6 @@ urlpatterns = [
         views.activate,
         name="activate",
     ),
+    path("account/", views.AccountView.as_view(), name="account"),
     path("profile/", views.UserProfile.as_view(), name="profile"),
 ]

@@ -84,6 +84,10 @@ def get_own_books_on_loan(user):
     )
 
 
+class AccountView(TemplateView):
+    template_name = "account_profile.html"
+
+
 class UserProfile(TemplateView):
     template_name = "profile.html"
 

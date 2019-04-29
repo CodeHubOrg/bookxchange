@@ -1,5 +1,6 @@
 {% extends 'books/base.html' %}
     {% block content %}
+        <p>You are logged in as {{ user.username }}.</p>
         {% if borrowed %}
 
         <p><strong>MY CURRENT LOANS</strong></p>

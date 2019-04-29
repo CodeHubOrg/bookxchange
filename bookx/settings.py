@@ -150,6 +150,8 @@ PASSWORD_RESET_TIMEOUT_DAYS = 1
 
 POSTMAN_AUTO_MODERATE_AS = True
 
+SITE_ID = 2
+
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 

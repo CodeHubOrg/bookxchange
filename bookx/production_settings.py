@@ -21,6 +21,8 @@ LOGGING = {
 
 POSTMAN_FROM_EMAIL = "info@codehub.org.uk"
 
+SITE_ID = 3
+
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
