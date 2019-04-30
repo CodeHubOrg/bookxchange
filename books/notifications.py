@@ -12,6 +12,7 @@ def notify_owner_of_request(request, book):
         subject=f"Request to borrow your book {book.title}",
         body=f"{request.user.username} has asked to borrow your book. Please reply to this message, and arrange a time and place where the book can be picked up. Please also send a message if you cannot lend the book.",
         auto_archive=True,
+        skip_notification=True,
     )
     send_book_request(request, book)
 
