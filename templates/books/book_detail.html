@@ -44,6 +44,11 @@
     <p>ISBN: {{ ct_book.isbn }}</p>
     {% endif %}
 
+    {% if ct_book.year_published %}
+    <p>Year published: {{ ct_book.year_published }}</p>
+    {% endif %}
+
+
   </div>
 
   <div class="uk-container-expand uk-margin-top">
@@ -60,6 +65,7 @@
   {% endif %}
   </strong>
   </div>
+  {% if ct_book.at_framework %}<p><strong>At Framework Library</strong></p>{% endif %}
   <p>Owned by {{ ct_book.owner.username }}</p>
 
   {% if ct_book.status == 'AV' %}

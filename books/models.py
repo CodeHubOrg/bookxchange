@@ -1,3 +1,5 @@
+import datetime
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -10,6 +12,9 @@ def get_default_owner():
         username=settings.DEFAULT_OWNER, email=settings.DEFAULT_OWNER_EMAIL
     )
     return def_user[0]
+
+def current_year():
+    return datetime.date.today().year
 
 
 class LoanStatus(ChoiceEnum):
@@ -59,6 +64,7 @@ class Book(models.Model):
         a brief description of the book",
         null=True,
     )
+    year_published = models.PositiveIntegerField(blank=True, null=True, validators=[MaxValueValidator(current_year())])
     status = models.CharField(
         max_length=50,
         choices=[(tag.name, tag.value) for tag in LoanStatus],
@@ -75,6 +81,7 @@ class Book(models.Model):
     category = models.ForeignKey(
         "Category", null=True, blank=True, on_delete=models.CASCADE
     )
+    at_framework = models.BooleanField(default=False)
     objects = BookQueryset.as_manager()
 
     def get_loan(self, status):

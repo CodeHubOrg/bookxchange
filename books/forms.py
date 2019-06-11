@@ -21,8 +21,10 @@ class PostBookForm(forms.ModelForm):
             "author",
             "cover",
             "description",
+            "year_published",
             "category",
             "openlibcover",
+            "at_framework",
         )
         widgets = {
             "title": forms.TextInput(attrs={"class": "uk-input"}),
