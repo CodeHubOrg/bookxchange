@@ -58,7 +58,7 @@ class BookListView(TemplateView):
 
     def get(self, request):
         categories = Category.objects.all()
-        books = Book.objects.filter(published_date__lte=timezone.now())
+        books = Book.objects.filter(published_date__lte=timezone.now()).exclude(status="NA")
         return render(
             request,
             self.template_name,
@@ -75,7 +75,7 @@ class BookCategoryView(BookListView):
 
     def get(self, request, category):
         categories = Category.objects.all()
-        books = Book.objects.get_books_in_category(category.capitalize())
+        books = Book.objects.get_books_in_category(category.capitalize()).exclude(status="NA")
         query_param = self.get_query_param(request)
         return render(
             request,
@@ -91,7 +91,7 @@ class BookSuperCategoryView(BookCategoryView):
         categories = Category.objects.all()
         books = Book.objects.get_books_in_supercategory(
             supercategory.capitalize()
-        )
+        ).exclude(status="NA")
         query_param = self.get_query_param(request)
         return render(
             request,
