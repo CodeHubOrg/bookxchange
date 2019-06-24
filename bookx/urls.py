@@ -8,7 +8,7 @@ from bookx import views
 
 
 urlpatterns = [
-    path("", RedirectView.as_view(pattern_name="book_list"), name="home"),
+    path("", RedirectView.as_view(pattern_name="book_supercategory"), name="home", kwargs={"supercategory":"programming"}),
     path("about/", views.AboutPageView.as_view(), name="about"),
     path("books/", include("books.urls")),
     path("messages/", include("postman.urls")),
