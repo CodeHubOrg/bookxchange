@@ -41,17 +41,8 @@ class BookxReplyForm(WriteForm):
         return super(BookxReplyForm, self).clean()
 
     def save(self, *args, **kwargs):
-        # print("instance body", self.instance.body)
-        # print("instance subject", self.instance.subject)
-        # print("recipient email", self.recipient.email)
-        # print("recipient username", self.recipient.username)
-        # print("recipient")
-        # pp.pprint(vars(self.recipient))
-        # print("self")
-        # pp.pprint(vars(self))
         send_reply_notification(self.instance, self.recipient, self.site)
         return super(BookxReplyForm, self).save(self.recipient, *args, **kwargs)
-
 
 allow_copies = not getattr(settings, 'POSTMAN_DISALLOW_COPIES_ON_REPLY', False)
 
