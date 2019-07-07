@@ -1,4 +1,4 @@
-django==2.2.2
+django==2.2.3
 Pillow==6.1.0
 psycopg2==2.8.3
 pytest==4.4.1
@@ -11,4 +11,3 @@ django-sendgrid-v5==0.8.0
 django-ajax-selects==1.7.1
 django-appconf==1.0.3
 django-postman==3.6.2
-
