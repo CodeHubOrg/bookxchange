@@ -51,7 +51,7 @@ def send_reply_notification(msg, user, site):
     uid = urlsafe_base64_encode(force_bytes(user.id))
     to_email = [user.email]
     login_path = reverse("emaillogin", kwargs=dict(uidb64=uid, token=token))
-    login_url = f"{site}{login_path}"
+    login_url = f"https://{site}{login_path}"
     message = render_to_string(
         "emails/reply_email.html",
         {
