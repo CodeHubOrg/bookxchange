@@ -42,3 +42,22 @@ def send_book_request(request, book):
         },
     )
     send_mail(subject, message, settings.DEFAULT_OWNER_EMAIL, to_email)
+
+
+def send_reply_notification(msg, user, site):
+    subject = msg.subject
+    body = msg.body
+    token = account_activation_token.make_token(user)
+    uid = urlsafe_base64_encode(force_bytes(user.id))
+    to_email = [user.email]
+    login_path = reverse("emaillogin", kwargs=dict(uidb64=uid, token=token))
+    login_url = f"{site}{login_path}"
+    message = render_to_string(
+        "emails/reply_email.html",
+        {
+            "user": user,
+            "body": body,
+            "loginurl": login_url
+        }
+    )
+    send_mail(subject, message, settings.DEFAULT_OWNER_EMAIL, to_email)

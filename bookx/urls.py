@@ -11,7 +11,7 @@ urlpatterns = [
     path("", RedirectView.as_view(pattern_name="book_supercategory"), name="home", kwargs={"supercategory":"programming"}),
     path("about/", views.AboutPageView.as_view(), name="about"),
     path("books/", include("books.urls")),
-    path("messages/", include("postman.urls")),
+    path("messages/", include("lending.urls")),
     path("users/", include("users.urls")),  # new
     path("users/", include("django.contrib.auth.urls")),  # new
     path("admin/", admin.site.urls),

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "users",
     "books",
     "postman",
+    "lending",
     "ajax_select",
 ]
 
@@ -147,7 +148,7 @@ AUTH_USER_MODEL = "users.CustomUser"
 AUTHENTICATION_BACKENDS = ["users.backends.EmailBackend"]
 
 PASSWORD_RESET_TIMEOUT_DAYS = 1
-
+POSTMAN_DISABLE_USER_EMAILING = True
 POSTMAN_AUTO_MODERATE_AS = True
 
 SITE_ID = 2
