@@ -6,7 +6,9 @@ Confirmation - Book {% if type == 'Loan' %}Loan{% else %}Return{% endif %}
 {% block content %}
 This is to confirm {% if type == 'Loan' %}the loan{% else %}the return{% endif %} of a book from the Bookx library.
 
-Book: {{ book.title }}
-Owner: {{ book.owner.username }}
-Borrowed by: {{ holder.username }}
+*Book*: {{ book.title }}
+
+*Owner*: {{ book.owner.username }}
+
+*Borrowed by*: {{ holder.username }}
 {% endblock %}

@@ -17,8 +17,8 @@ def notify_owner_of_request(request, book):
     send_book_request(request, book)
 
 
-def notify_of_loan_or_return(request, book, holder, action="Loan"):
-    subject = f"Bookx - Confirmation of Book {action}"
+def notify_of_loan_or_return(request, book, holder, type="Loan"):
+    subject = f"Bookx - Confirmation of Book {type}"
     message = render_to_string(
         "emails/loan_or_return_confirmation.html",
         {"type": type, "book": book, "holder": holder},

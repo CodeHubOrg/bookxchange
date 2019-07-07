@@ -250,7 +250,7 @@ class BookReturn(BaseLoanView):
             status=status,
         )
         book.save()
-        notify_of_loan_or_return(self.request, book, holder, action="Return")
+        notify_of_loan_or_return(self.request, book, holder, type="Return")
 
 
 class BookInterest(BaseLoanView):
