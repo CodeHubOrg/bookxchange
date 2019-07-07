@@ -26,8 +26,8 @@
 {% if not archived %}<button type="submit" class="pm_btn pm_btn-archive"
  onclick="this.form.action='{% url 'postman:archive' %}?next={{ next_url|urlencode }}'">{% trans "Archive" %}</button>{% endif %}
 </span>
-{% if reply_to_pk %}<a href="{% url 'postman:reply' reply_to_pk %}?next={{ next_url|urlencode }}"
- class="pm_action pm_action-reply">{% trans "Reply" %}</a>{% endif %}
+{% if reply_to_pk %}<!-- <a href="{% url 'postman:reply' reply_to_pk %}?next={{ next_url|urlencode }}"
+ class="pm_action pm_action-reply">{% trans "Reply" %}</a> -->{% endif %}
 </form>
 {% if reply_to_pk %}<hr />
 <h2>{% trans 'Reply' %}</h2>
