@@ -17,8 +17,7 @@ class BookxReplyForm(WriteForm):
 
         recipient = kwargs.pop('recipient', None)
         super(BookxReplyForm, self).__init__(*args, **kwargs)
-        print("Was sind die kwargs")
-        pp.pprint(vars(*args))
+        # pp.pprint(vars(*args))
         self.recipient = recipient
 
     def clean(self):

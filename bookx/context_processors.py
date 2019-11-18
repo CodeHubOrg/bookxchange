@@ -11,17 +11,18 @@ def books(request):
         if book_id is None:
             return None
         else:
-            return Book.objects.get(id=book_id)
+            return Book.objects.get(pk=book_id)
 
     def _get_book_context(request):
         if _get_book(request) is None:
             return {}
         else:
-            book = _get_book(request)
+            book = _get_book(request)            
             holder = book.get_holder_for_current_status()
             date = None
             if holder:
-                date = book.get_date_for_status(book.status)
+                loan = book.get_loan(book.status)
+                date = loan.date
             return {"ct_book": book, "ct_holder": holder, "ct_date": date}
 
     return _get_book_context(request)
