@@ -20,20 +20,35 @@
   </nav>
 
   <div class="book-menu uk-text-center">
-  <div class="uk-inline">
-    <button class="uk-button uk-button-default" type="button">Filter by Category</button>
 
-    {% if categories %}
-    <div uk-dropdown="mode:click">
-      <ul class="uk-nav uk-dropdown-nav">
-        {% for cat in categories %}
-          <li><a href="{% url 'book_category' category=cat.name %}">{{ cat.name }}</a></li>
-        {% endfor %}
-      </ul>
+    <div class="maxw820; margin: 0 auto">
+
+
+      <div class="maxw820" style="text-align: left; display: flex; justify-content: space-between; margin: 0 auto">
+          <!-- <div class="uk-inline"> -->
+          <div style="flex: 5 0 240px">
+            <button class="uk-button uk-button-default" type="button">Filter by Category</button>
+
+            {% if categories %}
+            <div uk-dropdown="mode:click">
+              <ul class="uk-nav uk-dropdown-nav">
+                {% for cat in categories %}
+                  <li><a href="{% url 'book_category' category=cat.name %}">{{ cat.name }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+
+          <div style="flex: 11 0 580px">
+            <form style="width: 100%" class="uk-search uk-search-default">    
+                <span uk-search-icon></span>
+                <input class="uk-search-input" type="search" placeholder="Search by Title or Author">
+            </form>   
+          </div>
+      </div>
+
     </div>
-    {% endif %}
-
-  </div>
 
   <div class="cat-heading">
     {% if cat %}
@@ -44,6 +59,10 @@
       All Books
     {% endif %}
   </div>
+
+  <section style="width: 600px; margin: 0 auto" class="search">
+
+  </section>
 
   {% if books %}
   <div class="uk-flex-center
