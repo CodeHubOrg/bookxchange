@@ -110,7 +110,5 @@ media
 
 
 .sass-cache
-gulpfile.js
 node_modules/
-package.json
 package-lock.json
