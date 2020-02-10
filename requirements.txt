@@ -8,6 +8,6 @@ django-dotenv==1.4.2
 gunicorn==20.0.4
 ipdb==0.12.3
 django-sendgrid-v5==0.8.1
-django-ajax-selects==1.7.1
+django-ajax-selects==1.9.0
 django-appconf==1.0.3
 django-postman==3.6.2
