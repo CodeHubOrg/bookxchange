@@ -1,7 +1,7 @@
 FROM python:3.6
 
 ENV PYTHONUNBUFFERED 1
-
+RUN mkdir /app
 WORKDIR /app
 COPY manage.py requirements.txt /app/
 

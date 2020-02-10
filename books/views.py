@@ -1,12 +1,13 @@
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.core.exceptions import ImproperlyConfigured
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.views.generic.edit import DeleteView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.db.models import Q 
 
 from bookx.context_processors import books_action
 from .models import Book, Category, LoanStatus
@@ -242,4 +243,17 @@ class BookChangeStatus(TemplateView):
         book.save()
         return HttpResponseRedirect(
             reverse_lazy("book_detail", kwargs={"pk": book_id})
+        )
+
+class BookSearchResultsView(BookListView):
+    template_name = "books/book_list.html"
+
+    def get(self, request):
+        categories = Category.objects.all()
+        query = self.request.GET.get('q')
+        books = Book.objects.filter(Q(title__icontains=query) | Q(author__icontains=query)).exclude(status="NA")
+        return render(
+            request,
+            self.template_name,
+            {"categories": categories, "books": books, "query": query}
         )

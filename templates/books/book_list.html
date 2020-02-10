@@ -24,9 +24,9 @@
     <div class="maxw820; margin: 0 auto">
 
 
-      <div class="maxw820" style="text-align: left; display: flex; justify-content: space-between; margin: 0 auto">
+      <div class="maxw820" style="text-align: left; display: flex; justify-content: space-between; flex-wrap: wrap; margin: 0 auto">
           <!-- <div class="uk-inline"> -->
-          <div style="flex: 5 0 240px">
+          <div style="flex: 5 1 240px; margin-bottom: 20px">
             <button class="uk-button uk-button-default" type="button">Filter by Category</button>
 
             {% if categories %}
@@ -40,10 +40,10 @@
             {% endif %}
           </div>
 
-          <div style="flex: 11 0 580px">
-            <form style="width: 100%" class="uk-search uk-search-default">    
+          <div style="flex: 11 1 580px">
+            <form action="{% url 'search_results' %}" method="get" style="width: 100%" class="uk-search uk-search-default">    
                 <span uk-search-icon></span>
-                <input class="uk-search-input" type="search" placeholder="Search by Title or Author">
+                <input name="q" class="uk-search-input" type="search" placeholder="Search by Title or Author">
             </form>   
           </div>
       </div>
@@ -55,6 +55,8 @@
       {{ cat }}
     {% elif supercat %}
       {{ supercat }}
+    {% elif query %}
+      Search results for <em><span style="text-transform: none">{{ query }}</span></em>
     {% else %}
       All Books
     {% endif %}

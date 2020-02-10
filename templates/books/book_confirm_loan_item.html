@@ -3,7 +3,12 @@
   {% block content %}
 
       <form method="post">{% csrf_token %}
+
+      	  {% if request.user.is_superuser or request.user == object.owner %}
           <p>Confirm the loan of <em>{{object}}</em> to {{ holder.username }} ?</p>
+          {% else %}
+          <p>Confirm that you are borrowing <em>{{ object }}?</em></p>
+          {% endif %}
           <input class="uk-button uk-button-bookupdate" type="submit" value="Confirm">
       </form>
 

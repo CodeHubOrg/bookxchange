@@ -113,7 +113,7 @@ class Book(models.Model):
     def return_by_borrower(self, borrower):
         self.log_loan_event(borrower, LoanStatus.RB.name)
 
-    @transition(field=status, source=[LoanStatus.OL.name], target=LoanStatus.AV.name)
+    @transition(field=status, source=[LoanStatus.OL.name, LoanStatus.LB.name, LoanStatus.RB.name], target=LoanStatus.AV.name)
     def return_item(self, lenderadmin):        
         self.log_loan_event(lenderadmin, LoanStatus.AV.name)
 

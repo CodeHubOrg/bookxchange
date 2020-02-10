@@ -19,11 +19,12 @@ def books(request):
         else:
             book = _get_book(request)            
             holder = book.get_holder_for_current_status()
-            date = None
+            loandate = None
+
             if holder:
                 loan = book.get_loan(book.status)
-                date = loan.date
-            return {"ct_book": book, "ct_holder": holder, "ct_date": date}
+                loandate = loan.date
+            return {"ct_book": book, "ct_holder": holder, "ct_date": loandate}
 
     return _get_book_context(request)
 
