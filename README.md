@@ -26,7 +26,7 @@ Create the directory used for media uploads in development:
 ```
 docker-compose exec web mkdir -p media/covers
 ```
-The local development server should be running at this point, and the app accessible in the browser at localhost:800. If it needs to be started again, you can use this command:
+Start the development server, app will then be running on localhost:8000:
 ```
 docker-compose exec web python manage.py runserver 0:8000
 ```
