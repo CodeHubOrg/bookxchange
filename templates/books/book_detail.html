@@ -54,11 +54,11 @@
   <div class="uk-container-expand uk-margin-top">
   Status:
   <strong>
-  {% if ct_book.status == 'AV' %}
+  {% if ct_book.status in "['RB','AV']" %}
     <p>Available</p>
   {% elif ct_book.status == 'RQ' %}
   <p>Requested</p>
-  {% elif ct_book.status == 'OL' %}
+  {% elif ct_book.status in "['OL', 'LB']" %}
   <p>On loan</p>
   {% elif ct_book.status == 'NA' %}
     <p>Unavailable for other reaons</p>
@@ -90,11 +90,21 @@
       <h3>Loan admin</h3>
 
         {% if ct_book.status == 'RQ' %}
-          <div class="uk-alert uk-alert-primary maxw600"><strong>This book was requested
-            {% if ct_holder %} by
-            @{{ ct_holder.username }}{% endif %}</strong>
-            {% if ct_date != "" %} on {{ ct_date|date:"d M Y" }}{% endif %}.
+          <div class="uk-alert uk-alert-primary maxw600"><strong>This book was requested{% if ct_holder %} by
+            @{{ ct_holder.username }}</strong>
+            {% if ct_date  %} on {{ ct_date|date:"d M Y" }}{% endif %}{% endif %}.
           </div>
+        {% elif ct_book.status in "['OL','LB']" %}
+         <div class="uk-alert uk-alert-primary maxw600">
+          <strong>This book is currently on loan to @{{ ct_holder }}</strong>.<br />
+          {% if ct_book.status == 'LB' %}
+            The loan has been confirmed by the borrower.
+          {% endif %}
+        </div>
+        {% elif ct_book.status == 'RB' %}
+         <div class="uk-alert uk-alert-primary maxw600">
+          <strong>This book has been registered as returned by @{{ ct_holder }}. Please confirm.</strong>.<br />
+        </div>      
         {% endif %}
 
         <nav class="book-menu maxw600 m-bottom">
@@ -110,14 +120,14 @@
               {% endif %}
               ">Start loan</a></li>
             <li><a class="uk-button uk-button-loan
-              {% if ct_book.status == 'OL' %}
+              {% if ct_book.status == 'OL' or ct_book.status == 'LB' or ct_book.status == 'RB' %}
                 active
               {% endif %}
               " href="
-              {% if ct_book.status == 'OL' %}
+              {% if ct_book.status == 'OL' or ct_book.status == 'LB' or ct_book.status == 'RB' %}
                 {% url 'book_return_item' pk=ct_book.id  %}
               {% endif %}
-              ">Book returned</a></li>
+              ">{% if ct_book.status == 'RB' %}Confirm{% endif %} Return</a></li>
           </ul>
         </nav>
 
@@ -145,13 +155,15 @@
           </ul>
         </nav>
 
-    {% elif ct_holder == user and ct_book.status in "['RQ', 'OL']" %}
+    {% elif ct_holder == user and ct_book.status in "['RQ', 'OL', 'LB']" %}
 
-      <h3>Register loan or return (can be done by you, the owner or an admin)</h3>
+      <h3>Register {% if ct_book.status in "['RQ', 'OL']" %}loan{% else %}return{% endif %} </h3>
 
        <div class="uk-alert uk-alert-primary maxw600">
       {% if ct_book.status == 'RQ' %}
           <strong>You have requested this book.</strong>
+      {% elif ct_book.status == 'OL' %}
+          <strong>An admin or the owner of the book registered the loan of this book to you. Please confirm.</strong>
       {% else %}
           <strong>According to our records, you are currently borrowing this book.</strong>
       {% endif %}
@@ -159,24 +171,29 @@
       <nav class="book-menu maxw600 m-bottom">
           <ul class="uk-nav nav-bookupdate flex-nav-books">
             <li><a class="uk-button uk-button-loan
-             {% if ct_book.status == 'RQ' %}
+             {% if ct_book.status in 'RQ' or ct_book.status in 'OL' %}
               active
              {% endif %}
              "
              href="
-              {% if ct_book.status == 'RQ' %}
+              {% if ct_book.status == 'RQ' or ct_book.status == 'OL' %}
                 {% url 'book_lend_item' pk=ct_book.id %}
               {% endif %}
-              ">Start loan</a></li>
+              ">
+              {% if ct_book.status == 'RQ' %}
+              Start {% elif ct_book.status == 'OL' %} Confirm {% endif %} loan
+              </a>
+            </li>
             <li><a class="uk-button uk-button-loan
-              {% if ct_book.status == 'OL' %}
+              {% if ct_book.status == 'LB' %}
                 active
               {% endif %}
               " href="
-              {% if ct_book.status == 'OL' %}
+              {% if ct_book.status == 'OL' or ct_book.status == 'LB' %}
                 {% url 'book_return_item' pk=ct_book.id  %}
               {% endif %}
-              ">Book returned</a></li>
+              ">
+              Return</a></li>
           </ul>
       </nav>
 

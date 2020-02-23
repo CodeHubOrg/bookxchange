@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+Your email has been sent successfully. <br />&nbsp;<br />
+
+{% if ct_book %}
+&laquo; Back to page for <a href="{% url 'book_detail' pk=ct_book.id %}"> {{ ct_book.title }}</a>
+<br />&nbsp;<br />
+{% endif %}
+
+&laquo; To <a href="/books">all books</a>
+
+{% endblock %}

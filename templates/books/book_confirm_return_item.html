@@ -3,17 +3,24 @@
 {% block content %}
 
   {% if object.status != 'AV' %}
-
-    {% if object.status == 'OL' %}
-      <p>According to our records, <strong>{{ holder.username }}</strong> has borrowed this book.</p>
+    
+    {% if request.user.is_superuse or request.user == object.owner %}
+    {% if object.status in "['OL', 'LB']" %}
+      <p>According to our records, <strong>@{{ ct_holder.username }}</strong> has borrowed this book.</p>
+    {% elif object.status == 'RB' %}
+      <p><strong>@{{ ct_holder.username }}</strong> has registered this book as returned.</p>
     {% elif object.status == 'RQ' %}
-      <p>According to our records, <strong>{{ holder.username }}</strong> has requested this book. </p>
+      <p>According to our records, <strong>@{{ ct_holder.username }}</strong> has requested this book. </p>
     {% endif %}
+  
+  {% endif %}
 
 
     <form method="post">{% csrf_token %}
-        {% if object.status == 'OL' %}
+        {% if object.status in "['OL', 'LB'}" %}
         <p>Return <em>{{object.title }}</em>?</p>
+        {% elif object.status == 'RB' %}
+        <p>Confirm return of <em>{{ object.title }}</em>.</p>
         {% else %}
         <p>Make <em>{{ object.title }}</em> available?</p>
         {% endif %}
