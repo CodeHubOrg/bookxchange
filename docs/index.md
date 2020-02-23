@@ -1,0 +1,49 @@
+# Notes / Troubleshooting
+
+## Docker
+
+### Running and shutting down the development sever
+
+Originally starting the dev server was part of starting the containers with docker-compose. But that way it is running in the background and difficult to shut down without also shutting down the container - I have not found a good way. 
+
+So after starting the containers, run `docker-compose exec web python manage.py runserver 0:8000`
+
+### When you get error messages on missing dependencies
+
+When a new Python/Django dependency is installed, do a rebuild - this will only affect the web container (the other one is based on an image that doesn't change).
+
+`docker-compose build`
+
+### Accessing server and database
+
+For accessing a docker container, there are two alternative ways, either using _docker_ or _docker-compose_, both using the exec command
+
+`docker-compose exec web bash` will give you access to the container where the app is running; you could equally use `docker exec -it bookxchange_web_1 bash` where the container name depends on the name of the parent directory (look up the container name with `docker ps`)
+
+To log into the database, use `docker-compose exec db psql -U dj` or `docker exec -it bookxchange_db_1 psql -U dj`
+
+### Run migrations
+
+`docker-compose exec web python manage.py migrate`
+
+### Operations on postgres
+
+Copy file from host into docker         
+`docker cp book_x.sql bookxchange_db_1:/var/backups`          
+
+Drop database, create it again and restore from database dump         
+docker-compose exec db psql -U dj -d postgres -c "DROP DATABASE dj"         
+docker-compose exec db psql -U dj -d postgres -c "CREATE DATABASE dj"      
+docker-compose exec db psql -U dj -f /var/backups/book_x_2020_22.sql  
+
+### Generally useful 
+
+Stop all docker containers: `docker stop $(docker ps -a -q)`
+
+Inspect container: `docker inspect -f '{{ json .Mounts }}' bookxchange_db_1 | python -m json.tool`   (example)
+
+Look at logs: `docker-compose logs web` or `docker logs bookxchange_web_1`
+
+## Postgres
+
+`\x on` switches to a neater display of table entries
