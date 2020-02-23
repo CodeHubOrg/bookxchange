@@ -15,7 +15,7 @@ function style(cb) {
 
 function browsersync() {
     bs.init({
-        proxy: "localhost:8080",
+        proxy: "localhost:8000",
         open:false        
     })
 }

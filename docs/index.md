@@ -4,9 +4,9 @@
 
 ### Running and shutting down the development sever
 
-Originally starting the dev server was part of starting the containers with docker-compose. But that way it is running in the background and difficult to shut down without also shutting down the container - I have not found a good way. 
+The development server is not started anymore when the containers are brought up, as it then runs in the background and is difficult to shut down or start. 
 
-So after starting the containers, run `docker-compose exec web python manage.py runserver 0:8000`
+So after starting the containers with `docker-compose up -d`, run `docker-compose exec web python manage.py runserver 0:8000`
 
 ### When you get error messages on missing dependencies
 
@@ -47,3 +47,11 @@ Look at logs: `docker-compose logs web` or `docker logs bookxchange_web_1`
 ## Postgres
 
 `\x on` switches to a neater display of table entries
+
+## Frontend
+
+### Compiling css files
+
+Install gulp globally: `yarn global add gulp-cli` or `npm install -g gulp-cli`
+Install local dependencies: `yarn` or `npm install`
+Start gulp watch with browsersync: `gulp` - app then running on localhost:3000, reload should be trigger on change of sass or html files
