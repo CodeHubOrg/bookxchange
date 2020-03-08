@@ -190,3 +190,16 @@ class BookHolder(models.Model):
     date_requested = models.DateTimeField(blank=True, null=True)
     date_borrowed = models.DateTimeField(blank=True, null=True)
     date_returned = models.DateTimeField(blank=True, null=True)
+
+class Comment(models.Model):
+    comment = models.TextField(
+        max_length=1000,
+        help_text="Have you read the book or heard about it, want to read it? Add a comment.",
+        null=True,
+    )
+    # @TODO decide what to do when a user is deleted; could have a 'former member' user?
+    # what when a book is deleted?
+    comment_author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    comment_book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    published_date = models.DateTimeField(blank=True, null=True)
+    last_updated = models.DateTimeField(auto_now_add=True, null=True)

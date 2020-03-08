@@ -47,8 +47,6 @@
     {% if ct_book.year_published %}
     <p>Year published: {{ ct_book.year_published }}</p>
     {% endif %}
-
-
   </div>
 
   <div class="uk-container-expand uk-margin-top">
@@ -68,12 +66,56 @@
   {% if ct_book.at_framework %}<p><strong>At Framework Library</strong></p>{% endif %}
   <p>Owned by {{ ct_book.owner.username }}</p>
 
+
+  {% block comments %}
+    {% if comments %}
+      <h3>Comments</h3>
+      <ul class="uk-container-expand uk-margin-top">
+        {% for comment in comments  %}
+          <li>
+            <p>{{ comment.comment }}</p>
+            <p>Posted by: {{ comment.comment_author.username }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <h4>Post a comment</h4>
+    <form method="POST" class="uk-form  book__form maxw600">
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="uk-form-row uk-margin">
+            <label for="{{ field.id_for_label }}" class="uk-form-label">{{ field.label }}: </label>
+            <div class="uk-form-controls">
+               {{ field }}
+               {% if field.errors %}
+                  <div class="uk-alert uk-alert-warning">
+                    {{ field.errors }}
+                  </div>
+               {% endif %}
+               {% if field.help_text %}
+                  <div class="uk-alert">
+                    {{ field.help_text }}
+                  </div>
+               {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+        <button type="submit" class="uk-button uk-button-bookupdate">Save</button>
+    </form>
+    <p>&nbsp;</p>
+    {% endif %}
+
+  {% endblock %}
+
+
   {% if ct_book.status == 'AV' %}
 
     {% if user.is_authenticated %}
       <a class="uk-button uk-button-secondary maxw600" href="{% url 'book_request_item' pk=ct_book.id %}">Request this book</a>
     {% else %}
-      <a href="{% url 'login' %}">Log in to request this book</a>
+      <a href="{% url 'login' %}">Log in to request this book, or post a comment.</a>
     {% endif %}
 
   {% else %}

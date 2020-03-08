@@ -47,6 +47,7 @@ urlpatterns = [
         name="book_interest",
     ),
     path("<int:pk>/success", views.BookEmailSuccess.as_view(), name="email_success"),
+    path("<int:pk>/success_comment", views.BookCommentSuccess.as_view(), name="comment_success"),
     path("search", views.BookSearchResultsView.as_view(), name="search_results"),
     path("<int:pk>/", views.BookDetailView.as_view(), name="book_detail"),
     path(
