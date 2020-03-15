@@ -7,8 +7,7 @@ from PIL import Image
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
-from .models import Book
-
+from .models import Book, Comment
 
 class PostBookForm(forms.ModelForm):
     openlibcover = forms.CharField(max_length=200, widget=forms.HiddenInput())
@@ -142,3 +141,15 @@ class PostBookForm(forms.ModelForm):
 
 class InvalidExtension(Exception):
     """Raise for invalid image extension"""
+
+
+class PostCommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = (
+            "comment",
+        )
+        widgets = {
+            "comment": forms.Textarea(attrs={"class": "uk-textarea"})
+        }

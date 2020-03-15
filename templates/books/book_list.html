@@ -41,9 +41,9 @@
           </div>
 
           <div style="flex: 11 1 580px">
-            <form action="{% url 'search_results' %}" method="get" style="width: 100%" class="uk-search uk-search-default">    
+            <form id="searchform" action="{% url 'search_results' %}" method="get" style="width: 100%" class="uk-search uk-search-default">    
                 <span uk-search-icon></span>
-                <input name="q" class="uk-search-input" type="search" placeholder="Search by Title or Author">
+                <input id="q" name="q" class="uk-search-input" type="text"  placeholder="Search by Title or Author">
             </form>   
           </div>
       </div>

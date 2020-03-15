@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.exceptions import ImproperlyConfigured
 from django.views.generic import TemplateView, DetailView, ListView
 from django.views.generic.edit import DeleteView, UpdateView
@@ -10,8 +10,8 @@ from django.utils.decorators import method_decorator
 from django.db.models import Q 
 
 from bookx.context_processors import books_action
-from .models import Book, Category, LoanStatus
-from .forms import PostBookForm  # , RequestBookForm
+from .models import Book, Category, Comment, LoanStatus
+from .forms import PostBookForm, PostCommentForm # , RequestBookForm
 from .notifications import (
     notify_owner_of_request,
     notify_of_loan_or_return,
@@ -99,17 +99,36 @@ class BookSuperCategoryView(BookCategoryView):
             {
                 "categories": categories,
                 "books": books,
-                "supercat": query_param,
+                "supercat": query_param
             },
+            
         )
 
 
 class BookDetailView(TemplateView):
     template_name = "books/book_detail.html"
+    form_class = PostCommentForm
 
     def get(self, request, pk):
+        form = self.form_class()
+        comments = Comment.objects.filter(comment_book_id=pk)
+        # import ipdb
+        # ipdb.set_trace()
+        return render(request, self.template_name, {"form": form, "bookid": pk, "comments": comments})
 
-        return render(request, self.template_name)
+    def post(self, request, pk):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.published_date = timezone.now()
+            comment.comment_book = Book.objects.get(id=pk)
+            if request.user.is_authenticated:
+                comment.comment_author = request.user
+            comment.save()
+            return HttpResponseRedirect(
+            reverse_lazy("comment_success", kwargs={"pk": pk})
+        )
+        return render(request, self.template_name, {"form": form})
 
 
 class BaseLoanView(DetailView):
@@ -225,6 +244,10 @@ class BookInterest(BaseLoanView):
 class BookEmailSuccess(TemplateView):
     template_name = "books/success.html"
 
+
+class BookCommentSuccess(TemplateView):
+    template_name = "books/success_comment.html"
+
 class BookChangeStatus(TemplateView):
     template_name = "books/book_change_status.html"
 
@@ -257,3 +280,19 @@ class BookSearchResultsView(BookListView):
             self.template_name,
             {"categories": categories, "books": books, "query": query}
         )
+
+def autocompleteModel(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '').capitalize()
+        title_qs = Book.objects.filter(title__icontains=q).exclude(status="NA")
+        author_qs = Book.objects.filter(author__icontains=q).exclude(status="NA")
+        results = []
+        for r in title_qs:
+            results.append(r.title)
+        for r in author_qs:
+            results.append(r.author)
+        data = JsonResponse(results, safe=False)
+    else:
+       data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
