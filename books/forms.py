@@ -9,7 +9,6 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django import forms
 from .models import Book, Comment
 
-
 class PostBookForm(forms.ModelForm):
     openlibcover = forms.CharField(max_length=200, widget=forms.HiddenInput())
 

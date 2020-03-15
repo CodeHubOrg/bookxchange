@@ -55,4 +55,5 @@ urlpatterns = [
         login_required(views.BookChangeStatus.as_view()),
         name="book_change_status",
     ),
+    path("ajax_calls/search", views.autocompleteModel, name="ajax_search")
 ]

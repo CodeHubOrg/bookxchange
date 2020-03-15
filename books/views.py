@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.exceptions import ImproperlyConfigured
 from django.views.generic import TemplateView, DetailView, ListView
 from django.views.generic.edit import DeleteView, UpdateView
@@ -11,7 +11,7 @@ from django.db.models import Q
 
 from bookx.context_processors import books_action
 from .models import Book, Category, Comment, LoanStatus
-from .forms import PostBookForm, PostCommentForm  # , RequestBookForm
+from .forms import PostBookForm, PostCommentForm # , RequestBookForm
 from .notifications import (
     notify_owner_of_request,
     notify_of_loan_or_return,
@@ -99,8 +99,9 @@ class BookSuperCategoryView(BookCategoryView):
             {
                 "categories": categories,
                 "books": books,
-                "supercat": query_param,
+                "supercat": query_param
             },
+            
         )
 
 
@@ -279,3 +280,19 @@ class BookSearchResultsView(BookListView):
             self.template_name,
             {"categories": categories, "books": books, "query": query}
         )
+
+def autocompleteModel(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '').capitalize()
+        title_qs = Book.objects.filter(title__icontains=q).exclude(status="NA")
+        author_qs = Book.objects.filter(author__icontains=q).exclude(status="NA")
+        results = []
+        for r in title_qs:
+            results.append(r.title)
+        for r in author_qs:
+            results.append(r.author)
+        data = JsonResponse(results, safe=False)
+    else:
+       data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
